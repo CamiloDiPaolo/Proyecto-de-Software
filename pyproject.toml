@@ -6,8 +6,10 @@ authors = ["Camilo Di Paolo <camilodipaolo10@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.8"
 Flask = "^2.2.2"
+psycopg2 = "^2.9.3"
+SQLAlchemy = "^1.4.41"
 
 
 [build-system]
