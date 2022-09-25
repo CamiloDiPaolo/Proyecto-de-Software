@@ -68,4 +68,21 @@ class Usuario(Base):
         self.ultima_actualizacion = datetime.datetime.now()
         self.nombre = nombre
         self.apellido = apellido
+    
+    def update_roles(self, roles):
+        # TODO: refactorizar esto...
+        # eliminamos las antiguas relaciones
+        old_roles = db_session.query(UsuarioTieneRol).filter_by(usuario_id = self.id).all()
+        for old_relation in old_roles:
+            db_session.delete(old_relation)
+        
+        # creamos las nuevas relaciones
+        new_roles = []
+        for role in roles:
+            new_role = db_session.query(Rol).filter_by(nombre = role).all()
+            new_relation = UsuarioTieneRol(self.id, new_role[0].id)
+            db_session.add_all([new_relation])
+        
+        db_session.commit()
+
 

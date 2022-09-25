@@ -15,7 +15,7 @@ class UsuarioTieneRol(Base):
 
     def __init__(self,usuario_id=None, rol_id=None):
         self.usuario_id = usuario_id
-        slef.rol_id = rol_id
+        self.rol_id = rol_id
 
     def __repr__(self):
         return f"UsuarioTieneRol(usuario_id={self.usuario_id!r}, rol_id={self.rol_id!r})"
