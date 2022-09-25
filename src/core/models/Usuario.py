@@ -8,6 +8,8 @@ from sqlalchemy import String
 from sqlalchemy import Boolean
 from sqlalchemy import Date
 
+import datetime
+
 class Usuario(Base):
     __tablename__ = "usuario"
     id = Column(Integer, primary_key=True)
@@ -21,13 +23,13 @@ class Usuario(Base):
     apellido = Column(String, nullable=False)
 
 
-    def __init__(self, email=None, username=None, contraseña=None, activo=None, ultima_actualizacion=None, creacion=None, nombre=None, apellido=None):
+    def __init__(self, email=None, username=None, contraseña=None, activo=None, nombre=None, apellido=None):
         self.email = email
         self.username = username
         self.contraseña = contraseña
         self.activo = activo
-        self.ultima_actualizacion = ultima_actualizacion
-        self.creacion = creacion
+        self.ultima_actualizacion = datetime.datetime.now()
+        self.creacion = datetime.datetime.now()
         self.nombre = nombre
         self.apellido = apellido
 
@@ -46,7 +48,8 @@ class Usuario(Base):
             "ultima_actualizacion":  self.ultima_actualizacion,
             "creacion":  self.creacion,
             "nombre":  self.nombre,
-            "apellido":  self.apellido 
+            "apellido":  self.apellido,
+            "roles": self.get_roles() 
         }
     
     def get_roles(self):
@@ -54,6 +57,15 @@ class Usuario(Base):
         result = db_session.query(UsuarioTieneRol).filter_by(usuario_id = self.id).all()
         for row in result:
             rol = db_session.query(Rol).filter_by(id = row.rol_id).all()
-            print(rol[0])
             roles.append(rol[0].__str__())
         return roles 
+    
+    def update(self, email=None, username=None, contraseña=None, activo=None, nombre=None, apellido=None):
+        self.email = email
+        self.username = username
+        self.contraseña = contraseña
+        self.activo = activo
+        self.ultima_actualizacion = datetime.datetime.now()
+        self.nombre = nombre
+        self.apellido = apellido
+
