@@ -46,7 +46,7 @@ def allowed_request(request, allowed_roles):
 
     for allowed_role in allowed_roles:
         for user_rol in user_roles:
-            if(user_rol == allowed_role):
+            if(user_rol["nombre"] == allowed_role):
                 return True
     return False
     

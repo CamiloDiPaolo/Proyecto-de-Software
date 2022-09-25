@@ -20,3 +20,9 @@ class Rol(Base):
     
     def __str__(self):
         return self.nombre
+    
+    def json(self):
+        return {
+            "id":  self.id,
+            "nombre":  self.nombre,
+        }

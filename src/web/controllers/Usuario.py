@@ -1,7 +1,10 @@
 from flask import Blueprint, render_template, request,jsonify
 from src.core.db import db_session
 from src.core.models.Usuario import Usuario
+from src.core.models.Rol import Rol
+from src.core.models.relations.UsuarioTieneRol import UsuarioTieneRol
 from src.web.controllers.Auth import allowed_request
+from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, create_doc_json, delete_doc_json
 
 # TODO: pulir las response, agregar codigos HTTP descriptivos
 users_blueprint = Blueprint("users", __name__, url_prefix="/users")
@@ -13,11 +16,11 @@ def protect():
 
 @users_blueprint.route("/", methods=["GET"])
 def all_users():
-    return jsonify(get_all_users_json())
+    return jsonify(get_all_docs_json(Usuario))
 
 @users_blueprint.route("/<int:id>", methods=["GET"])
 def get_user(id):
-    return jsonify(get_user_json(id))
+    return jsonify(get_doc_json(Usuario, id))
 
 @users_blueprint.route("/create", methods=["POST"])
 def create_user():
@@ -25,38 +28,30 @@ def create_user():
 
 @users_blueprint.route("/delete/<id>", methods=["DELETE"])
 def delete_user(id):
-    return jsonify(delete_user_json(id))
+    return jsonify(delete_doc_json(Usuario, id))
 
 @users_blueprint.route("/update/<int:id>", methods=["PUT"])
 def update_user(id):
     return jsonify(update_user_json(id, request.json))
 
-
-
-def get_all_users_json():
-    json = []
-    result = db_session.query(Usuario).all()
-    for row in result:
-        json.append(row.json())
-    return json
-
-def get_user_json(user_id):
-    result = db_session.query(Usuario).filter_by(id = user_id).all()
-    for row in result:
-        return row.json()
-    return {}
-
 def create_user_json(data):
-    # TODO: hashear la contraseña
-    # TODO: sanitizar los parametros
-    new_user = Usuario(email = data["email"], username = data["username"], contraseña = data["contraseña"], activo = False, nombre = data["nombre"], apellido = data["apellido"])
-    db_session.add_all([new_user])
+    new_user = create_doc_json(Usuario, data);
+    new_roles = []
+    for rol_id in data["roles"]:
+        rol = db_session.query(Rol).filter_by(id = rol_id).all()
+        new_relation = UsuarioTieneRol(new_user["id"], rol_id)
+        db_session.add_all([new_relation])   
+        new_roles.append(str(rol))  
     db_session.commit()
-    return new_user.json()
+    new_user["roles"] = new_roles
+
 
 def update_user_json(user_id, data):
     # TODO: sanitizar los parametros
     # TODO: verificar que si un dato no se pasa quede el que estaba
+    print("__________________________________")
+    print(data)
+    print("__________________________________")
     result = db_session.query(Usuario).filter_by(id = user_id).all()
     updated_user = result[0]
     updated_user.update(data)
@@ -65,10 +60,3 @@ def update_user_json(user_id, data):
     db_session.add_all([updated_user])
     db_session.commit()
     return updated_user.json()
-
-def delete_user_json(user_id):
-    result = db_session.query(Usuario).filter_by(id = user_id).all()
-    for row in result:
-        db_session.delete(row)
-        db_session.commit()
-    return {}

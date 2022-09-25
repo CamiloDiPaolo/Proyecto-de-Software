@@ -23,15 +23,16 @@ class Usuario(Base):
     apellido = Column(String, nullable=False)
 
 
-    def __init__(self, email=None, username=None, contraseña=None, activo=None, nombre=None, apellido=None):
-        self.email = email
-        self.username = username
-        self.contraseña = contraseña
-        self.activo = activo
+    def __init__(self, data):
         self.ultima_actualizacion = datetime.datetime.now()
         self.creacion = datetime.datetime.now()
-        self.nombre = nombre
-        self.apellido = apellido
+
+        self.email = data["email"]
+        self.username = data["username"]
+        self.contraseña = data["contraseña"]
+        self.activo = data["activo"]
+        self.nombre = data["nombre"]
+        self.apellido = data["apellido"]
 
     def __repr__(self):
         return f"Usuario(email={self.email!r}, username={self.username!r}, contraseña={self.contraseña!r}, activo={self.activo!r}, ultima_actualizacion={self.ultima_actualizacion!r}, creacion={self.creacion!r}, nombre={self.nombre!r}, apellido={self.apellido!r})"
@@ -41,6 +42,7 @@ class Usuario(Base):
 
     def json(self):
         return {
+            "id": self.id,
             "email":  self.email,
             "username":  self.username,
             "contraseña":  self.contraseña,
@@ -57,11 +59,10 @@ class Usuario(Base):
         result = db_session.query(UsuarioTieneRol).filter_by(usuario_id = self.id).all()
         for row in result:
             rol = db_session.query(Rol).filter_by(id = row.rol_id).all()
-            roles.append(rol[0].__str__())
+            roles.append(rol[0].json())
         return roles 
     
     def update(self, data):
-        print(data)
         if "email" in data:
             self.email = data["email"]
         if "username" in data:
@@ -86,10 +87,8 @@ class Usuario(Base):
             db_session.delete(old_relation)
         
         # creamos las nuevas relaciones
-        new_roles = []
         for role in roles:
-            new_role = db_session.query(Rol).filter_by(nombre = role).all()
-            new_relation = UsuarioTieneRol(self.id, new_role[0].id)
+            new_relation = UsuarioTieneRol(self.id, role)
             db_session.add_all([new_relation])
         
         db_session.commit()
