@@ -59,8 +59,9 @@ def update_user_json(user_id, data):
     # TODO: verificar que si un dato no se pasa quede el que estaba
     result = db_session.query(Usuario).filter_by(id = user_id).all()
     updated_user = result[0]
-    updated_user.update(email = data["email"], username = data["username"], contraseña = data["contraseña"], activo = False, nombre = data["nombre"], apellido = data["apellido"])
-    updated_user.update_roles(data["roles"])
+    updated_user.update(data)
+    if "roles" in data:
+        updated_user.update_roles(data["roles"])
     db_session.add_all([updated_user])
     db_session.commit()
     return updated_user.json()

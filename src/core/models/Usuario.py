@@ -60,17 +60,26 @@ class Usuario(Base):
             roles.append(rol[0].__str__())
         return roles 
     
-    def update(self, email=None, username=None, contraseña=None, activo=None, nombre=None, apellido=None):
-        self.email = email
-        self.username = username
-        self.contraseña = contraseña
-        self.activo = activo
+    def update(self, data):
+        print(data)
+        if "email" in data:
+            self.email = data["email"]
+        if "username" in data:
+            self.username = data["username"]
+        if "contraseña" in data:
+            self.contraseña = data["contraseña"]
+        if "activo" in data:
+            self.activo = data["activo"]
         self.ultima_actualizacion = datetime.datetime.now()
-        self.nombre = nombre
-        self.apellido = apellido
+        if "nombre" in data:
+            self.nombre = data["nombre"]
+        if "apellido" in data:
+            self.apellido = data["apellido"]
     
     def update_roles(self, roles):
         # TODO: refactorizar esto...
+        if(len(roles) == 0):
+            return
         # eliminamos las antiguas relaciones
         old_roles = db_session.query(UsuarioTieneRol).filter_by(usuario_id = self.id).all()
         for old_relation in old_roles:
