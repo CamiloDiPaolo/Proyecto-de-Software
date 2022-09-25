@@ -17,3 +17,6 @@ class Rol(Base):
 
     def __repr__(self):
         return f"Rol(nombre={self.nombre!r})"
+    
+    def __str__(self):
+        return self.nombre

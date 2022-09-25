@@ -35,6 +35,10 @@ def allowed_request(request, allowed_roles):
     user = db_session.query(Usuario).filter_by(id=decoded["data"]).all()
     user_roles = user[0].get_roles()
 
+    print("---------- USER ROLES")
+    print(user_roles)
+    print("----------")
+
     for allowed_role in allowed_roles:
         for user_rol in user_roles:
             if(user_rol == allowed_role):

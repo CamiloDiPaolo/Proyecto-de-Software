@@ -1,4 +1,6 @@
-from src.core.db import Base
+from src.core.db import Base, db_session
+from src.core.models.relations.UsuarioTieneRol import UsuarioTieneRol
+from src.core.models.Rol import Rol
 
 from sqlalchemy import Column
 from sqlalchemy import Integer
@@ -48,4 +50,10 @@ class Usuario(Base):
         }
     
     def get_roles(self):
-        return ["user", "admin"] #  cambiar esto por una relacion mas tarde
+        roles = []
+        result = db_session.query(UsuarioTieneRol).filter_by(usuario_id = self.id).all()
+        for row in result:
+            rol = db_session.query(Rol).filter_by(id = row.rol_id).all()
+            print(rol[0])
+            roles.append(rol[0].__str__())
+        return roles 
