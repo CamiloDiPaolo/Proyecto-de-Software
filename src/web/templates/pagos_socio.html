@@ -1,0 +1,19 @@
+<!-- En pagos socios  -->
+
+{% extends "list.html" %} {% block body %}
+<button>Agregar Pago</button>
+{% endblock %}{% block table_head %}
+<tr>
+  <th>ID</th>
+  <th>ID_SOCIO</th>
+  <th>PAGO</th>
+  <th>FECHA</th>
+</tr>
+{% endblock %} {% block table_body %} {% for data in pagos_socio %}
+<tr>
+  <td>{{data.id}}</td>
+  <td>{{data.id_socio}}</td>
+  <td>{{data.pago}}</td>
+  <td>{{data.fecha}}</td>
+</tr>
+{% endfor %} {% endblock %}

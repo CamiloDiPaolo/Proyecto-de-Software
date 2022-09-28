@@ -1,0 +1,18 @@
+{% extends "list.html" %} {% block table_head %}
+<tr>
+  <th>NOMBRE</th>
+  <th>APELLIDO</th>
+  <th>NRO DOC</th>
+  <th>NRO SOCIO</th>
+</tr>
+{% endblock %} {% block table_body %} {% for data in socios %}
+<tr>
+  <td>{{data.nombre}}</td>
+  <td>{{data.apellido}}</td>
+  <td>{{data.nro_documento}}</td>
+  <td>{{data.nro_socio}}</td>
+  <td><button id="select" value="{{data.id}}">Seleccionar</button></td>
+</tr>
+{% endfor %} {% endblock %} {% block scripts %}
+<script src="{{ url_for('static', filename='js/socios.js') }}"></script>
+{% endblock %}

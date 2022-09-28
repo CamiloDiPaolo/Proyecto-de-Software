@@ -1,5 +1,5 @@
-from flask import Flask
-from src.web.controllers.Foo import foo_blueprint
+from flask import Flask,render_template
+from src.web.controllers.pagos import pago_blueprint
 
 def create_app():
     app = Flask(__name__)
@@ -8,7 +8,7 @@ def create_app():
     @app.route("/")
     def hello_world():
         return "<p>Hello, World!</p>"
-    
-    app.register_blueprint(foo_blueprint)
+
+    app.register_blueprint(pago_blueprint)
 
     return app    
