@@ -30,7 +30,10 @@ class Usuario(Base):
         self.email = data["email"]
         self.username = data["username"]
         self.contraseña = data["contraseña"]
-        self.activo = data["activo"]
+        if "activo" in data:
+            self.activo = data["activo"]
+        else:
+            self.activo = True
         self.nombre = data["nombre"]
         self.apellido = data["apellido"]
 

@@ -3,26 +3,35 @@
   <div class="admin__panel__header">
     <h2>Crear Usuario</h2>
   </div>
-  <form class="admin__form admin__form--create">
+  <form
+    class="admin__form admin__form--create"
+    method="POST"
+    action="/users/create"
+  >
     <div class="admin__form__input">
       <label>Nombre de usuario</label>
-      <input type="text" placeolder="Nombre de usuario" required />
+      <input
+        type="text"
+        placeolder="Nombre de usuario"
+        required
+        name="username"
+      />
     </div>
     <div class="admin__form__input">
       <label>Nombre</label>
-      <input type="text" placeolder="Nombre" required />
+      <input type="text" placeolder="Nombre" required name="nombre" />
     </div>
     <div class="admin__form__input">
       <label>Apellido</label>
-      <input type="text" placeolder="Apellido" required />
+      <input type="text" placeolder="Apellido" required name="apellido" />
     </div>
     <div class="admin__form__input">
       <label>Email</label>
-      <input type="email" placeolder="Email" required />
+      <input type="email" placeolder="Email" required name="email" />
     </div>
     <div class="admin__form__input">
       <label>Contraseña</label>
-      <input type="text" placeolder="Password" required />
+      <input type="text" placeolder="Password" required name="contraseña" />
     </div>
     <div class="admin__form__input">
       <label>Roles</label>
@@ -38,7 +47,8 @@
       <label>Roles seleccionados</label>
       <div class="roles__added"></div>
     </div>
-    <input type="submit" value="Crear usuario" />
+    <input name="roles" type="text" style="display: none" />
+    <input type="submit" value="Crear usuario" class="submit__btn" />
   </form>
 </div>
 <script src="{{ url_for('static', filename='js/admin_users.js') }}"></script>

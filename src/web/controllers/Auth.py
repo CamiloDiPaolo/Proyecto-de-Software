@@ -15,12 +15,13 @@ def login_view():
 
 @auth_blueprint.route("/login", methods=["POST"])
 def login():
-    if not valid_user(request.json['username'], request.json['password']):
+    data = request.form.to_dict()
+    if not valid_user(data['username'], data['contraseña']):
         res = make_response("alguno de los datos ingresados es incorrecto")
         res.status = 401
         return res
     
-    user_id = db_session.query(Usuario.id).filter_by(username=request.json['username'], contraseña=request.json['password']).all()
+    user_id = db_session.query(Usuario.id).filter_by(username=data['username'], contraseña=data['contraseña']).all()
 
     res = make_response("logeado")
     res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/"
@@ -38,6 +39,9 @@ def allowed_request(request, allowed_roles):
         return
 
     user = db_session.query(Usuario).filter_by(id=decoded["data"]).all()
+    if (not user):
+        return
+        
     user_roles = user[0].get_roles()
 
     print("---------- USER ROLES")

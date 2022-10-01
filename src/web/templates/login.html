@@ -7,11 +7,10 @@
     <title>Document</title>
   </head>
   <body>
-    <form class="form__login">
-      <input type="text" placeholder="Nombre de usuario" />
-      <input type="password" placeholder="Contraseña" />
+    <form class="form__login" method="POST" action="/auth/login">
+      <input type="text" placeholder="Nombre de usuario" name="username" />
+      <input type="password" placeholder="Contraseña" name="contraseña" />
       <input type="submit" />
     </form>
   </body>
-  <script src="{{ url_for('static', filename='js/login.js') }}"></script>
 </html>

@@ -10,7 +10,6 @@ admin_blueprint = Blueprint("admin", __name__, url_prefix="/admin")
 @admin_blueprint.before_request
 def protect():
     if(not allowed_request(request, ["admin"])):
-        print("NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
         return redirect("/auth/login")
 
 @admin_blueprint.route("/", methods=["GET"])

@@ -5,6 +5,7 @@ from src.core.models.Rol import Rol
 from src.core.models.relations.UsuarioTieneRol import UsuarioTieneRol
 from src.web.controllers.Auth import allowed_request
 from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, create_doc_json, delete_doc_json
+import ast
 
 # TODO: pulir las response, agregar codigos HTTP descriptivos
 users_blueprint = Blueprint("users", __name__, url_prefix="/users")
@@ -24,15 +25,20 @@ def get_user(id):
 
 @users_blueprint.route("/create", methods=["POST"])
 def create_user():
-    return jsonify(create_user_json(request.json))
+    data = request.form.to_dict()
+    data["roles"] = ast.literal_eval(data["roles"] )
+    return jsonify(create_user_json(data))
 
 @users_blueprint.route("/delete/<id>", methods=["DELETE"])
 def delete_user(id):
     return jsonify(delete_doc_json(Usuario, id))
 
-@users_blueprint.route("/update/<int:id>", methods=["PUT"])
+@users_blueprint.route("/update/<id>", methods=["POST"])
 def update_user(id):
-    return jsonify(update_user_json(id, request.json))
+    data = request.form.to_dict()
+    data["roles"] = ast.literal_eval(data["roles"] )
+    print(data)
+    return jsonify(update_user_json(id, data))
 
 def create_user_json(data):
     new_user = create_doc_json(Usuario, data);
@@ -44,6 +50,7 @@ def create_user_json(data):
         new_roles.append(str(rol))  
     db_session.commit()
     new_user["roles"] = new_roles
+    return new_user
 
 
 def update_user_json(user_id, data):

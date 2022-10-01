@@ -46,75 +46,21 @@ addRoleBtn.addEventListener("click", (e) => {
   });
 });
 
-// LOGICA PARA CREAR UN USUARIO
+// TANTO AL CREAR COMO AL EDITAR UN USUARIO PARSEAMOS LOS ROLES EN UN ARREGLO
 const form = document.querySelector(".admin__form--create");
-
 form?.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const inputs = [...e.target.querySelectorAll("input")];
   const rolesDivs = [...e.target.querySelectorAll(".rol__added")];
-  const roles = rolesDivs.map((div) => div.dataset.id * 1);
-  const data = {
-    username: inputs[0].value,
-    nombre: inputs[1].value,
-    apellido: inputs[2].value,
-    email: inputs[3].value,
-    contraseña: inputs[4].value,
-    activo: true,
-    roles,
-  };
-
-  try {
-    const res = await fetch(`http://${location.host}/users/create`, {
-      method: "POST",
-      credentials: "same-origin",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (res.status == 200) location.href = "/admin/users";
-  } catch (err) {
-    console.log(err);
-  }
+  e.target.roles.value = JSON.stringify(
+    rolesDivs.map((div) => div.dataset.id * 1)
+  );
+  return true;
 });
 
-// LOGICA PARA CMODIFICAR UN USUARIO
 const formUpdate = document.querySelector(".admin__form--update");
-
 formUpdate?.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const inputs = [...e.target.querySelectorAll("input")];
   const rolesDivs = [...e.target.querySelectorAll(".rol__added")];
-  const roles = rolesDivs.map((div) => div.dataset.id * 1);
-  const data = {
-    username: inputs[0].value,
-    nombre: inputs[1].value,
-    apellido: inputs[2].value,
-    email: inputs[3].value,
-    contraseña: inputs[4].value,
-    activo: true,
-    roles,
-  };
-  console.log(data);
-  try {
-    const res = await fetch(
-      `http://${location.host}/users/update/${location.href.split("/").at(-1)}`,
-      {
-        method: "PUT",
-        credentials: "same-origin",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      }
-    );
-
-    if (res.status == 200) location.href = "/admin/users";
-  } catch (err) {
-    console.log(err);
-  }
+  e.target.roles.value = JSON.stringify(
+    rolesDivs.map((div) => div.dataset.id * 1)
+  );
+  return true;
 });

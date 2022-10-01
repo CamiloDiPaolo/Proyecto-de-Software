@@ -3,7 +3,11 @@
   <div class="admin__panel__header">
     <h2>Modificar datos de Usuario</h2>
   </div>
-  <form class="admin__form admin__form--update">
+  <form
+    class="admin__form admin__form--update"
+    method="POST"
+    action="/users/update/{{user.id}}"
+  >
     <div class="admin__form__input">
       <label>Nombre de usuario</label>
       <input
@@ -11,11 +15,18 @@
         placeolder="Nombre de usuario"
         required
         value="{{user.username}}"
+        name="username"
       />
     </div>
     <div class="admin__form__input">
       <label>Nombre</label>
-      <input type="text" placeolder="Nombre" required value="{{user.nombre}}" />
+      <input
+        type="text"
+        placeolder="Nombre"
+        required
+        value="{{user.nombre}}"
+        name="nombre"
+      />
     </div>
     <div class="admin__form__input">
       <label>Apellido</label>
@@ -24,11 +35,18 @@
         placeolder="Apellido"
         required
         value="{{user.apellido}}"
+        name="apellido"
       />
     </div>
     <div class="admin__form__input">
       <label>Email</label>
-      <input type="email" placeolder="Email" required value="{{user.email}}" />
+      <input
+        type="email"
+        placeolder="Email"
+        required
+        value="{{user.email}}"
+        name="email"
+      />
     </div>
     <div class="admin__form__input">
       <label>Contraseña</label>
@@ -37,6 +55,7 @@
         placeolder="Password"
         required
         value="{{user.contraseña}}"
+        name="contraseña"
       />
     </div>
     <div class="admin__form__input">
@@ -62,6 +81,7 @@
         {% endfor %}
       </div>
     </div>
+    <input name="roles" type="text" style="display: none" />
     <input type="submit" value="Modificar usuario" />
   </form>
 </div>
