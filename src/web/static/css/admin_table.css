@@ -9,6 +9,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 15px;
 }
 
 .admin__panel__header h2 {
@@ -104,4 +105,30 @@
 .active__btn--False:hover {
   background-color: var(--alerta-2-suave);
   cursor: pointer;
+}
+
+.page__btn {
+  background-color: var(--acento-2);
+}
+
+.page__btn:hover {
+  background-color: var(--acento-2-suave);
+  cursor: pointer;
+}
+
+.page__btn--disabled {
+  background-color: var(--acento-2-suave);
+}
+
+.page__btn--disabled:hover {
+  cursor: not-allowed;
+}
+
+.pages__btn {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+
+  flex-grow: 1;
 }

@@ -44,10 +44,6 @@ def allowed_request(request, allowed_roles):
         
     user_roles = user[0].get_roles()
 
-    print("---------- USER ROLES")
-    print(user_roles)
-    print("----------")
-
     for allowed_role in allowed_roles:
         for user_rol in user_roles:
             if(user_rol["nombre"] == allowed_role):

@@ -4,7 +4,7 @@ from src.core.models.Usuario import Usuario
 from src.core.models.Rol import Rol
 from src.core.models.relations.UsuarioTieneRol import UsuarioTieneRol
 from src.web.controllers.Auth import allowed_request
-from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, create_doc_json, delete_doc_json
+from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, create_doc_json, delete_doc_json, get_all_docs_paginated_json
 import ast
 
 # TODO: pulir las response, agregar codigos HTTP descriptivos
@@ -18,6 +18,10 @@ def protect():
 @users_blueprint.route("/", methods=["GET"])
 def all_users():
     return jsonify(get_all_docs_json(Usuario))
+
+@users_blueprint.route("/page/<page>", methods=["GET"])
+def all_users_paginated(page):
+    return jsonify(get_all_docs_paginated_json(Usuario, page))
 
 @users_blueprint.route("/<int:id>", methods=["GET"])
 def get_user(id):

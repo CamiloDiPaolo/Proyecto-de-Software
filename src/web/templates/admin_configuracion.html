@@ -1,0 +1,74 @@
+{% extends "admin.html" %} {% block content %}
+<div class="admin__panel">
+  <div class="admin__panel__header">
+    <h2>Configuracion del sistema</h2>
+  </div>
+  <form class="admin__form" method="POST" action="/admin/config">
+    <div class="admin__form__input">
+      <label>Cantidad de elementos por pagina</label>
+      <input
+        type="number"
+        required
+        value="{{config.elementos_por_pag}}"
+        name="elementos_por_pag"
+      />
+    </div>
+    <div class="admin__form__input">
+      <label>Tabla de pagos</label>
+      <select value="{{config.tabla_pagos}}" required name="tabla_pagos">
+        {% if config.contacto %}
+        <option value="{{True}}">Activo</option>
+        <option value="{{False}}">Inactivo</option>
+        {% else %}
+        <option value="{{False}}">Inactivo</option>
+        <option value="{{True}}">Activo</option>
+        {% endif%}
+      </select>
+    </div>
+    <div class="admin__form__input">
+      <label>Contacto</label>
+      <select value="{{config.contacto}}" required name="contacto">
+        {% if config.contacto %}
+        <option value="{{True}}">Activo</option>
+        <option value="{{False}}">Inactivo</option>
+        {% else %}
+        <option value="{{False}}">Inactivo</option>
+        <option value="{{True}}">Activo</option>
+        {% endif%}
+      </select>
+    </div>
+    <div class="admin__form__input">
+      <label>Encabezado de pagos</label>
+      <input
+        type="text"
+        required
+        value="{{config.encabezado_pago}}"
+        name="encabezado_pago"
+      />
+    </div>
+    <div class="admin__form__input">
+      <label>Valor de cuota base</label>
+      <input
+        type="number"
+        required
+        value="{{config.valor_cuota_base}}"
+        name="valor_cuota_base"
+      />
+    </div>
+    <div class="admin__form__input">
+      <label>Recargo por deuda</label>
+      <input
+        type="number"
+        required
+        value="{{config.recargo_deuda}}"
+        name="recargo_deuda"
+      />
+    </div>
+    <div class="admin__form__input">
+      <label>Moneda</label>
+      <input type="text" required value="{{config.moneda}}" name="moneda" />
+    </div>
+    <input type="submit" value="Modificar configuracion" />
+  </form>
+</div>
+{% endblock %}
