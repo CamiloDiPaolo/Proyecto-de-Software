@@ -16,6 +16,24 @@
   margin: 0;
 }
 
+.link__btn{
+  background-color: lightseagreen;
+  border-radius: 100px;
+  color:black;
+  font-weight: bold;
+  text-align: center;
+  height: 30px;
+  position: fixed;
+  padding-top: 10px;
+  width: 180px;
+}
+
+.link__btn:hover {
+  cursor: pointer;
+  transition: 10ms;
+  background-color: rgb(28, 146, 140);
+}
+
 .add__btn {
   width: 60px;
   height: 60px;

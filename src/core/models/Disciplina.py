@@ -1,6 +1,6 @@
 from src.core.db import Base, db_session
 from src.core.models.relations.UsuarioTieneRol import UsuarioTieneRol
-from src.core.models.Rol import Rol
+from src.core.models.Categoria import Categoria
 
 from sqlalchemy import Column
 from sqlalchemy import Integer
@@ -32,13 +32,10 @@ class Disciplina(Base):
     def __repr__(self):
         return f"Disciplina(id={self.id!r}, nombre={self.nombre!r}, categoria_id={self.categoria_id!r}, instructores={self.instructores!r}, horarios={self.horarios!r}, costo={self.costo!r}, habilitada={self.habilitada!r})"
 
-    # def __str__(self):
-    #     return f"Hola, mi nombre es ${self.username}"
-
     def json(self):
         return {
             "id": self.id,
-            "nombre": self.nombre
+            "nombre": self.nombre,
             "categoria": self.get_categoria(),
             "instructores": self.instructores,
             "horarios": self.horarios,
@@ -48,7 +45,8 @@ class Disciplina(Base):
     
     def get_categoria(self):
         categoria = db_session.query(Categoria).filter_by(id = self.categoria_id)
-        return categoria 
+        cat= categoria[0].json()
+        return cat
     
     def update(self, data):
         if "nombre" in data:
@@ -61,4 +59,4 @@ class Disciplina(Base):
             self.costo = data["costo"]
         if "habilitada" in data:
             self.habilitada = data["habilitada"]
-    
+

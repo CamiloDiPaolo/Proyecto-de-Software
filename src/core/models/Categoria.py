@@ -14,3 +14,13 @@ class Categoria(Base):
 
     def __repr__(self):
         return f"Categoria(id={self.id!r}, nombre={self.nombre!r})"
+
+    def json(self):
+        return {
+            "id":  self.id,
+            "nombre":  self.nombre,
+        }
+    def getName():
+        return self.nombre
+        
+    
