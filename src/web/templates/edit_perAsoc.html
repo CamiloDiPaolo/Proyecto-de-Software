@@ -1,0 +1,73 @@
+{% extends 'layout_perAsoc.html' %}
+{% block title %} Panel de personas Asociadas {% endblock %}
+
+{% block body %}
+
+<div class="admin__panel">
+    <div class="admin__panel__header">
+      <h2>Modificar datos de Usuario</h2>
+    </div>
+    <form class="admin__form admin__form--update">
+      <div class="admin__form__input">
+        <label>Nombre de usuario</label>
+        <input
+          type="text"
+          placeolder="Nombre de usuario"
+          required
+          value=" "
+        />
+      </div>
+      <div class="admin__form__input">
+        <label>Nombre</label>
+        <input type="text" placeolder="Nombre" required value=" " />
+      </div>
+      <div class="admin__form__input">
+        <label>Apellido</label>
+        <input
+          type="text"
+          placeolder="Apellido"
+          required
+          value=" "
+        />
+      </div>
+      <div class="admin__form__input">
+        <label>Email</label>
+        <input type="email" placeolder="Email" required value=" " />
+      </div>
+      <div class="admin__form__input">
+        <label>Contraseña</label>
+        <input
+          type="text"
+          placeolder="Password"
+          required
+          value=" "
+        />
+      </div>
+      <div class="admin__form__input">
+        <label>Roles</label>
+        <div class="roles__input">
+          <select value="" required>
+            <option value="">Seleccione un rol para agregar</option>
+            
+            <option value=" "> </option>
+            
+          </select>
+          <button class="add__role">+</button>
+        </div>
+        <label>Roles seleccionados</label>
+        <div class="roles__added">
+          
+          <div data-id=" " class="rol__added">
+            <span> </span>
+            <button class="action__btn delete__btn">
+              <span class="material-symbols-outlined"> delete </span>
+            </button>
+          </div>
+          
+        </div>
+      </div>
+      <input type="submit" value="Modificar usuario" />
+    </form>
+  </div>
+
+{% endblock %}

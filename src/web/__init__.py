@@ -3,6 +3,7 @@ from src.web.controllers.Usuario import users_blueprint
 from src.web.controllers.Auth import auth_blueprint, allowed_request
 from src.web.controllers.Usuario import users_blueprint
 from src.web.controllers.Admin import admin_blueprint
+from src.web.controllers.perAsoc import perAsoc_blueprint
 
 def create_app():
     app = Flask(__name__, static_folder="static")
@@ -20,5 +21,6 @@ def create_app():
     app.register_blueprint(admin_blueprint)
     app.register_blueprint(users_blueprint)
     app.register_blueprint(auth_blueprint)
+    app.register_blueprint(perAsoc_blueprint)
 
     return app    

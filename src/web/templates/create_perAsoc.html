@@ -1,0 +1,68 @@
+{% extends 'layout_perAsoc.html' %}
+{% block title %} Panel de personas Asociadas {% endblock %}
+{% block body %}
+<div class="admin__panel">
+    <div class="admin__panel__header">
+      <h2>Crear Socio</h2>
+    </div>
+    <form class="admin__form admin__form--create" action="/perAsoc/socioCreado" method="POST">
+      <div class="admin__form__input">
+        <label >Nombre</label>
+        <input type="text" name="nombre" required />
+      </div>
+      <div class="admin__form__input">
+        <label>Apellido</label>
+        <input type="text"  name="apellido" required />
+      </div>
+      <div class="admin__form__input">
+        <label>Tipo de Documento</label>
+        <div class="roles__input">
+          <select value="" name="tipo_documento" required>
+            <option value="DNI">DNI</option>
+            <option value="CARNET_EXT">CARNET EXT</option>
+            <option value="RUC<">RUC</option>
+            <option value="PASAPORTE">PASAPORTE</option>
+            <option value="P.NAC">P.NAC</option>
+          </select>
+        </div>
+      </div>
+      <div class="admin__form__input">
+        <label>Numero de documento (Sin puntos ni coma) </label>
+        <input type="number" name="nro_documento" required />
+      </div>
+      <div class="admin__form__input">
+        <label>Genero </label>
+        <div class="roles__input">
+          <select value="" name="genero"required>
+            <option> Seleccione genero </option>
+            <option value="M">Masculino</option>
+            <option value="F">Femenino</option>
+            <option value="O">Otro</option>
+          </select>
+        </div>
+      </div>
+      <div class="admin__form__input">
+        <label>Direccion</label>
+        <input type="text" name="direccion"required />
+      </div>
+      <div class="admin__form__input">
+        <label>Estado </label>
+        <div class="roles__input">
+          <select value="" name="estado"required>
+            <option value="Activo"> Activo </option>
+            <option value="Inactivo"> Inactivo</option>
+          </select>
+        </div> 
+      </div>
+      <div class="admin__form__input">
+        <label>Telefono</label>
+        <input type="number" name="telefono"/>
+      </div>
+      <div class="admin__form__input">
+        <label>Email</label>
+        <input type="email" name="email"/>
+      </div>
+    <input type="submit" value="Crear socio" /> </a>
+    </form>
+  </div>
+{% endblock %}
