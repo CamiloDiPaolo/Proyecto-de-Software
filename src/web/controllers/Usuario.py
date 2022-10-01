@@ -40,6 +40,11 @@ def update_user(id):
     print(data)
     return jsonify(update_user_json(id, data))
 
+@users_blueprint.route("/active/<id>", methods=["POST"])
+def active_user(id):
+    data = request.json
+    return jsonify(update_user_json(id, data))
+
 def create_user_json(data):
     new_user = create_doc_json(Usuario, data);
     new_roles = []

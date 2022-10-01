@@ -20,7 +20,7 @@
         <td>{{user.username}}</td>
         <td>{{user.nombre}}</td>
         <td>{{user.apellido}}</td>
-        <td>/{% for rol in user.roles %}{{rol.nombre}}/{% endfor %}</td>
+        <td>{% for rol in user.roles %}{{rol.nombre}} {% endfor %}</td>
         <td>
           <div class="admin__table__actions">
             <a class="delete__btn action__btn" data-id="{{user.id}}">
@@ -31,6 +31,17 @@
               href="/admin/users/edit/{{user.id}}"
             >
               <span class="material-symbols-outlined"> edit </span>
+            </a>
+            <a
+              class="active__btn--{{user.activo}} action__btn active__btn"
+              data-id="{{user.id}}"
+              data-activo="{{user.activo}}"
+            >
+              {% if user.activo %}
+              <span class="material-symbols-outlined"> toggle_on </span>
+              {% else %}
+              <span class="material-symbols-outlined"> toggle_off </span>
+              {% endif %}
             </a>
           </div>
         </td>
@@ -55,6 +66,29 @@
           }
         );
 
+        if (res.status == 200) location.href = "/admin/users";
+      } catch (err) {
+        console.log(err);
+      }
+    });
+  });
+
+  [...document.querySelectorAll(".active__btn")].forEach((btn) => {
+    btn.addEventListener("click", async (e) => {
+      try {
+        const res = await fetch(
+          `http://${location.host}/users/active/${btn.dataset.id}`,
+          {
+            method: "POST",
+            credentials: "same-origin",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              activo: btn.dataset.activo == "True" ? false : true,
+            }),
+          }
+        );
         if (res.status == 200) location.href = "/admin/users";
       } catch (err) {
         console.log(err);

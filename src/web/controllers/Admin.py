@@ -18,7 +18,9 @@ def admin():
 
 @admin_blueprint.route("/users", methods=["GET"])
 def users():
-    return render_template('admin_usuarios.html', users=get_all_docs_json(Usuario))
+    users = get_all_docs_json(Usuario);
+    users.sort(key = lambda u: u["username"])
+    return render_template('admin_usuarios.html', users=users)
 
 @admin_blueprint.route("/users/new", methods=["GET"])
 def new_user():

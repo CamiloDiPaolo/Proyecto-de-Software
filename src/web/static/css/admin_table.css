@@ -87,3 +87,21 @@
   background-color: var(--acento-2-suave);
   cursor: pointer;
 }
+
+.active__btn--True {
+  background-color: var(--acento-1);
+}
+
+.active__btn--True:hover {
+  background-color: var(--acento-1-suave);
+  cursor: pointer;
+}
+
+.active__btn--False {
+  background-color: var(--alerta-2);
+}
+
+.active__btn--False:hover {
+  background-color: var(--alerta-2-suave);
+  cursor: pointer;
+}
