@@ -23,15 +23,15 @@
     <div style="align-items: start;" class="admin__form__input">
       <label>Habilitado</label>
       {% if discipline.habilitada == true %}
-      <input type="checkbox" name="habilitada"  checked="true" required />
+      <input type="checkbox" name="habilitada"  checked="true"  />
       {% else %}
-      <input type="checkbox" name="habilitada"  required />
+      <input type="checkbox" name="habilitada"   />
       {% endif %}
     </div>
     <div class="admin__form__input">
       <label>Categoria</label>
       <div class="roles__input">
-        <select name="categoria_id" >
+        <select name="categoria_id" required>
           {% for cat in categories %}
           <option value='{{cat.id}}'>{{cat.nombre}}</option>
           {% endfor %}

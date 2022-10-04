@@ -22,12 +22,12 @@
     </div>
     <div class="admin__form__input">
       <label>Habilitado</label>
-      <input type="checkbox" name="habilitada" required />
+      <input type="checkbox" name="habilitada" />
     </div>
     <div class="admin__form__input">
       <label>Categoria</label>
       <div class="roles__input">
-        <select name="categoria_id" >
+        <select name="categoria_id" required >
           {% for cat in categories %}
           <option value='{{cat.id}}'>{{cat.nombre}}</option>
           {% endfor %}

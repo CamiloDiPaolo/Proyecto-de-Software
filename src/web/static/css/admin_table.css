@@ -88,6 +88,10 @@
   color: var(--gris-oscuro-1);
 }
 
+.play__btn {
+  background-color: rgb(29, 138, 29);
+}
+
 .delete__btn {
   background-color: var(--alerta-1);
 }

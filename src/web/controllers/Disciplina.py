@@ -22,7 +22,7 @@ def get_user(id):
 @disciplines_blueprint.route("/create", methods=["POST"])
 def create_discipline():
     disc = request.form.to_dict()
-    if(disc['habilitada']):
+    if 'habilitada' in disc.keys():
         disc['habilitada'] = True
     else:
         disc['habilitada'] = False
@@ -31,35 +31,36 @@ def create_discipline():
 
 @disciplines_blueprint.route("/update/<int:id>", methods=["POST"])
 def update_discipline(id):
-    return jsonify(update_discipline_json(id, request.json))
+    disc = request.form.to_dict()
+    result = db_session.query(Disciplina).filter_by(id = id).all()
+    if 'habilitada' in disc.keys():
+        disc['habilitada'] = True
+    else:
+        disc['habilitada'] = False
+    updated_disc = result[0]
+    updated_disc.update(disc)
+    db_session.add_all([updated_disc])
+    db_session.commit()
+    return redirect("/admin/disciplines")
 
 @disciplines_blueprint.route("/delete/<id>", methods=["DELETE"])
 def delete_discipline(id):
     return jsonify(delete_doc_json(Disciplina, id))
 
 
-#@disciplines.route("/update/Status<int:id>", methods=["PUT"])
-#def update_discipline_status(id):
-#    return jsonify(update_discipline_status(id, request.json))
+@disciplines_blueprint.route("/switch/<int:id>/<string:state>")
+def switch(id,state):
+    result = db_session.query(Disciplina).filter_by(id = id).all()
+    updated_disc = result[0]
+    if(state == "true"):
+        updated_disc.habilitada = True;
+    else:
+        updated_disc.habilitada = False;
+    db_session.add_all([updated_disc])
+    db_session.commit()
+    return redirect("/admin/disciplines")
 
 def create_discipline_json(data):
     disc = create_doc_json(Disciplina, data);
     db_session.commit()
-
-def update_discipline_json(id, data):
-    print("__________________________________")
-    print(request.form)
-    print(get_doc_json(Disciplina,id))
-    print("__________________________________")
-    #result = db_session.query(Usuario).filter_by(id = user_id).all()
-    #updated_user = result[0]
-    #updated_user.update(data)
-    #if "roles" in data:
-    #    updated_user.update_roles(data["roles"])
-    #db_session.add_all([updated_user])
-    #db_session.commit()
-    return True#updated_user.json()
-
-    
-
 
