@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pagos</title>
+  </head>
+  <body>
+    <form>
+      <div>
+        <label>Nombre</label>
+        <input type="text" value="{{socio.nombre}}" disabled />
+      </div>
+      <div>
+        <label>Apellido</label>
+        <input type="text" value="{{socio.apellido}}" disabled />
+      </div>
+      <div>
+        <label>NRO Documento</label>
+        <input type="text" value="{{socio.nro_documento}}" disabled />
+      </div>
+    </form>
+    <form action="/pagos/create" method="POST">
+      <div style="display: none">
+        <input type="number" name="id_socio" value="{{socio.id}}" />
+      </div>
+      <div>
+        <label>Pago</label>
+        <input type="number" placeholder="Pago" name="Pago" required />
+      </div>
+      <div>
+        <label>Año</label>
+        <input
+          type="number"
+          required
+          min="2000"
+          max="{{ac_year}}"
+          name="Año"
+          required
+        />
+        <label>Mes</label>
+        <select name="month" id="month">
+          <option value="01">Enero</option>
+          <option value="02">Febrero</option>
+          <option value="03">Marzo</option>
+          <option value="04">Abril</option>
+          <option value="05">Mayo</option>
+          <option value="06">Junio</option>
+          <option value="07">Julio</option>
+          <option value="08">Agosto</option>
+          <option value="09">Septiembre</option>
+          <option value="10">Octubre</option>
+          <option value="11">Noviembre</option>
+          <option value="12">Diciembre</option>
+        </select>
+      </div>
+      <input type="submit" value="Agregar Pago" />
+    </form>
+  </body>
+</html>

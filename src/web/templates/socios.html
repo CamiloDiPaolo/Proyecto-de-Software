@@ -11,7 +11,9 @@
   <td>{{data.apellido}}</td>
   <td>{{data.nro_documento}}</td>
   <td>{{data.nro_socio}}</td>
-  <td><button id="select" value="{{data.id}}">Seleccionar</button></td>
+  <td>
+    <a href="/socios/{{data.id}}"><span>Seleccionar</span></a>
+  </td>
 </tr>
 {% endfor %} {% endblock %} {% block scripts %}
 <script src="{{ url_for('static', filename='js/socios.js') }}"></script>
