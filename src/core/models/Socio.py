@@ -8,32 +8,32 @@ from sqlalchemy import Date
 
 class socio(Base):
     __tablename__ = "socio"
-    id = 1#Column(Integer, primary_key=True)
-    email = Column(String, primary_key=True)#Column(String, nullable=False)
+    id = Column(Integer, primary_key=True)
+    email = Column(String, nullable=False) #Column(String, primary_key=True)
     nombre = Column(String,nullable=False)
     apellido = Column(String, nullable=False)
     tipo_documento = Column(String, nullable=False)
     nro_documento = Column(String, nullable=False)
     genero = Column(String, nullable=False)
-    nro_socio = 1#Column(Integer, nullable=False)
+    nro_socio = Column(Integer, nullable=False)
     direccion = Column(String, nullable=False)
     estado = Column(Boolean, nullable=False)
     telefono = Column(String, nullable=False)
-    fecha_alta = '2022-09-30'#Column(Date, nullable=False)
+    fecha_alta = Column(Date, nullable=False)
 
     def __init__(self,data):
-        #self.id = data["id"]
+        self.id = self.id#data["id"]
         self.email = data["email"]
         self.nombre = data["nombre"]
         self.apellido = data["apellido"]
         self.tipo_documento = data["tipo_documento"]
         self.nro_documento = data["nro_documento"]
         self.genero = data["genero"]
-        #self.nro_socio = data["nro_socio"]
+        self.nro_socio = data["nro_socio"]
         self.direccion = data["direccion"]
         self.estado = data["estado"]
         self.telefono = data["telefono"]
-        #self.fecha_alta = data["fecha_alta"]
+        self.fecha_alta = data["fecha_alta"]
 
 
     def __repr__(self):

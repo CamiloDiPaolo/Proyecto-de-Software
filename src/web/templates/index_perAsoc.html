@@ -2,8 +2,90 @@
 
 {% block title %}  Panel de personas Asociadas {% endblock %}
 {% block body %}
-<a href="/perAsoc/crearSocio"> <button class="btn btn-primary btn-lg"> Crear Socio </button> </a>
-{# <a href="/perAsoc/borrarSocio"> <button> Borrar Socio </button> </a> #}
-{# <a href="/perAsoc/editarSocio"> <button> Editar Socio </button> </a> #}
 
-{% endblock %}
+<div class="admin__panel">
+    <div class="admin__panel__header">
+      <h2>Socios</h2>
+      <a class="add__btn" href="/perAsoc/crearSocio">+</a>
+    </div>
+    <table class="admin__table">
+      <thead class="admin__table__head">
+        <th>nro_Socio</th>
+        <th>email</th>
+        <th>nombre</th>
+        <th>apellido</th>
+        <th>tipo_documento</th>
+        <th>nro_document</th>
+        <th>direccion</th>
+        <th>estado</th>
+        <th>telefono</th>
+        <th>fecha_alta</th>
+        <th></th>
+      </thead>
+      <tbody class="admin__table__body">
+        {% for user in socio %}
+        <tr>
+          <td>{{user.nro_socio}}</td>
+          {% if user.email %}
+            <td>{{user.email}}</td>
+            {% else %}
+            <td>Sin especificar</td>
+          {% endif %}
+          <td>{{user.nombre}}</td>
+          <td>{{user.apellido}}</td>
+          <td>{{user.tipo_documento}}</td>
+          <td>{{user.nro_document}}</td>
+          <td>{{user.direccion}}</td>
+          {% if user.estado %}
+            <td>Activo</td>
+            {% else %}
+            <td>Inactivo</td>
+          {% endif %}
+          {% if user.telefono %}
+            <td>{{user.telefono}}</td>
+            {% else %}
+            <td>Sin especificar</td>
+          {% endif %}
+          <td>{{user.fecha_alta}}</td>
+          <td>
+            <div class="admin__table__actions">
+              <a class="delete__btn action__btn" data-id="{{user.id}}">
+                <span class="material-symbols-outlined"> delete </span>
+              </a>
+              <a
+                class="patch__btn action__btn"
+                href="/perAsoc/editarSocio/{{user.id}}"
+              >
+                <span class="material-symbols-outlined"> edit </span>
+              </a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  
+  <script>
+    [...document.querySelectorAll(".delete__btn")].forEach((btn) => {
+      btn.addEventListener("click", async (e) => {
+        try {
+          const res = await fetch(
+            `http://${location.host}/perAsoc/delete/${btn.dataset.id}`,
+            {
+              method: "DELETE",
+              credentials: "same-origin",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+  
+          if (res.status == 200) location.href = "/perAsoc";
+        } catch (err) {
+          console.log(err);
+        }
+      });
+    });
+  </script>
+  {% endblock %}
