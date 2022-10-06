@@ -10,16 +10,17 @@
     </div>
     <table class="admin__table">
       <thead class="admin__table__head">
-        <th>nro_Socio</th>
-        <th>email</th>
-        <th>nombre</th>
-        <th>apellido</th>
-        <th>tipo_documento</th>
-        <th>nro_document</th>
-        <th>direccion</th>
-        <th>estado</th>
-        <th>telefono</th>
-        <th>fecha_alta</th>
+        <th>Numero de Socio</th>
+        <th>Email</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Genero</th>
+        <th>Tipo de Documento</th>
+        <th>Nro de Documento</th>
+        <th>Direccion</th>
+        <th>Estado</th>
+        <th>Telefono</th>
+        <th>Fecha de alta</th>
         <th></th>
       </thead>
       <tbody class="admin__table__body">
@@ -33,8 +34,9 @@
           {% endif %}
           <td>{{user.nombre}}</td>
           <td>{{user.apellido}}</td>
+          <td>{{user.genero}}</td>
           <td>{{user.tipo_documento}}</td>
-          <td>{{user.nro_document}}</td>
+          <td>{{user.nro_documento}}</td>
           <td>{{user.direccion}}</td>
           {% if user.estado %}
             <td>Activo</td>

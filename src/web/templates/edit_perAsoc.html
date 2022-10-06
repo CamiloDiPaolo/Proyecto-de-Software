@@ -7,67 +7,52 @@
     <div class="admin__panel__header">
       <h2>Modificar datos de Usuario</h2>
     </div>
-    <form class="admin__form admin__form--update">
-      <div class="admin__form__input">
-        <label>Nombre de usuario</label>
-        <input
-          type="text"
-          placeolder="Nombre de usuario"
-          required
-          value=" "
-        />
-      </div>
+    <form class="admin__form admin__form--update" action="/perAsoc/update/{{user.id}}" method="POST">
       <div class="admin__form__input">
         <label>Nombre</label>
-        <input type="text" placeolder="Nombre" required value=" " />
+        <input name="nombre" type="text" placeolder="Nombre" required value="{{user.nombre}} " />
       </div>
       <div class="admin__form__input">
         <label>Apellido</label>
-        <input
-          type="text"
-          placeolder="Apellido"
-          required
-          value=" "
-        />
+        <input name="apellido" type="text" placeolder="Apellido" required value="{{user.apellido}} "/>
+      </div>
+      <div class="admin__form__input">
+        <label>Genero </label>
+        <div class="roles__input">
+          <select name="genero" required>
+            <option value="{{user.genero}}"disabled selected hidden > {{user.genero}} </option>
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+      </div>
+      <div class="admin__form__input">
+        <label>Estado </label>
+        <div class="roles__input">
+          <select value="" name="estado" required>
+            {% if user.estado %} <option value="Activo"disabled selected hidden >Activo</option>
+            {% else %} <option value="Inactivo"disabled selected hidden >Inactivo</option>
+            {% endif %}
+            <option value="Activo">Activo </option>
+            <option value="Inactivo">Inactivo</option>
+          </select>
+        </div> 
+      </div>
+      <div class="admin__form__input">
+        <label>Direccion</label>
+        <input type="text" name="direccion"required value="{{user.direccion}}"/>
+      </div>
+      <div class="admin__form__input">
+        <label>Telefono</label>
+        <input type="number" name="telefono" value="{{user.telefono}}"/>
       </div>
       <div class="admin__form__input">
         <label>Email</label>
-        <input type="email" placeolder="Email" required value=" " />
+        <input name ="email" type="email" placeolder="Email" value="{{user.email}} " />
       </div>
-      <div class="admin__form__input">
-        <label>Contraseña</label>
-        <input
-          type="text"
-          placeolder="Password"
-          required
-          value=" "
-        />
-      </div>
-      <div class="admin__form__input">
-        <label>Roles</label>
-        <div class="roles__input">
-          <select value="" required>
-            <option value="">Seleccione un rol para agregar</option>
-            
-            <option value=" "> </option>
-            
-          </select>
-          <button class="add__role">+</button>
-        </div>
-        <label>Roles seleccionados</label>
-        <div class="roles__added">
-          
-          <div data-id=" " class="rol__added">
-            <span> </span>
-            <button class="action__btn delete__btn">
-              <span class="material-symbols-outlined"> delete </span>
-            </button>
-          </div>
-          
-        </div>
-      </div>
-      <input type="submit" value="Modificar usuario" />
+    <input type="submit" value="Modificar usuario" />
     </form>
   </div>
-
+</div>
 {% endblock %}

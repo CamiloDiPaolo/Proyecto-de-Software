@@ -55,3 +55,19 @@ class socio(Base):
             "fecha_alta": self.fecha_alta,
         }
 
+    def update(self, data):
+        if "nombre" in data:
+            self.nombre = data["nombre"]
+        if "apellido" in data:
+            self.apellido = data["apellido"]
+        if "email" in data:
+            self.email = data["email"]
+        if "genero" in data:
+            self.genero = data["genero"]
+        if "direccion" in data:
+            self.direccion = data["direccion"]
+        if "telefono" in data:
+            self.telefono = data["telefono"]
+        if "estado" in data:
+            self.estado = data["estado"]
+
