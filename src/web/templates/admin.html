@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/admin.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/admin_table.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/admin_form.css') }}"
+    />
+    <title>Panel de administrador</title>
+  </head>
+  <body>
+    <nav class="admin__nav">
+      <ul class="admin__nav__links">
+        <li>
+          <a class="admin__nav__link" href="/admin/users"
+            ><span class="material-symbols-outlined"> person </span
+            ><span>Usuarios</span></a
+          >
+        </li>
+        <li>
+          <a class="admin__nav__link" href="/perAsoc/"
+            ><span class="material-symbols-outlined"> school </span
+            ><span> Socios </span>
+          </a>
+        </li>
+        <li>
+          <a class="admin__nav__link"
+            ><span class="material-symbols-outlined"> fitness_center </span
+            ><span>Disciplinas</span></a
+          >
+        </li>
+        <li>
+          <a class="admin__nav__link" href="/socios"
+            ><span class="material-symbols-outlined"> payments </span
+            ><span>Pagos</span></a
+          >
+        </li>
+        <li>
+          <a class="admin__nav__link"
+            ><span class="material-symbols-outlined"> settings </span
+            ><span>Configuracion</span></a
+          >
+        </li>
+      </ul>
+    </nav>
+    <main class="admin__main">{% block content %} {% endblock %}</main>
+  </body>
+</html>

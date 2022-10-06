@@ -1,0 +1,33 @@
+<!-- En pagos socios  -->
+
+{% extends "admin.html" %} {% block content %}
+<div class="admin__panel">
+  <div class="admin__panel__header">
+    <!-- <div style="transform: translate(-250%,-70%);">
+      <a class="add__btn action__btn" href="/socios"><span class="material-symbols-outlined">
+        arrow_back
+        </span></a>
+    </div> -->
+    <h2>Pagos de {{partner.nombre}} {{partner.apellido}}</h2>
+  </div class="admin__table__actions">
+  <div>
+    <a class="add__btn action__btn" href="/pagos/{{partner.id}}/new"><span class="material-symbols-outlined"> add </span></a>
+  </div>
+  <table class="admin__table">
+    <thead class="admin__table__head">
+      <tr>
+        <th>PAGO</th>
+        <th>FECHA</th>
+      </tr>
+    </thead>
+    <tbody class="admin__table__body">
+      {% for data in pagos_socio %}
+      <tr>
+        <td>{{data.pago}}</td>
+        <td>{{data.fecha}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

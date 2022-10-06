@@ -1,0 +1,36 @@
+{% extends "admin.html" %} {% block content %}
+<div class="admin__panel">
+  <div class="admin__panel__header">
+    <h2>Elija un Socio</h2>
+  </div>
+
+  <table class="admin__table">
+    <thead class="admin__table__head">
+      <tr>
+        <th>NOMBRE</th>
+        <th>APELLIDO</th>
+        <th>NRO DOC</th>
+        <th>NRO SOCIO</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody class="admin__table__body">
+      {% for data in socios %}
+      <tr>
+        <td>{{data.nombre}}</td>
+        <td>{{data.apellido}}</td>
+        <td>{{data.nro_documento}}</td>
+        <td>{{data.nro_socio}}</td>
+        <td>
+          <div class="admin__table__actions">
+            <a class="add__btn action__btn" href="/socios/{{data.id}}"
+              ><span class="material-symbols-outlined"> payments </span>
+            </a>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

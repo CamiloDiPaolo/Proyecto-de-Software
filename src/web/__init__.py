@@ -8,7 +8,7 @@ def create_app():
     # Define home
     @app.route("/")
     def hello_world():
-        return "<p>Hello, World!</p>"
+        return render_template("admin.html")
 
     app.register_blueprint(pago_blueprint)
     app.register_blueprint(pagos_socios_blueprint)
