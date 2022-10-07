@@ -1,12 +1,9 @@
-from flask import Blueprint,render_template,redirect, request
+from flask import Blueprint,render_template,redirect, request,jsonify
 from src.core.db import db_session
 from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, create_doc_json, delete_doc_json
 from src.core.models.pago import pago
 from src.core.models.socio import socio
 
-from flask_wtf import FlaskForm
-from wtforms import SubmitField
-from wtforms.validators import DataRequired
 
 import datetime
 
@@ -25,14 +22,14 @@ def create_payment(id_socio):
 @pago_blueprint.route("create",methods=["POST"])
 def create_payment_POST():
     payment_dict = request.form.to_dict()
-    print("----------------------")
-    print(payment_dict)
-    print("----------------------")
     data = {
         "id_socio": payment_dict["id_socio"],
         "pago": payment_dict["Pago"],
-        "fecha": datetime.date(int(payment_dict["Año"]),int(payment_dict["month"]),1)
+        "fecha": datetime.date(int(payment_dict["Año"]),int(payment_dict["month"]),datetime.datetime.now().day)
     }
-    print(data)
     create_doc_json(pago,data)
     return redirect("/socios/"+ data["id_socio"])
+
+@pago_blueprint.route("/delete/<id>", methods=["DELETE"])
+def delete_discipline(id):
+    return jsonify(delete_doc_json(pago, id))

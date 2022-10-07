@@ -2,6 +2,21 @@
 <div class="admin__panel">
   <div class="admin__panel__header">
     <h2>Elija un Socio</h2>
+    <!-- TODO: Crear estilo para buscador -->
+    <form action="/socios/find" method="GET">
+      <input type="text" name="search" placeholder="Buscar..." required />
+      <select name="type" id="type" required>
+        <option disabled selected hidden value="">--Buscar por--</option>
+        <option value="nombre">Nombre</option>
+        <option value="nro_socio">Numero Socio</option>
+      </select>
+      <input type="submit" value="Buscar" />
+    </form>
+    <div class="admin__table__actions">
+      <a class="add__btn action__btn" href="/socios"
+        ><span class="material-symbols-outlined"> sync </span>
+      </a>
+    </div>
   </div>
 
   <table class="admin__table">

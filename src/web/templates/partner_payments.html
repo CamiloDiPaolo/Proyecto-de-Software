@@ -3,31 +3,86 @@
 {% extends "admin.html" %} {% block content %}
 <div class="admin__panel">
   <div class="admin__panel__header">
-    <!-- <div style="transform: translate(-250%,-70%);">
-      <a class="add__btn action__btn" href="/socios"><span class="material-symbols-outlined">
-        arrow_back
-        </span></a>
-    </div> -->
     <h2>Pagos de {{partner.nombre}} {{partner.apellido}}</h2>
-  </div class="admin__table__actions">
-  <div>
-    <a class="add__btn action__btn" href="/pagos/{{partner.id}}/new"><span class="material-symbols-outlined"> add </span></a>
+
+    <!-- <form action="/socios/{{partner.id}}/find" method="GET">
+      <div class="admin__form__input">
+        <label>Año</label>
+        <div class="roles__input">
+          <select name="year" id="year" required>
+            <option disabled selected hidden value="">--Elija un año--</option>
+            <option value="{{ac_year}}">{{ac_year}}</option>
+            <option value="{{ac_year - 1}}">{{ac_year - 1}}</option>
+            <option value="{{ac_year - 2}}">{{ac_year - 2}}</option>
+          </select>
+        </div>
+      </div>
+      <input type="submit" value="Filtrar" />
+    </form>
+    <div>
+      <a class="add__btn action__btn" href="/socios/{{partner.id}}"
+        ><span class="material-symbols-outlined"> sync </span>
+      </a>
+    </div> -->
+  </div> 
+    <div>
+      <a class="add__btn action__btn" href="/pagos/{{partner.id}}/new"
+        ><span class="material-symbols-outlined"> add </span></a
+      >
+    </div>
+    <table class="admin__table">
+      <thead class="admin__table__head">
+        <tr>
+          <th>PAGO</th>
+          <th>FECHA</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody class="admin__table__body">
+        {% for data in pagos_socio %}
+        <tr>
+          <td>{{data.pago}}</td>
+          <td>{{data.fecha}}</td>
+          <td>
+            <div class="admin__table__actions">
+              <a class="delete__btn action__btn" data-id="{{data.id}}">
+                <span class="material-symbols-outlined"> delete </span>
+              </a>
+              <a class="patch__btn action__btn" data-id="{{data.id}}">
+                <span class="material-symbols-outlined"> file_download </span>
+              </a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
-  <table class="admin__table">
-    <thead class="admin__table__head">
-      <tr>
-        <th>PAGO</th>
-        <th>FECHA</th>
-      </tr>
-    </thead>
-    <tbody class="admin__table__body">
-      {% for data in pagos_socio %}
-      <tr>
-        <td>{{data.pago}}</td>
-        <td>{{data.fecha}}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+
+  <script>
+    [...document.querySelectorAll(".delete__btn")].forEach((btn) => {
+      btn.addEventListener("click", async (e) => {
+        if (confirm("¿Estas seguro de que quieres eliminar este pago?")) {
+          try {
+            const res = await fetch(
+              `http://${location.host}/pagos/delete/${btn.dataset.id}`,
+              {
+                method: "DELETE",
+                credentials: "same-origin",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+
+            if (res.status == 200) location.href = "/socios/{{partner.id}}";
+          } catch (err) {
+            console.log(err);
+          }
+        }
+      });
+    });
+  </script>
+
+  {% endblock %}
 </div>
-{% endblock %}
