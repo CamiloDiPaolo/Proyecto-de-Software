@@ -6,7 +6,7 @@ from sqlalchemy import Integer
 from sqlalchemy import String
 
 
-engine = create_engine(f"postgresql+psycopg2://postgres:postgres@localhost:5432/proyectosoftware", echo=True, future=True)
+engine = create_engine(f"postgresql+psycopg2://grupo21:grupo21@https://admin-grupo21.proyecto2022.linti.unlp.edu.ar/", echo=True, future=True)
 
 db_session = scoped_session(sessionmaker(autocommit=False,
                                          autoflush=False,
