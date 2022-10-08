@@ -1,4 +1,4 @@
-from src.web import create_app
+from src import create_app
 from src.core.db import init_db
 
 app = create_app()
