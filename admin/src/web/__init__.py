@@ -1,4 +1,5 @@
-from flask import Flask, request, redirect, render_template
+from flask import Flask, request, redirect, render_template, session
+from flask_session import Session
 from src.web.controllers.Usuario import users_blueprint
 from src.web.controllers.Auth import auth_blueprint, allowed_request
 from src.web.controllers.Admin import admin_blueprint
@@ -15,7 +16,12 @@ def create_app(env="development", static_folder="static"):
 
     app.config.from_object(config[env])
 
+    app.config["SESSION_PERMANENT"] = False
+    app.config["SESSION_TYPE"] = "filesystem"
+
     db.init_app(app)
+    Session(app)
+
     # Define home
     @app.route("/")
     def hello_world():
