@@ -1,2 +1,8 @@
 pruebas
-__pychache__
+src/web/controllers/__pycache__
+src/web/__pycache__
+src/core/__pycache__
+src/core/models/__pycache__
+__pycache__
+
+

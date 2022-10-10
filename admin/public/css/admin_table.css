@@ -1,0 +1,148 @@
+.admin__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 80%;
+}
+
+.admin__panel__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.admin__panel__header h2 {
+  color: var(--acento-1);
+  margin: 0;
+}
+
+.add__btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 999px;
+  background-color: var(--acento-1);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: var(--gris-oscuro-1);
+}
+
+.add__btn:hover {
+  cursor: pointer;
+  background-color: var(--acento-1-suave);
+}
+.admin__table {
+  color: var(--gris-claro-5);
+}
+.admin__table__head {
+  background-color: var(--gris-oscuro-2);
+}
+
+.admin__table__body {
+  background-color: var(--gris-oscuro-3);
+}
+
+.admin__table__body td,
+.admin__table__head th {
+  padding: 20px;
+  text-align: center;
+  max-width: 100px;
+  min-width: 100px;
+  height: auto;
+  word-wrap: break-word;
+}
+
+.admin__table__actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.action__btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  color: var(--gris-oscuro-1);
+}
+
+.delete__btn {
+  background-color: var(--alerta-1);
+}
+
+.delete__btn:hover {
+  background-color: var(--alerta-1-suave);
+  cursor: pointer;
+}
+
+.patch__btn {
+  background-color: var(--acento-2);
+}
+
+.patch__btn:hover {
+  background-color: var(--acento-2-suave);
+  cursor: pointer;
+}
+.active__btn--True {
+  background-color: var(--acento-1);
+}
+
+.active__btn--True:hover {
+  background-color: var(--acento-1-suave);
+  cursor: pointer;
+}
+
+.active__btn--False {
+  background-color: var(--alerta-2);
+}
+
+.active__btn--False:hover {
+  background-color: var(--alerta-2-suave);
+  cursor: pointer;
+}
+
+.page__btn {
+  background-color: var(--acento-2);
+}
+
+.page__btn:hover {
+  background-color: var(--acento-2-suave);
+  cursor: pointer;
+}
+
+.page__btn--disabled {
+  background-color: var(--acento-2-suave);
+}
+
+.page__btn--disabled:hover {
+  cursor: not-allowed;
+}
+
+.pages__btn {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+
+  flex-grow: 1;
+}
+.select__btn {
+  border-radius: 90px;
+  background-color: var(--acento-1);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: var(--gris-oscuro-1);
+}
+
+.select__btn:hover {
+  cursor: pointer;
+  background-color: var(--acento-1-suave);
+}
