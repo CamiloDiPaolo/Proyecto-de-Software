@@ -1,7 +1,7 @@
 from flask import Blueprint,render_template,redirect,request,jsonify
 import json,datetime,random
 from src.core.db import db_session
-from src.core.models.Socio import socio
+from src.core.models.Socio import Socio
 from src.web.controllers.FactoryCrud import create_doc_json, delete_doc_json, get_all_docs_json, get_doc_json
 
 
@@ -10,11 +10,11 @@ perAsoc_blueprint = Blueprint('perAsoc_blueprint', __name__, url_prefix='/perAso
 
 @perAsoc_blueprint.route("/", methods=["GET"])
 def all_users():
-    return render_template("index_perAsoc.html", socio=get_all_docs_json(socio))
+    return render_template("index_perAsoc.html", socio=get_all_docs_json(Socio))
 
 @perAsoc_blueprint.route("/<int:id>", methods=["GET"])
 def get_user(id):
-    return jsonify(get_doc_json(socio, id))
+    return jsonify(get_doc_json(Socio, id))
 
 @perAsoc_blueprint.route("/crearSocio", methods=["GET"])
 def createSoc():
@@ -37,12 +37,12 @@ def socioCreado():
     else:
         result['estado'] = False
         
-    create_doc_json(socio, result)
+    create_doc_json(Socio, result)
     return redirect("/perAsoc/")
     
 @perAsoc_blueprint.route("/editarSocio/<int:id>", methods=["GET"])
 def editSoc(id):
-    return render_template("edit_perAsoc.html", user=get_doc_json(socio, id))
+    return render_template("edit_perAsoc.html", user=get_doc_json(Socio, id))
 
 @perAsoc_blueprint.route("/update/<int:id>", methods=["POST"])
 def update_user(id):
@@ -52,7 +52,7 @@ def update_user(id):
         disc['estado'] = True
     else:
         disc['estado'] = False
-    result = db_session.query(socio).filter_by(id = id).all()
+    result = db_session.query(Socio).filter_by(id = id).all()
     
     
     updated_disc = result[0]
@@ -67,7 +67,7 @@ def update_user(id):
 
 @perAsoc_blueprint.route("/delete/<int:id>", methods=["DELETE"])
 def deleteSoc(id):
-    return jsonify(delete_doc_json(socio, id))
+    return jsonify(delete_doc_json(Socio, id))
 
 
 

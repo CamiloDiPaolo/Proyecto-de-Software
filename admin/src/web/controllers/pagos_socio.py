@@ -2,7 +2,7 @@ from flask import Blueprint,render_template,redirect, request
 from src.core.db import db_session
 from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, create_doc_json, delete_doc_json
 from src.core.models.pago import pago
-from src.core.models.socio import socio
+from src.core.models.Socio import Socio
 
 import datetime
 
@@ -10,7 +10,7 @@ pagos_socios_blueprint = Blueprint("socios",__name__, url_prefix="/socios")
 
 @pagos_socios_blueprint.route("/")
 def socios():
-    socios = get_all_docs_json(socio)
+    socios = get_all_docs_json(Socio)
     return render_template("all_partners.html",socios=socios)
 
 @pagos_socios_blueprint.route("/<id_socio>")

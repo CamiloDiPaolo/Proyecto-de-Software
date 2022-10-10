@@ -6,7 +6,7 @@ from sqlalchemy import String
 from sqlalchemy import Integer
 from sqlalchemy import Date
 
-class socio(Base):
+class Socio(Base):
     __tablename__ = "socio"
     id = Column(Integer, primary_key=True)
     email = Column(String, nullable=False)
