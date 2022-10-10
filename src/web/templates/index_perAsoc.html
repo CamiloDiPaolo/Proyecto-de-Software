@@ -1,0 +1,93 @@
+{% extends 'layout_perAsoc.html' %}
+
+{% block title %}  Panel de personas Asociadas {% endblock %}
+{% block body %}
+
+<div class="admin__panel">
+    <div class="admin__panel__header">
+      <h2>Socios</h2>
+      <a class="add__btn" href="/perAsoc/crearSocio">+</a>
+    </div>
+    <table class="admin__table">
+      <thead class="admin__table__head">
+        <th>Numero de Socio</th>
+        <th>Email</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Genero</th>
+        <th>Tipo de Documento</th>
+        <th>Nro de Documento</th>
+        <th>Direccion</th>
+        <th>Estado</th>
+        <th>Telefono</th>
+        <th>Fecha de alta</th>
+        <th></th>
+      </thead>
+      <tbody class="admin__table__body">
+        {% for user in socio %}
+        <tr>
+          <td>{{user.nro_socio}}</td>
+          {% if user.email %}
+            <td>{{user.email}}</td>
+            {% else %}
+            <td>Sin especificar</td>
+          {% endif %}
+          <td>{{user.nombre}}</td>
+          <td>{{user.apellido}}</td>
+          <td>{{user.genero}}</td>
+          <td>{{user.tipo_documento}}</td>
+          <td>{{user.nro_documento}}</td>
+          <td>{{user.direccion}}</td>
+          {% if user.estado %}
+            <td>Activo</td>
+            {% else %}
+            <td>Inactivo</td>
+          {% endif %}
+          {% if user.telefono %}
+            <td>{{user.telefono}}</td>
+            {% else %}
+            <td>Sin especificar</td>
+          {% endif %}
+          <td>{{user.fecha_alta}}</td>
+          <td>
+            <div class="admin__table__actions">
+              <a class="delete__btn action__btn" data-id="{{user.id}}">
+                <span class="material-symbols-outlined"> delete </span>
+              </a>
+              <a
+                class="patch__btn action__btn"
+                href="/perAsoc/editarSocio/{{user.id}}"
+              >
+                <span class="material-symbols-outlined"> edit </span>
+              </a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  
+  <script>
+    [...document.querySelectorAll(".delete__btn")].forEach((btn) => {
+      btn.addEventListener("click", async (e) => {
+        try {
+          const res = await fetch(
+            `http://${location.host}/perAsoc/delete/${btn.dataset.id}`,
+            {
+              method: "DELETE",
+              credentials: "same-origin",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+  
+          if (res.status == 200) location.href = "/perAsoc";
+        } catch (err) {
+          console.log(err);
+        }
+      });
+    });
+  </script>
+  {% endblock %}
