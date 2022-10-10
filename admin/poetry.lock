@@ -37,6 +37,18 @@ async = ["asgiref (>=3.2)"]
 dotenv = ["python-dotenv"]
 
 [[package]]
+name = "flask-sqlalchemy"
+version = "3.0.0"
+description = "Add SQLAlchemy support to your Flask application."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+Flask = ">=2.2"
+SQLAlchemy = ">=1.4.18"
+
+[[package]]
 name = "greenlet"
 version = "1.1.3"
 description = "Lightweight in-process concurrent programming"
@@ -176,7 +188,7 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "caba95605e4ec37f506805886b3a41d206f4a49184dfd869ca6f89600233dedb"
+content-hash = "3831cf2efc10656507167fc98b4b03dbb2c6b2dca3afdb16ea9f9cc8d65055ab"
 
 [metadata.files]
 click = [
@@ -190,6 +202,10 @@ colorama = [
 Flask = [
     {file = "Flask-2.2.2-py3-none-any.whl", hash = "sha256:b9c46cc36662a7949f34b52d8ec7bb59c0d74ba08ba6cb9ce9adc1d8676d9526"},
     {file = "Flask-2.2.2.tar.gz", hash = "sha256:642c450d19c4ad482f96729bd2a8f6d32554aa1e231f4f6b4e7e5264b16cca2b"},
+]
+flask-sqlalchemy = [
+    {file = "Flask-SQLAlchemy-3.0.0.tar.gz", hash = "sha256:b54939fd5f48184742b7d5b222d86983e233b43140c1071a36327353e86f3b56"},
+    {file = "Flask_SQLAlchemy-3.0.0-py3-none-any.whl", hash = "sha256:741dabf0903569a89e4793667e25be5bb9581e614fa0eeb81a395cc7dee40c4b"},
 ]
 greenlet = [
     {file = "greenlet-1.1.3-cp27-cp27m-macosx_10_14_x86_64.whl", hash = "sha256:8c287ae7ac921dfde88b1c125bd9590b7ec3c900c2d3db5197f1286e144e712b"},

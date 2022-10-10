@@ -1,17 +1,19 @@
-
 from flask import Flask, request, redirect, render_template
 from src.web.controllers.Usuario import users_blueprint
 from src.web.controllers.Auth import auth_blueprint, allowed_request
-from src.web.controllers.Usuario import users_blueprint
 from src.web.controllers.Admin import admin_blueprint
 from src.web.controllers.perAsoc import perAsoc_blueprint
-from flask import Flask,render_template
 from src.web.controllers.pagos import pago_blueprint
 from src.web.controllers.pagos_socio import pagos_socios_blueprint
+from src.web.config import config
+from src.core import db
 
 def create_app(env="development", static_folder="static"):
     app = Flask(__name__, static_folder=static_folder)
 
+    app.config.from_object(config[env])
+
+    db.init_app(app)
     # Define home
     @app.route("/")
     def hello_world():
