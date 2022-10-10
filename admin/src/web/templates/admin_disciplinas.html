@@ -1,0 +1,82 @@
+{% extends "admin.html" %} {% block content %}
+<div class="admin__panel">
+  <div class="admin__panel__header">
+    <h2>Disciplinas</h2>
+
+    <a class="link__btn" href="/admin/categories/new">Crear categoría</a>
+    <a class="add__btn" href="/admin/disciplines/new">+</a>
+  
+  </div>
+  <table class="admin__table">
+    <thead class="admin__table__head">
+      <th>Nombre</th>
+      <th>Categoria</th>
+      <th>Instructores</th>
+      <th>Horarios</th>
+      <th>Costo</th>
+      <th>Habilitada</th>
+      <td>Acciones</td>
+    </thead>
+    <tbody class="admin__table__body">
+      {% for discipline in disciplines %}
+      <tr>
+        <td>{{discipline.nombre}}</td>
+        <td>{{discipline.categoria.nombre}}</td>
+        <td>{{discipline.instructores}}</td>
+        <td>{{discipline.horarios}}</td>
+        <td>{{discipline.costo}}</td>
+        <td>{% if discipline.habilitada == true%} Si {% else %} No {% endif %} </td>
+        <td>
+          <div class="admin__table__actions">
+            <a class="delete__btn delete action__btn" data-id="{{discipline.id}}">
+              <span class="material-symbols-outlined"> delete </span>
+            </a>
+            {% if discipline.habilitada == true %}
+            <a class="delete__btn action__btn switch" href="/disciplines/switch/{{discipline.id}}/false">
+              <span class="material-symbols-outlined"> pause </span>
+            </a>
+            {% else %}
+            <a class="play__btn action__btn switch" href="/disciplines/switch/{{discipline.id}}/true">
+              <span class="material-symbols-outlined"> play_arrow </span>
+            </a>
+            {% endif %}
+
+            <a
+              class="patch__btn action__btn"
+              href="/admin/disciplines/edit/{{discipline.id}}"
+            >
+              <span class="material-symbols-outlined"> edit </span>
+            </a>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<script>
+  [...document.querySelectorAll(".delete")].forEach((btn) => {
+    btn.addEventListener("click", async (e) => {
+      if (confirm("Estas seguro de que quieres eliminar esta disciplina?")){
+      try {
+        const res = await fetch(
+          `http://${location.host}/disciplines/delete/${btn.dataset.id}`,
+          {
+            method: "DELETE",
+            credentials: "same-origin",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (res.status == 200) location.href = "/admin/disciplines";
+      } catch (err) {
+        console.log(err);
+      }
+      }
+    });
+  });
+</script>
+{% endblock %}

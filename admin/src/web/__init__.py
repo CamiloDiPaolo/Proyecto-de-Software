@@ -7,6 +7,8 @@ from src.web.controllers.pagos import pago_blueprint
 from src.web.controllers.pagos_socio import pagos_socios_blueprint
 from src.web.config import config
 from src.core import db
+from src.web.controllers.Disciplina import disciplines_blueprint
+from src.web.controllers.Categoria import categories_blueprint
 
 def create_app(env="development", static_folder="static"):
     app = Flask(__name__, static_folder=static_folder)
@@ -30,6 +32,7 @@ def create_app(env="development", static_folder="static"):
     app.register_blueprint(perAsoc_blueprint)
     app.register_blueprint(pago_blueprint)
     app.register_blueprint(pagos_socios_blueprint)
-
+    app.register_blueprint(disciplines_blueprint)
+    app.register_blueprint(categories_blueprint)
 
     return app    

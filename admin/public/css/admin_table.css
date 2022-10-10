@@ -17,6 +17,24 @@
   margin: 0;
 }
 
+.link__btn{
+  background-color: lightseagreen;
+  border-radius: 100px;
+  color:black;
+  font-weight: bold;
+  text-align: center;
+  height: 30px;
+  position: fixed;
+  padding-top: 10px;
+  width: 180px;
+}
+
+.link__btn:hover {
+  cursor: pointer;
+  transition: 10ms;
+  background-color: rgb(28, 146, 140);
+}
+
 .add__btn {
   width: 60px;
   height: 60px;
@@ -69,6 +87,10 @@
   justify-content: center;
   border: none;
   color: var(--gris-oscuro-1);
+}
+
+.play__btn {
+  background-color: rgb(29, 138, 29);
 }
 
 .delete__btn {
