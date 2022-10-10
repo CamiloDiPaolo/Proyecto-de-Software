@@ -3,6 +3,7 @@ from src.core.db import db_session
 from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, create_doc_json, delete_doc_json
 from src.core.models.pago import pago
 from src.core.models.socio import socio
+from src.web.controllers.PDFCreate import createPDF
 
 
 import datetime
@@ -33,3 +34,15 @@ def create_payment_POST():
 @pago_blueprint.route("/delete/<id>", methods=["DELETE"])
 def delete_discipline(id):
     return jsonify(delete_doc_json(pago, id))
+
+@pago_blueprint.route("/<partner_id>/download/<payment_id>")
+def downloadPDF(partner_id,payment_id):
+    partner = get_doc_json(socio,partner_id)
+    payment = get_doc_json(pago,payment_id);
+    print("--------------------------")
+    print(partner)
+    print("--------------------------")
+    print(payment)
+    print("--------------------------")
+    createPDF(partner,payment)
+    return redirect("/socios/"+partner_id)
