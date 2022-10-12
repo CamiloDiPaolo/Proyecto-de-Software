@@ -5,6 +5,8 @@ from src.core.models.Rol import Rol
 from src.core.models.relations.UsuarioTieneRol import UsuarioTieneRol
 from src.web.controllers.Auth import allowed_request
 from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, create_doc_json, delete_doc_json, get_all_docs_paginated_json
+from src.core.models.Configuracion import Configuracion
+import math
 import ast
 
 # TODO: pulir las response, agregar codigos HTTP descriptivos
@@ -106,3 +108,21 @@ def check_exist_user(username, email, id = False):
             break
         return "ya existe un usuario con ese email"
     return False
+
+def get_all_user_paginated_filter_json(page, value, tipo):
+    config = get_doc_json(Configuracion, 1)
+    rows_per_page = config["elementos_por_pag"]
+
+    json = []
+    if(tipo == "email"):
+        # result = db_session.query(Usuario).filter_by(email = value).limit(rows_per_page).offset(int(page)*rows_per_page)
+        result = db_session.query(Usuario).filter(Usuario.email.ilike("%" + value + "%")).limit(rows_per_page).offset(int(page)*rows_per_page)
+    else:
+        result = db_session.query(Usuario).filter(Usuario.username.ilike("%" + value + "%")).limit(rows_per_page).offset(int(page)*rows_per_page)
+        # result = db_session.query(Usuario).filter_by(username = value).limit(rows_per_page).offset(int(page)*rows_per_page)
+    for row in result:
+        json.append(row.json())
+    
+    result = db_session.query(Usuario).all();
+    all_pages = math.ceil(len(result) / rows_per_page)
+    return {"docs": json, "total_pages": all_pages}

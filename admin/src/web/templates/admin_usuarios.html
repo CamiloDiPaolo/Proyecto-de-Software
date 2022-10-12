@@ -2,10 +2,42 @@
 <div class="admin__panel">
   <div class="admin__panel__header">
     <h2>Usuarios</h2>
+    <form class="form__search">
+      <div class="user__search">
+        <input type="text" name="input_search" class="input__search" />
+        <button class="search__btn action__btn">
+          <span class="material-symbols-outlined"> search </span>
+        </button>
+      </div>
+      <select name="type_search" class="select__search">
+        <option>email</option>
+        <option>username</option>
+      </select>
+    </form>
     <div class="pages__btn">
+      {% if search %}
+      <a
+        class="page__down action__btn page__btn"
+        data-search="true"
+        data-tipo="{{tipo}}"
+        data-value="{{value}}"
+        ><</a
+      >
+      {% else %}
       <a class="page__down action__btn page__btn"><</a>
+      {% endif %}
       <p class="page" data-max="{{max_page}}">/ {{max_page}}</p>
+      {% if search %}
+      <a
+        class="page__up action__btn page__btn"
+        data-search="true"
+        data-tipo="{{tipo}}"
+        data-value="{{value}}"
+        >></a
+      >
+      {% else %}
       <a class="page__up action__btn page__btn">></a>
+      {% endif %}
     </div>
     <a class="add__btn" href="/admin/users/new">+</a>
   </div>
@@ -116,12 +148,35 @@
 
   pageUp.addEventListener("click", (e) => {
     if (pageCount.dataset.max * 1 - 1 <= page * 1) return;
-    location.href = `/admin/users/${page * 1 + 1}`;
+
+    const href = `${
+      e.target.dataset.search == "true"
+        ? `/search/${e.target.dataset.tipo}/${e.target.dataset.value}`
+        : ""
+    }`;
+
+    location.href = `/admin/users${href}/${page * 1 + 1}`;
   });
 
   pageDown.addEventListener("click", (e) => {
     if (page * 1 <= 0) return;
-    location.href = `/admin/users/${page * 1 - 1}`;
+
+    const href = `${
+      e.target.dataset.search == "true"
+        ? `/search/${e.target.dataset.tipo}/${e.target.dataset.value}`
+        : ""
+    }`;
+
+    location.href = `/admin/users${href}/${page * 1 - 1}`;
+  });
+
+  // REDIRIGIMOS A LA PESTAÑA DE BUSQUEDA
+  document.querySelector(".form__search").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const tipo = document.querySelector(".select__search").value;
+    const value = document.querySelector(".input__search").value;
+    console.log(tipo, value);
+    location.href = `/admin/users/search/${tipo}/${value}/0`;
   });
 </script>
 {% endblock %}
