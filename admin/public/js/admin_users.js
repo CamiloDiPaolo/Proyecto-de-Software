@@ -50,17 +50,25 @@ addRoleBtn.addEventListener("click", (e) => {
 const form = document.querySelector(".admin__form--create");
 form?.addEventListener("submit", async (e) => {
   const rolesDivs = [...e.target.querySelectorAll(".rol__added")];
-  e.target.roles.value = JSON.stringify(
-    rolesDivs.map((div) => div.dataset.id * 1)
-  );
+  if (rolesDivs.length) {
+    e.target.roles.value = JSON.stringify(
+      rolesDivs.map((div) => div.dataset.id * 1)
+    );
+  } else {
+    e.target.roles.value = "empty";
+  }
   return true;
 });
 
 const formUpdate = document.querySelector(".admin__form--update");
 formUpdate?.addEventListener("submit", async (e) => {
   const rolesDivs = [...e.target.querySelectorAll(".rol__added")];
-  e.target.roles.value = JSON.stringify(
-    rolesDivs.map((div) => div.dataset.id * 1)
-  );
+  if (rolesDivs.length) {
+    e.target.roles.value = JSON.stringify(
+      rolesDivs.map((div) => div.dataset.id * 1)
+    );
+  } else {
+    e.target.roles.value = "empty";
+  }
   return true;
 });

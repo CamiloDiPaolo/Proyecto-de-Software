@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request,make_response, render_template, session
+from flask import Blueprint, render_template, request,make_response, render_template, session, redirect
 from src.core.db import db_session
 from src.core.models.Usuario import Usuario
 
@@ -20,9 +20,7 @@ def login():
 
     session['user_id'] = user_id[0][0]
 
-    res = make_response("logeado")
-
-    return res
+    return redirect("/admin")
 
 def allowed_request(request, allowed_roles):
     user_id = session.get('user_id')

@@ -4,13 +4,31 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/login.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/admin_form.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/admin.css') }}"
+    />
+    <title>Login</title>
   </head>
   <body>
     <form class="form__login" method="POST" action="/auth/login">
-      <input type="text" placeholder="Nombre de usuario" name="username" />
-      <input type="password" placeholder="Contraseña" name="contraseña" />
-      <input type="submit" />
+      <div class="admin__form__input">
+        <label>Nombre de usuario</label>
+        <input type="text" required name="username" />
+      </div>
+      <div class="admin__form__input">
+        <label>Contraseña</label>
+        <input type="password" required name="contraseña" />
+      </div>
+      <input type="submit" class="submit__btn" value="Iniciar sesion" />
     </form>
   </body>
 </html>

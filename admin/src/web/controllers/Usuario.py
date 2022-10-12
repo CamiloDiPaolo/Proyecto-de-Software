@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request,jsonify
+from flask import Blueprint, render_template, request,jsonify, redirect
 from src.core.db import db_session
 from src.core.models.Usuario import Usuario
 from src.core.models.Rol import Rol
@@ -30,19 +30,39 @@ def get_user(id):
 @users_blueprint.route("/create", methods=["POST"])
 def create_user():
     data = request.form.to_dict()
+
+    if(data["roles"] == "empty"):
+        return render_template('admin_usuarios_new.html', roles=get_all_docs_json(Rol), error="no se selecciono ningun rol")
+
     data["roles"] = ast.literal_eval(data["roles"] )
-    return jsonify(create_user_json(data))
+
+    error = check_exist_user(data["username"], data["email"])
+    if (error):
+        return render_template('admin_usuarios_new.html', roles=get_all_docs_json(Rol), error=error)
+
+    create_user_json(data)
+    return redirect("/admin/users/0")
 
 @users_blueprint.route("/delete/<id>", methods=["DELETE"])
 def delete_user(id):
-    return jsonify(delete_doc_json(Usuario, id))
+    delete_doc_json(Usuario, id)
+    return redirect("/admin/users/0")
 
 @users_blueprint.route("/update/<id>", methods=["POST"])
 def update_user(id):
     data = request.form.to_dict()
+
+    if(data["roles"] == "empty"):
+        return render_template('admin_usuarios_edit.html', user=get_doc_json(Usuario, id), roles=get_all_docs_json(Rol), error="no se selecciono ningun rol")
+
     data["roles"] = ast.literal_eval(data["roles"] )
-    print(data)
-    return jsonify(update_user_json(id, data))
+
+    error = check_exist_user(data["username"], data["email"], id)
+    if (error):
+        return render_template('admin_usuarios_edit.html', user=get_doc_json(Usuario, id), roles=get_all_docs_json(Rol), error=error)
+
+    update_user_json(id, data)
+    return redirect("/admin/users/0")
 
 @users_blueprint.route("/active/<id>", methods=["POST"])
 def active_user(id):
@@ -64,10 +84,6 @@ def create_user_json(data):
 
 def update_user_json(user_id, data):
     # TODO: sanitizar los parametros
-    # TODO: verificar que si un dato no se pasa quede el que estaba
-    print("__________________________________")
-    print(data)
-    print("__________________________________")
     result = db_session.query(Usuario).filter_by(id = user_id).all()
     updated_user = result[0]
     updated_user.update(data)
@@ -76,3 +92,17 @@ def update_user_json(user_id, data):
     db_session.add_all([updated_user])
     db_session.commit()
     return updated_user.json()
+
+def check_exist_user(username, email, id = False):
+    result = db_session.query(Usuario).filter_by(username = username).all()
+    for row in result:
+        print(id, row.json()["id"])
+        if (id and str(row.json()["id"]) == id):
+            break
+        return "ya existe un usuario con ese username"
+    result = db_session.query(Usuario).filter_by(email = email).all()
+    for row in result:
+        if (id and str(row.json()["id"]) == id):
+            break
+        return "ya existe un usuario con ese email"
+    return False
