@@ -31,7 +31,7 @@
     <div class="admin__form__input">
       <label>Categoria</label>
       <div class="roles__input">
-        <select name="categoria_id" required>
+        <select value="" name="categoria_id" required>
           {% for cat in categories %}
           <option value='{{cat.id}}'>{{cat.nombre}}</option>
           {% endfor %}

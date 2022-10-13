@@ -22,6 +22,7 @@ def get_user(id):
 @disciplines_blueprint.route("/create", methods=["POST"])
 def create_discipline():
     disc = request.form.to_dict()
+    print(disc)
     if 'habilitada' in disc.keys():
         disc['habilitada'] = True
     else:
@@ -32,6 +33,7 @@ def create_discipline():
 @disciplines_blueprint.route("/update/<int:id>", methods=["POST"])
 def update_discipline(id):
     disc = request.form.to_dict()
+    print(disc)
     result = db_session.query(Disciplina).filter_by(id = id).all()
     if 'habilitada' in disc.keys():
         disc['habilitada'] = True
