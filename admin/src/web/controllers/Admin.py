@@ -28,18 +28,6 @@ def users(page):
     users["docs"].sort(key = lambda u: u["username"])
     return render_template('admin_usuarios.html', users=users["docs"], max_page = users["total_pages"])
 
-# @admin_blueprint.route("/users/search/<page>", methods=["POST"])
-# def users_search(page):
-#     users = []
-#     data = request.form.to_dict()
-#     if(data["type_search"] == "email"):
-#         users = get_all_user_paginated_filter_json( page, data["input_search"], "email")
-#     else:
-#         users = get_all_user_paginated_filter_json( page, data["input_search"], "username")
-
-#     users["docs"].sort(key = lambda u: u["username"])
-#     return render_template('admin_usuarios.html', users=users["docs"], max_page = users["total_pages"], search = True)
-
 @admin_blueprint.route("/users/search/<tipo>/<value>/<page>", methods=["GET"])
 def users_search_get(tipo, value, page):
     users = []
