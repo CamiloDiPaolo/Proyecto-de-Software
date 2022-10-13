@@ -4,26 +4,6 @@
 <div class="admin__panel">
   <div class="admin__panel__header">
     <h2>Pagos de {{partner.nombre}} {{partner.apellido}}</h2>
-
-    <!-- <form action="/socios/{{partner.id}}/find" method="GET">
-      <div class="admin__form__input">
-        <label>Año</label>
-        <div class="roles__input">
-          <select name="year" id="year" required>
-            <option disabled selected hidden value="">--Elija un año--</option>
-            <option value="{{ac_year}}">{{ac_year}}</option>
-            <option value="{{ac_year - 1}}">{{ac_year - 1}}</option>
-            <option value="{{ac_year - 2}}">{{ac_year - 2}}</option>
-          </select>
-        </div>
-      </div>
-      <input type="submit" value="Filtrar" />
-    </form>
-    <div>
-      <a class="add__btn action__btn" href="/socios/{{partner.id}}"
-        ><span class="material-symbols-outlined"> sync </span>
-      </a>
-    </div> -->
   </div> 
     <div>
       <a class="add__btn action__btn" href="/pagos/{{partner.id}}/new"
@@ -45,9 +25,9 @@
           <td>{{data.fecha}}</td>
           <td>
             <div class="admin__table__actions">
-              <a class="delete__btn action__btn" data-id="{{data.id}}">
-                <span class="material-symbols-outlined"> delete </span>
-              </a>
+              <form action="/pagos/delete/{{partner.id}}/{{data.id}}" method="DELETE">
+                <input type="submit" class="material-symbols-outlined delete__btn action__btn" style="background-color:#cd104d ;" value="delete">
+              </form>
               <a class="patch__btn action__btn" data-id="{{data.id}}" href="/pagos/{{partner.id}}/download/{{data.id}}">
                 <span class="material-symbols-outlined"> file_download </span>
               </a>
@@ -59,13 +39,13 @@
     </table>
   </div>
 
-  <script>
+  <!-- <script>
     [...document.querySelectorAll(".delete__btn")].forEach((btn) => {
       btn.addEventListener("click", async (e) => {
         if (confirm("¿Estas seguro de que quieres eliminar este pago?")) {
           try {
             const res = await fetch(
-              `http://${location.host}/pagos/delete/${btn.dataset.id}`,
+              `http://${location.host}/pagos/delete/${partner.id}/${btn.dataset.id}`,
               {
                 method: "DELETE",
                 credentials: "same-origin",
@@ -82,7 +62,7 @@
         }
       });
     });
-  </script>
+  </script> -->
 
   {% endblock %}
 </div>

@@ -28,5 +28,5 @@ def createPDF(partner,payment):
     pdf.text(x=30,y=65,txt=f'Por el concepto de cuota societaria mes {transformMonth(payment["fecha"].month)} {payment["fecha"].year}')
 
     pdf.line(10,75,200,75)
-
-    return pdf.output("tuto1.pdf","F")
+    pdf.close()
+    return pdf

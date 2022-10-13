@@ -31,7 +31,7 @@ def find_partenr():
     elif(partner_dict["type"] == "nro_socio"):
         result = db_session.query(socio).filter_by(nro_socio = partner_dict["search"]).all()
     else:
-       return redirect("/socios") 
+       return redirect("/socios")
     for row in result:
        partenrs.append(row.json())
     return render_template("all_partners.html",socios=partenrs)
