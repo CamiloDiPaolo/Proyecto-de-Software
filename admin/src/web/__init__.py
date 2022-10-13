@@ -26,7 +26,7 @@ def create_app(env="development", static_folder="static"):
     # Define home
     @app.route("/")
     def hello_world():
-        return "<p>Hello, World!</p>"
+        return redirect("/admin")
     
     # @app.route("/admin", methods=["GET"])
     # def admin():

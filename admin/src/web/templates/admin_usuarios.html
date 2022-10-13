@@ -60,26 +60,28 @@
         <td>{% for rol in user.roles %}{{rol.nombre}} {% endfor %}</td>
         <td>
           <div class="admin__table__actions">
-            <a class="delete__btn action__btn" data-id="{{user.id}}">
-              <span class="material-symbols-outlined"> delete </span>
-            </a>
+            <form method="DELETE" action="/users/delete/{{user.id}}">
+              <button class="delete__btn action__btn">
+                <span class="material-symbols-outlined"> delete </span>
+              </button>
+            </form>
             <a
               class="patch__btn action__btn"
               href="/admin/users/edit/{{user.id}}"
             >
               <span class="material-symbols-outlined"> edit </span>
             </a>
-            <a
-              class="active__btn--{{user.activo}} action__btn active__btn"
-              data-id="{{user.id}}"
-              data-activo="{{user.activo}}"
-            >
-              {% if user.activo %}
-              <span class="material-symbols-outlined"> toggle_on </span>
-              {% else %}
-              <span class="material-symbols-outlined"> toggle_off </span>
-              {% endif %}
-            </a>
+            <form method="POST" action="/users/active/{{user.id}}">
+              <button
+                class="active__btn--{{user.activo}} action__btn active__btn"
+              >
+                {% if user.activo %}
+                <span class="material-symbols-outlined"> toggle_on </span>
+                {% else %}
+                <span class="material-symbols-outlined"> toggle_off </span>
+                {% endif %}
+              </button>
+            </form>
           </div>
         </td>
       </tr>
@@ -89,50 +91,6 @@
 </div>
 
 <script>
-  [...document.querySelectorAll(".delete__btn")].forEach((btn) => {
-    btn.addEventListener("click", async (e) => {
-      try {
-        const res = await fetch(
-          `http://${location.host}/users/delete/${btn.dataset.id}`,
-          {
-            method: "DELETE",
-            credentials: "same-origin",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (res.status == 200) location.href = location.href;
-      } catch (err) {
-        console.log(err);
-      }
-    });
-  });
-
-  [...document.querySelectorAll(".active__btn")].forEach((btn) => {
-    btn.addEventListener("click", async (e) => {
-      try {
-        const res = await fetch(
-          `http://${location.host}/users/active/${btn.dataset.id}`,
-          {
-            method: "POST",
-            credentials: "same-origin",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              activo: btn.dataset.activo == "True" ? false : true,
-            }),
-          }
-        );
-        if (res.status == 200) location.href = location.href;
-      } catch (err) {
-        console.log(err);
-      }
-    });
-  });
-
   // IMPLEMENTAMOS LA PAGINACION
   const page = location.href.split("/").at(-1);
   const pageCount = document.querySelector(".page");

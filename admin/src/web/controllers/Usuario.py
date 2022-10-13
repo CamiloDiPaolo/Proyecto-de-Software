@@ -21,13 +21,14 @@ def protect():
 def all_users():
     return jsonify(get_all_docs_json(Usuario))
 
+@users_blueprint.route("/<int:id>", methods=["GET"])
+def get_user(id):
+    return jsonify(get_doc_json(Usuario, id))
+    
 @users_blueprint.route("/page/<page>", methods=["GET"])
 def all_users_paginated(page):
     return jsonify(get_all_docs_paginated_json(Usuario, page))
 
-@users_blueprint.route("/<int:id>", methods=["GET"])
-def get_user(id):
-    return jsonify(get_doc_json(Usuario, id))
 
 @users_blueprint.route("/create", methods=["POST"])
 def create_user():
@@ -45,7 +46,7 @@ def create_user():
     create_user_json(data)
     return redirect("/admin/users/0")
 
-@users_blueprint.route("/delete/<id>", methods=["DELETE"])
+@users_blueprint.route("/delete/<id>", methods=["DELETE", "GET"])
 def delete_user(id):
     delete_doc_json(Usuario, id)
     return redirect("/admin/users/0")
@@ -68,8 +69,12 @@ def update_user(id):
 
 @users_blueprint.route("/active/<id>", methods=["POST"])
 def active_user(id):
-    data = request.json
-    return jsonify(update_user_json(id, data))
+    # data = request.json
+
+    user = get_doc_json(Usuario, id)
+    update_user_json(id, {"activo": not user["activo"]})
+    # return jsonify(update_user_json(id, data))
+    return redirect("/admin/users/0")
 
 def create_user_json(data):
     new_user = create_doc_json(Usuario, data);
