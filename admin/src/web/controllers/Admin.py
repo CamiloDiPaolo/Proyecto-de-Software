@@ -2,6 +2,8 @@ from flask import Blueprint, render_template, request,jsonify, redirect
 from src.web.controllers.Auth import allowed_request
 from src.core.models.Usuario import Usuario
 from src.core.models.Rol import Rol
+from src.core.models.Categoria import Categoria
+from src.core.models.Disciplina import Disciplina
 from src.core.models.Configuracion import Configuracion
 from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, update_doc_json, get_all_docs_paginated_json
 from src.core.models.Socio import Socio
@@ -48,17 +50,28 @@ def update_config():
     update_doc_json(Configuracion, 1, data)
     return redirect("/admin/config")
 
-#RUTAS DE SOCIOS
+#---------------------------------------------
+#Blueprints de DISCIPLINAS
 
-@admin_blueprint.route("perAsoc", methods=["GET"])
+@admin_blueprint.route("/disciplines", methods=["GET"])
 def disciplines():
-    return render_template('index_perAsoc.html', socio=get_all_docs_json(Socio))
+    return render_template('admin_disciplinas.html', disciplines=get_all_docs_json(Disciplina))
 
-@admin_blueprint.route("/perAsoc/crearSocio", methods=["GET"])
+@admin_blueprint.route("/disciplines/new", methods=["GET"])
 def new_discipline():
-    return render_template('create_perAsoc.html', categories=get_all_docs_json(Socio))
+    return render_template('admin_disciplinas_new.html', categories=get_all_docs_json(Categoria))
 
-@admin_blueprint.route("/perAsoc/editarSocio/<int:id>", methods=["GET"])
+@admin_blueprint.route("/disciplines/edit/<int:id>", methods=["GET"])
 def edit_discipline(id):
-    return render_template('edit_perAsoc.html', discipline=get_doc_json(Socio, id), categories=get_all_docs_json(Socio))
+    return render_template('admin_disciplinas_edit.html', discipline=get_doc_json(Disciplina, id), categories=get_all_docs_json(Categoria))
 
+#---------------------------------------------
+#Blueprints de CATEGORIAS
+
+@admin_blueprint.route("/categories", methods=["GET"])
+def categories():
+    return render_template('admin_categories.html', categories=get_all_docs_json(Categoria))
+
+@admin_blueprint.route("/categories/new", methods=["GET"])
+def new_category():
+    return render_template('admin_categorias_new.html', categories=get_all_docs_json(Categoria))
