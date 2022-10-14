@@ -1,0 +1,77 @@
+.admin__form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: var(--gris-oscuro-4);
+  color: var(--gris-claro-5);
+  padding: 50px;
+}
+
+.admin__form__input {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.admin__form__input input,
+.admin__form__input select,
+input[type="submit"] {
+  padding: 10px;
+  border: none;
+  color: var(--gris-oscuro-2);
+}
+
+.admin__form__input input,
+.admin__form__input select {
+  border-left: 5px var(--acento-1-suave) solid;
+}
+
+.admin__form__input input:focus,
+.admin__form__input select:focus {
+  border-left: 5px var(--acento-1) solid;
+}
+
+input[type="submit"] {
+  background-color: var(--acento-1);
+}
+input[type="submit"]:hover {
+  cursor: pointer;
+  background-color: var(--acento-1-suave);
+}
+
+.roles__input {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.roles__input select {
+  flex-grow: 1;
+}
+
+.roles__input .add__role {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background-color: var(--acento-1);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: var(--gris-oscuro-1);
+}
+
+.roles__input .add__role:hover {
+  cursor: pointer;
+  background-color: var(--acento-1-suave);
+}
+
+.rol__added {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: space-between;
+  width: 500px;
+}
