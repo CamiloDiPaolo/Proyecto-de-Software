@@ -10,7 +10,7 @@
     />
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='public/css/admin.css') }}"
+      href="{{ url_for('static', filename='css/admin.css') }}"
     />
     <link
       rel="stylesheet"
@@ -26,7 +26,7 @@
     <nav class="admin__nav">
       <ul class="admin__nav__links">
         <li>
-          <a class="admin__nav__link" href="/admin/users"
+          <a class="admin__nav__link" href="/admin/users/0"
             ><span class="material-symbols-outlined"> person </span
             ><span>Usuarios</span></a
           >
@@ -38,7 +38,7 @@
           </a>
         </li>
         <li>
-          <a class="admin__nav__link"
+          <a class="admin__nav__link" href="/admin/disciplines"
             ><span class="material-symbols-outlined"> fitness_center </span
             ><span>Disciplinas</span></a
           >
@@ -50,13 +50,14 @@
           >
         </li>
         <li>
-          <a class="admin__nav__link"
+          <a class="admin__nav__link" href="/admin/config"
             ><span class="material-symbols-outlined"> settings </span
             ><span>Configuracion</span></a
           >
         </li>
       </ul>
     </nav>
+
     <main class="admin__main">{% block content %} {% endblock %}</main>
   </body>
 </html>

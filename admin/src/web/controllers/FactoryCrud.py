@@ -1,4 +1,12 @@
 from src.core.db import db_session
+from src.core.models.Configuracion import Configuracion
+import math
+
+def get_doc_json(Model, doc_id):
+    result = db_session.query(Model).filter_by(id = doc_id).all()
+    for row in result:
+        return row.json()
+    return {}
 
 def get_all_docs_json(Model):
     json = []
@@ -7,11 +15,27 @@ def get_all_docs_json(Model):
         json.append(row.json())
     return json
 
+
+def get_all_docs_paginated_json(Model, page):
+    config = get_doc_json(Configuracion, 1)
+    rows_per_page = config["elementos_por_pag"]
+
+    json = []
+    result = db_session.query(Model).limit(rows_per_page).offset(int(page)*rows_per_page)
+    for row in result:
+        json.append(row.json())
+    
+    result = db_session.query(Model).all();
+    all_pages = math.ceil(len(result) / rows_per_page)
+    return {"docs": json, "total_pages": all_pages}
+
+
 def get_doc_json(Model, doc_id):
     result = db_session.query(Model).filter_by(id = doc_id).all()
     for row in result:
         return row.json()
     return {}
+
 
 def create_doc_json(Model, data):
     # TODO: hashear la contraseña
@@ -35,4 +59,6 @@ def delete_doc_json(Model, doc_id):
     for row in result:
         db_session.delete(row)
         db_session.commit()
+
     return {}
+

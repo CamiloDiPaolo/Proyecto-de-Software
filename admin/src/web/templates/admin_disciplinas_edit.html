@@ -1,0 +1,44 @@
+{% extends "admin.html" %} {% block content %}
+<div class="admin__panel">
+  <div class="admin__panel__header">
+    <h2>Crear nueva disciplina</h2>
+  </div>
+  <form class="admin__form admin__form--create" action="/disciplines/update/{{discipline.id}}" method="POST">
+    <div class="admin__form__input">
+      <label>Nombre</label>
+      <input type="text"  value="{{discipline.nombre}}" name="nombre" placeholder="nombre"  required />
+    </div>
+    <div class="admin__form__input">
+      <label>Horarios</label>
+      <input type="text" value="{{discipline.horarios}}" name="horarios" required />
+    </div>
+    <div class="admin__form__input">
+      <label>Entrenadores</label>
+      <input type="text" name="instructores" value="{{discipline.instructores}}" required />
+    </div>
+    <div class="admin__form__input">
+      <label>Costo</label>
+      <input type="number" name="costo" value="{{discipline.costo}}" required />
+    </div>
+    <div style="align-items: start;" class="admin__form__input">
+      <label>Habilitado</label>
+      {% if discipline.habilitada == true %}
+      <input type="checkbox" name="habilitada"  checked="true"  />
+      {% else %}
+      <input type="checkbox" name="habilitada"   />
+      {% endif %}
+    </div>
+    <div class="admin__form__input">
+      <label>Categoria</label>
+      <div class="roles__input">
+        <select value="" name="categoria_id" required>
+          {% for cat in categories %}
+          <option value='{{cat.id}}'>{{cat.nombre}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <br>
+    <input type="submit" value="Crear disciplina" />
+  </form>
+</div>
+{% endblock %}

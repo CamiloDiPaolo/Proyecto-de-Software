@@ -13,7 +13,7 @@ def createPDF(partner,payment):
     pdf.add_page()
 
     pdf.set_font('Arial', 'B', 20)
-    pdf.image("src\web\static\img\logo_club.png",x=10,y=10,w=30,h=30,type="png")
+    pdf.image("admin/public/img/logo_club.png",x=10,y=10,w=30,h=30,type="png")
     pdf.text(x=45,y=20,txt=f'Recibo # {payment["id"]}')
 
     pdf.set_font('Arial', '', 12)

@@ -34,4 +34,3 @@ def init_app(app):
 #     # you will have to import them first before calling init_db()
 #     Base.metadata.create_all(bind=engine)
 
-

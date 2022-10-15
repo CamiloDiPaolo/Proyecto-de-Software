@@ -1,0 +1,16 @@
+{% extends "admin.html" %} {% block content %}
+<div class="admin__panel">
+  <div class="admin__panel__header">
+    <h2>Crear Categoria</h2>
+  </div>
+  <form class="admin__form admin__form--create" action="/categories/create" method="POST">
+    <div class="admin__form__input">
+      <label>Nombre</label>
+      <input type="text" placeolder="Nombre" name="nombre" required />
+    </div>
+    <input type="submit" value="Crear categoría" />
+    </div>
+  </form>
+</div>
+<script src="{{ url_for('static', filename='js/admin_users.js') }}"></script>
+{% endblock %}

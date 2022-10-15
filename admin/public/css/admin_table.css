@@ -17,6 +17,24 @@
   margin: 0;
 }
 
+.link__btn{
+  background-color: lightseagreen;
+  border-radius: 100px;
+  color:black;
+  font-weight: bold;
+  text-align: center;
+  height: 30px;
+  position: fixed;
+  padding-top: 10px;
+  width: 180px;
+}
+
+.link__btn:hover {
+  cursor: pointer;
+  transition: 10ms;
+  background-color: rgb(28, 146, 140);
+}
+
 .add__btn {
   width: 60px;
   height: 60px;
@@ -71,6 +89,10 @@
   color: var(--gris-oscuro-1);
 }
 
+.play__btn {
+  background-color: rgb(29, 138, 29);
+}
+
 .delete__btn {
   background-color: var(--alerta-1);
 }
@@ -88,7 +110,49 @@
   background-color: var(--acento-2-suave);
   cursor: pointer;
 }
+.active__btn--True {
+  background-color: var(--acento-1);
+}
 
+.active__btn--True:hover {
+  background-color: var(--acento-1-suave);
+  cursor: pointer;
+}
+
+.active__btn--False {
+  background-color: var(--alerta-2);
+}
+
+.active__btn--False:hover {
+  background-color: var(--alerta-2-suave);
+  cursor: pointer;
+}
+
+.page__btn {
+  background-color: var(--acento-2);
+}
+
+.page__btn:hover {
+  background-color: var(--acento-2-suave);
+  cursor: pointer;
+}
+
+.page__btn--disabled {
+  background-color: var(--acento-2-suave);
+}
+
+.page__btn--disabled:hover {
+  cursor: not-allowed;
+}
+
+.pages__btn {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+
+  flex-grow: 1;
+}
 .select__btn {
   border-radius: 90px;
   background-color: var(--acento-1);
@@ -104,3 +168,4 @@
   cursor: pointer;
   background-color: var(--acento-1-suave);
 }
+>>>>>>>> development:admin/public/css/admin_table.css
