@@ -75,3 +75,9 @@ input[type="submit"]:hover {
   justify-content: space-between;
   width: 500px;
 }
+
+.error {
+  background-color: var(--alerta-1);
+  padding: 10px;
+  color: var(--gris-oscuro-2);
+}

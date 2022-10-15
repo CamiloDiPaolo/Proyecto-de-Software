@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request,jsonify, redirect
 from src.web.controllers.Auth import allowed_request
 from src.core.models.Usuario import Usuario
+from src.web.controllers.Usuario import get_all_user_paginated_filter_json
 from src.core.models.Rol import Rol
 from src.core.models.Categoria import Categoria
 from src.core.models.Disciplina import Disciplina
@@ -28,6 +29,17 @@ def users(page):
     users = get_all_docs_paginated_json(Usuario, page);
     users["docs"].sort(key = lambda u: u["username"])
     return render_template('admin_usuarios.html', users=users["docs"], max_page = users["total_pages"])
+
+@admin_blueprint.route("/users/search/<tipo>/<value>/<page>", methods=["GET"])
+def users_search_get(tipo, value, page):
+    users = []
+    if(tipo == "email"):
+        users = get_all_user_paginated_filter_json( page, value, "email")
+    else:
+        users = get_all_user_paginated_filter_json( page, value, "username")
+
+    users["docs"].sort(key = lambda u: u["username"])
+    return render_template('admin_usuarios.html', users=users["docs"], max_page = users["total_pages"], search = True, tipo = tipo, value = value)
 
 @admin_blueprint.route("/users/new", methods=["GET"])
 def new_user():

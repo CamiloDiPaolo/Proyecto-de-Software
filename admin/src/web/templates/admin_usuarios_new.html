@@ -36,7 +36,7 @@
     <div class="admin__form__input">
       <label>Roles</label>
       <div class="roles__input">
-        <select value="" required>
+        <select value="">
           <option value="">Seleccione un rol para agregar</option>
           {% for rol in roles %}
           <option value="{{rol.id}}">{{rol.nombre}}</option>
@@ -49,6 +49,9 @@
     </div>
     <input name="roles" type="text" style="display: none" />
     <input type="submit" value="Crear usuario" class="submit__btn" />
+    {% if error %}
+    <p class="error">{{error}}</p>
+    {% endif%}
   </form>
 </div>
 <script src="{{ url_for('static', filename='js/admin_users.js') }}"></script>
