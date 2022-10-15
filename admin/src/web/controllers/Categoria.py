@@ -20,7 +20,7 @@ def all_categories():
 def create_categories():
     cat = request.form.to_dict()
     create_doc_json(Categoria,cat)
-    return redirect("/admin/disciplines")
+    return redirect("/admin/disciplines/0")
 
 @categories_blueprint.route("/delete/<id>", methods=["DELETE"])
 def delete_categorie(id):
