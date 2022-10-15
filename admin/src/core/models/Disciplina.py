@@ -59,4 +59,6 @@ class Disciplina(Base):
             self.costo = data["costo"]
         if "habilitada" in data:
             self.habilitada = data["habilitada"]
+        if "categoria_id" in data:
+            self.categoria_id = data["categoria_id"]
 
