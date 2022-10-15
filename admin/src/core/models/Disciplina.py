@@ -1,7 +1,8 @@
 from src.core.db import Base, db_session
-from src.core.models.relations.UsuarioTieneRol import UsuarioTieneRol
+from src.core.models.relations.SocioSuscriptoDisciplina import SocioSuscriptoDisciplina
 from src.core.models.Categoria import Categoria
 
+from sqlalchemy import ForeignKey
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
@@ -15,7 +16,7 @@ class Disciplina(Base):
     __tablename__ = "disciplina"
     id = Column(Integer, primary_key=True)
     nombre = Column(String, nullable=False)
-    categoria_id = Column(Integer, nullable=False)
+    categoria_id = Column(Integer, ForeignKey("categoria.id"), nullable=False)
     instructores = Column(String, nullable=False)
     horarios = Column(String, nullable=False)
     costo = Column(Float, nullable=False)
@@ -62,3 +63,6 @@ class Disciplina(Base):
         if "categoria_id" in data:
             self.categoria_id = data["categoria_id"]
 
+    def get_member_disciplines(idSocio):
+        query = db_session.query(Disciplina).join(SocioSuscriptoDisciplina).filter_by(idSocio != SocioSuscriptoDisciplina.id_socio)
+        return query.json()

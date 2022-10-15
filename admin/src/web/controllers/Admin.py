@@ -69,11 +69,11 @@ def new_discipline():
 def edit_discipline(id):
     return render_template('admin_disciplinas_edit.html', discipline=get_doc_json(Disciplina, id), categories=get_all_docs_json(Categoria))
 
-
+#
 @admin_blueprint.route("/disciplines/registerMember/<int:id>", methods=["GET"])
-def register_member_discipline(socId):
-     result = db_session.query(Disciplina).filter_by(id = socId ).all()
-     return render_template('admin_disciplinas.html', disciplines=get_all_docs_json(Disciplina))
+def register_member_discipline(id):
+    #query = db.db_session.query(Disciplina).join(SocioSuscriptoDisciplina).filter_by(SocioSuscriptoDisciplina.id_socio != idSocio)
+    return Disciplina.get_member_disciplines(id)
 #---------------------------------------------
 #Blueprints de CATEGORIAS
 

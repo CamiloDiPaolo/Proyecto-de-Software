@@ -71,3 +71,7 @@ def create_discipline_json(data):
     disc = create_doc_json(Disciplina, data);
     db_session.commit()
 
+@disciplines_blueprint.route("/registerMember/<int:id>")
+def list_member_disciplines(id):
+    return Disciplina.get_member_disciplines(id)
+
