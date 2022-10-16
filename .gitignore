@@ -4,4 +4,5 @@ src/web/__pycache__
 src/core/__pycache__
 src/core/models/__pycache__
 __pycache__
-
+flask_session
+admin/flask_session
