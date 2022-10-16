@@ -17,10 +17,10 @@
   margin: 0;
 }
 
-.link__btn{
+.link__btn {
   background-color: lightseagreen;
   border-radius: 100px;
-  color:black;
+  color: black;
   font-weight: bold;
   text-align: center;
   height: 30px;
@@ -168,4 +168,42 @@
   cursor: pointer;
   background-color: var(--acento-1-suave);
 }
->>>>>>>> development:admin/public/css/admin_table.css
+
+.form__search {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.user__search {
+  display: flex;
+  background-color: var(--gris-oscuro-4);
+  padding: 10px;
+  border-radius: 999px;
+  justify-self: flex-end;
+}
+
+.user__search input,
+.user__search input:focus {
+  background-color: var(--gris-oscuro-4);
+  color: var(--gris-claro-5);
+  border: none;
+}
+
+.search__btn {
+  background-color: var(--acento-1);
+}
+
+.search__btn:hover {
+  background-color: var(--acento-1-suave);
+  cursor: pointer;
+}
+
+.select__search {
+  height: 25px;
+  border-radius: 999px;
+  background-color: var(--gris-oscuro-4);
+  color: var(--gris-claro-5);
+  border: none;
+  padding-left: 10px;
+}

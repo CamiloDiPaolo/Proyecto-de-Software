@@ -9,11 +9,12 @@ def transformMonth(numMonth):
 
 
 def createPDF(partner,payment):
+    image_path = "admin/public/img/logo_club.png"
     pdf = FPDF()
     pdf.add_page()
 
     pdf.set_font('Arial', 'B', 20)
-    pdf.image("admin/public/img/logo_club.png",x=10,y=10,w=30,h=30,type="png")
+    pdf.image(name=image_path,x=45,y=20,w=30,h=30,type="png")
     pdf.text(x=45,y=20,txt=f'Recibo # {payment["id"]}')
 
     pdf.set_font('Arial', '', 12)
