@@ -71,4 +71,3 @@ def create_discipline_json(data):
     disc = create_doc_json(Disciplina, data);
     db_session.commit()
 
-

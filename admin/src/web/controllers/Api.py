@@ -4,6 +4,7 @@ from src.core.models.Usuario import Usuario
 from src.core.models.Disciplina import Disciplina
 from src.web.config import config
 from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, update_doc_json, get_all_docs_paginated_json
+
 import jwt
 
 private_key = "mi-clave-privada-y-ultra-secreta-y-larga-para-firmar-jwts-podria-ser-mas-larga"
