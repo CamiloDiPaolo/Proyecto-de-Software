@@ -1,0 +1,54 @@
+{% extends "admin.html" %} {% block content %}
+<div class="admin__panel">
+  <div class="admin__panel__header">
+    <h2>Agregar Pago a {{socio.nombre}} {{socio.apellido}}</h2>
+  </div>
+
+  <form
+    class="admin__form admin__from--create"
+    action="/pagos/create"
+    method="POST"
+  >
+    <div style="display: none">
+      <input type="number" name="id_socio" value="{{socio.id}}" />
+    </div>
+    <div class="admin__form__input">
+      <label>Pago</label>
+      <input type="number" placeholder="Pago" name="Pago" required />
+    </div>
+    <div class="admin__form__input">
+      <label>Año</label>
+      <input
+        type="number"
+        required
+        min="2000"
+        max="{{ac_year}}"
+        name="Año"
+        required
+      />
+    </div>
+    <div class="admin__form__input">
+      <label>Mes</label>
+      <div class="roles__input">
+        <select name="month" id="month" required>
+          <option disabled selected hidden value="">--Elija un mes--</option>
+          <option value="01">Enero</option>
+          <option value="02">Febrero</option>
+          <option value="03">Marzo</option>
+          <option value="04">Abril</option>
+          <option value="05">Mayo</option>
+          <option value="06">Junio</option>
+          <option value="07">Julio</option>
+          <option value="08">Agosto</option>
+          <option value="09">Septiembre</option>
+          <option value="10">Octubre</option>
+          <option value="11">Noviembre</option>
+          <option value="12">Diciembre</option>
+        </select>
+      </div>
+    </div>
+
+    <input type="submit" value="Agregar Pago" />
+  </form>
+  {% endblock %}
+</div>

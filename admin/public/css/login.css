@@ -1,0 +1,20 @@
+body {
+  background-color: var(--gris-oscuro-5);
+}
+
+.form__login {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  width: 200px;
+  height: 220px;
+  padding: 20px;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  background-color: var(--gris-oscuro-4);
+}
