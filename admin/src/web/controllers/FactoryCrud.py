@@ -59,5 +59,6 @@ def delete_doc_json(Model, doc_id):
     for row in result:
         db_session.delete(row)
         db_session.commit()
+
     return {}
 

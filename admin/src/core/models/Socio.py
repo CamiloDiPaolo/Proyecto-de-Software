@@ -9,7 +9,7 @@ from sqlalchemy import Date
 class Socio(Base):
     __tablename__ = "socio"
     id = Column(Integer, primary_key=True)
-    email = Column(String, nullable=False)
+    email = Column(String, nullable=False) #Column(String, primary_key=True)
     nombre = Column(String,nullable=False)
     apellido = Column(String, nullable=False)
     tipo_documento = Column(String, nullable=False)
@@ -22,7 +22,7 @@ class Socio(Base):
     fecha_alta = Column(Date, nullable=False)
 
     def __init__(self,data):
-        self.id = data["id"]
+        self.id = self.id#data["id"]
         self.email = data["email"]
         self.nombre = data["nombre"]
         self.apellido = data["apellido"]
@@ -54,3 +54,20 @@ class Socio(Base):
             "telefono": self.telefono,
             "fecha_alta": self.fecha_alta,
         }
+
+    def update(self, data):
+        if "nombre" in data:
+            self.nombre = data["nombre"]
+        if "apellido" in data:
+            self.apellido = data["apellido"]
+        if "email" in data:
+            self.email = data["email"]
+        if "genero" in data:
+            self.genero = data["genero"]
+        if "direccion" in data:
+            self.direccion = data["direccion"]
+        if "telefono" in data:
+            self.telefono = data["telefono"]
+        if "estado" in data:
+            self.estado = data["estado"]
+

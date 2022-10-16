@@ -1,8 +1,9 @@
-from flask import Blueprint,render_template,redirect, request,jsonify
+from flask import Blueprint,render_template,redirect, request,jsonify, send_file, send_from_directory
 from src.core.db import db_session
 from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, create_doc_json, delete_doc_json
 from src.core.models.pago import pago
 from src.core.models.Socio import Socio
+from src.web.controllers.PDFCreate import createPDF
 
 
 import datetime
@@ -30,6 +31,24 @@ def create_payment_POST():
     create_doc_json(pago,data)
     return redirect("/socios/"+ data["id_socio"])
 
-@pago_blueprint.route("/delete/<id>", methods=["DELETE"])
-def delete_discipline(id):
-    return jsonify(delete_doc_json(pago, id))
+@pago_blueprint.route("/delete/<partner_id>/<id>", methods=["DELETE","GET"])
+def delete_payment(partner_id,id):
+    print("---------------------")
+    print(partner_id)
+    print("---------------------")
+    delete_doc_json(pago, id)
+    return redirect(f'/socios/{partner_id}')
+
+
+
+@pago_blueprint.route("/<partner_id>/download/<payment_id>")
+def downloadPDF(partner_id,payment_id):
+    partner = get_doc_json(Socio,partner_id)
+    payment = get_doc_json(pago,payment_id);
+    print("--------------------------")
+    print(partner)
+    print("--------------------------")
+    print(payment)
+    print("--------------------------")
+
+    return send_file(createPDF(partner,payment),download_name="recibo.pdf",mimetype='image/pdf',as_attachment=True)

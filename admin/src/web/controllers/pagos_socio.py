@@ -19,7 +19,7 @@ def pagos_socio(id_socio):
     result = db_session.query(pago).filter_by(id_socio = id_socio).order_by(pago.fecha.desc()).all()
     for row in result:
        pagos_socio.append(row.json())
-    return render_template("partner_payments.html",pagos_socio=pagos_socio,partner=get_doc_json(socio,id_socio),ac_year=datetime.datetime.now().year)
+    return render_template("partner_payments.html",pagos_socio=pagos_socio,partner=get_doc_json(Socio,id_socio),ac_year=datetime.datetime.now().year)
 
 @pagos_socios_blueprint.route("/find",methods=["GET"])
 def find_partenr():
@@ -27,11 +27,11 @@ def find_partenr():
     partenrs = []
     #  and type(partner_dict["search"]) is str
     if(partner_dict["type"] == "nombre"):
-        result = db_session.query(socio).filter_by(nombre = partner_dict["search"]).all()
+        result = db_session.query(Socio).filter_by(nombre = partner_dict["search"]).all()
     elif(partner_dict["type"] == "nro_socio"):
-        result = db_session.query(socio).filter_by(nro_socio = partner_dict["search"]).all()
+        result = db_session.query(Socio).filter_by(nro_socio = partner_dict["search"]).all()
     else:
-       return redirect("/socios") 
+       return redirect("/socios")
     for row in result:
        partenrs.append(row.json())
     return render_template("all_partners.html",socios=partenrs)
