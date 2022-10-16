@@ -1,3 +1,4 @@
+from flask import jsonify
 from src.core.db import Base, db_session
 from src.core.models.relations.SocioSuscriptoDisciplina import SocioSuscriptoDisciplina
 from src.core.models.Categoria import Categoria
@@ -63,6 +64,10 @@ class Disciplina(Base):
         if "categoria_id" in data:
             self.categoria_id = data["categoria_id"]
 
-    def get_member_disciplines(idSocio):
-        query = db_session.query(Disciplina).join(SocioSuscriptoDisciplina).filter_by(idSocio != SocioSuscriptoDisciplina.id_socio)
-        return query.json()
+    def get_disc_available(idS):
+        disciplines = db_session.query(SocioSuscriptoDisciplina.id_disciplina).filter(SocioSuscriptoDisciplina.id_socio == idS)
+        result = db_session.query(Disciplina).filter(Disciplina.id.not_in(disciplines))
+        for res in result:    
+            print(result.json())
+            print("-----------------------------")
+        return result

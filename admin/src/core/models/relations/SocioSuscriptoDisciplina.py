@@ -1,4 +1,5 @@
 from src.core.db import Base
+from src.core.db import Base, db_session
 
 from sqlalchemy import Integer
 from sqlalchemy import Column
@@ -17,3 +18,17 @@ class SocioSuscriptoDisciplina(Base):
 
     def __repr__(self):
         return f"SocioSuscriptoDisciplina(id_disciplina={self.id_disciplina!r}, id_socio={self.id_socio!r})"
+    def json(self):
+        return {
+            "id": self.id,
+            "id_disciplina": self.id_disciplina,
+            "id_socio":self.id_socio
+        }
+        
+    def get_member_disciplines(idS):
+        json = []
+        result = db_session.query(SocioSuscriptoDisciplina).filter_by(id_socio =idS).all()
+        for row in result:
+            json.append(row.json())
+        print(json)
+        return json

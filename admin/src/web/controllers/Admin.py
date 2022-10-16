@@ -1,10 +1,11 @@
 from flask import Blueprint, render_template, request,jsonify, redirect
 from src.web.controllers.Auth import allowed_request
 from src.core.models.Usuario import Usuario
-from src.web.controllers.Usuario import get_all_user_paginated_filter_json
 from src.core.models.Rol import Rol
 from src.core.models.Categoria import Categoria
 from src.core.models.Disciplina import Disciplina
+from src.core.models.relations.SocioSuscriptoDisciplina import SocioSuscriptoDisciplina
+
 from src.core.models.Configuracion import Configuracion
 from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, update_doc_json, get_all_docs_paginated_json
 from src.core.models.Socio import Socio
@@ -29,17 +30,6 @@ def users(page):
     users = get_all_docs_paginated_json(Usuario, page);
     users["docs"].sort(key = lambda u: u["username"])
     return render_template('admin_usuarios.html', users=users["docs"], max_page = users["total_pages"])
-
-@admin_blueprint.route("/users/search/<tipo>/<value>/<page>", methods=["GET"])
-def users_search_get(tipo, value, page):
-    users = []
-    if(tipo == "email"):
-        users = get_all_user_paginated_filter_json( page, value, "email")
-    else:
-        users = get_all_user_paginated_filter_json( page, value, "username")
-
-    users["docs"].sort(key = lambda u: u["username"])
-    return render_template('admin_usuarios.html', users=users["docs"], max_page = users["total_pages"], search = True, tipo = tipo, value = value)
 
 @admin_blueprint.route("/users/new", methods=["GET"])
 def new_user():
@@ -81,11 +71,11 @@ def new_discipline():
 def edit_discipline(id):
     return render_template('admin_disciplinas_edit.html', discipline=get_doc_json(Disciplina, id), categories=get_all_docs_json(Categoria))
 
-#
+
 @admin_blueprint.route("/disciplines/registerMember/<int:id>", methods=["GET"])
 def register_member_discipline(id):
-    #query = db.db_session.query(Disciplina).join(SocioSuscriptoDisciplina).filter_by(SocioSuscriptoDisciplina.id_socio != idSocio)
-    return Disciplina.get_member_disciplines(id)
+     return render_template('inscribir_socio_disciplina.html', disciplines=get_all_docs_json(Disciplina), memberDisc=SocioSuscriptoDisciplina.get_member_disciplines(id))
+
 #---------------------------------------------
 #Blueprints de CATEGORIAS
 

@@ -4,7 +4,21 @@
     <h2>Inscribir a disciplina</h2>
   </div>
   <form class="admin__form" method="POST" action="/admin/config">
-    
+    {% for discipline in disciplines %}
+        {% set vals= {'check': True} %}
+        {%for memberd in memberDisc %}
+          {% if memberd.id_disciplina == discipline.id %}
+            {%if vals.update({'check': False}) %} {% endif %}
+          {% endif %}
+        {% endfor %}
+
+        {% if vals.check %}
+        <div>
+          <h2>{{discipline.nombre}}</h2>
+        </div>
+        {% endif %}
+
+    {% endfor %}
   </form>
 </div>
 {% endblock %}

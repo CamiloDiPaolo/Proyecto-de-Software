@@ -1,7 +1,9 @@
 from flask import Blueprint, jsonify, request, make_response
 from src.core.db import db_session
 from src.core.models.Usuario import Usuario
+from src.core.models.Disciplina import Disciplina
 from src.web.config import config
+from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, update_doc_json, get_all_docs_paginated_json
 import jwt
 
 private_key = "mi-clave-privada-y-ultra-secreta-y-larga-para-firmar-jwts-podria-ser-mas-larga"
@@ -46,7 +48,10 @@ def profile():
     
     return jsonify(user[0].json())
 
-
+@api_blueprint.route("/club/disciplines", methods=["GET"])
+def all_disc():
+    disciplines = db_session.query(Disciplina).all()
+    return jsonify(get_all_docs_json(Disciplina))
 
 
 def valid_user(username, password):
