@@ -13,6 +13,7 @@ SQLAlchemy = "^1.4.41"
 PyJWT = "^2.5.0"
 flask-sqlalchemy = "^3.0.0"
 Flask-Session = "^0.4.0"
+fpdf = "^1.7.2"
 
 
 [build-system]
