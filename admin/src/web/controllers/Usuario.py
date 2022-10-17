@@ -119,6 +119,7 @@ def get_all_user_paginated_filter_json(page, value, tipo):
     rows_per_page = config["elementos_por_pag"]
 
     json = []
+
     if(tipo == "email"):
         # result = db_session.query(Usuario).filter_by(email = value).limit(rows_per_page).offset(int(page)*rows_per_page)
         result = db_session.query(Usuario).filter(Usuario.email.ilike("%" + value + "%")).limit(rows_per_page).offset(int(page)*rows_per_page)

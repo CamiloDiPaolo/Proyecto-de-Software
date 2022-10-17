@@ -63,8 +63,6 @@ def update_user(id):
     db_session.add_all([updated_disc])
     db_session.commit()
     
-    #NO AGARRA NI EMAIL NI APELLIDO NI NOMBRE :(
-    
     return redirect("/perAsoc/")
     
 
@@ -75,19 +73,23 @@ def deleteSoc(id):
 def get_all_partners_paginated_filter_json(page, value, tipo):
     config = get_doc_json(Configuracion, 1)
     rows_per_page = config["elementos_por_pag"]
+    all_pages = 1
 
     json = []
+    result = []
+
     if(tipo == "nombre"):
         result = db_session.query(Socio).filter(Socio.nombre.ilike("%" + value + "%")).limit(rows_per_page).offset(int(page)*rows_per_page)
+        len_result = db_session.query(Socio).filter(Socio.nombre.ilike("%" + value + "%")).all()
+        all_pages = math.ceil(len(len_result) / rows_per_page)
     else:
         result = db_session.query(Socio).filter(Socio.nro_socio == value).limit(rows_per_page).offset(int(page)*rows_per_page)
+        len_result = db_session.query(Socio).filter(Socio.nro_socio == value).all()
+        all_pages = math.ceil(len(len_result) / rows_per_page)
         # TODO: Implementar el ILIKE pero con numeros
         # result = db_session.query(Socio).filter(Socio.nro_socio.ilike("%" + value + "%")).limit(rows_per_page).offset(int(page)*rows_per_page)
     for row in result:
         json.append(row.json())
-
-    result = db_session.query(Socio).all()
-    all_pages = math.floor(len(result) / rows_per_page) if math.floor(len(result) / rows_per_page) > 0 else 1
     return {"docs": json, "total_pages": all_pages}
 
 

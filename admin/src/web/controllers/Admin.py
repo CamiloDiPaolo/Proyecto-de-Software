@@ -121,9 +121,4 @@ def partners_search_get(tipo, value, page):
         partners = get_all_partners_paginated_filter_json( page, value, "nro_socio")
 
     partners["docs"].sort(key = lambda u: u["nombre"])
-    # print("-----------------------------")
-    # print(partners["docs"])
-    # print("-----------------------------")
-    # print(partners["total_pages"])
-    # print("-----------------------------")
     return render_template('admin_payments.html', partners=partners["docs"], max_page = partners["total_pages"], search = True, tipo = tipo, value = value)
