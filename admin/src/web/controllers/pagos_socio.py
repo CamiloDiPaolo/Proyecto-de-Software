@@ -6,7 +6,7 @@ from src.core.models.Socio import Socio
 
 import datetime
 
-pagos_socios_blueprint = Blueprint("socios",__name__, url_prefix="/socios")
+pagos_socios_blueprint = Blueprint("socios",__name__, url_prefix="/socioss")
 
 @pagos_socios_blueprint.route("/")
 def socios():

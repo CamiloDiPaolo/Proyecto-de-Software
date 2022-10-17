@@ -1,12 +1,56 @@
-{% extends 'layout_perAsoc.html' %}
+{% extends 'admin.html' %}
 
 {% block title %}  Panel de personas Asociadas {% endblock %}
-{% block body %}
+{% block content %}
 
 <div class="admin__panel">
     <div class="admin__panel__header">
       <h2>Socios</h2>
-      <a class="add__btn" href="/perAsoc/crearSocio">+</a>
+
+      <form action="/socios/find" method="POST">
+        <input type="text" name="apellido" placeholder="Apellido"/>   
+        <select name="estado" id="type" >
+          <option disabled selected hidden value="">SELECCIONE ESTADO</option>
+          <option value="activo">Activo</option>
+          <option value="inactivo">Inactivo</option>
+        </select>
+        <input type="submit" value="Buscar"/>
+      </form>
+
+      <div class="pages__btn">
+        {% if search %}
+        <a
+          class="page__down action__btn page__btn"
+          data-search="true"
+          data-tipo="{{tipo}}"
+          data-value="{{value}}"
+          ><</a
+        >
+        {% else %}
+        <a class="page__down action__btn page__btn"><</a>
+        {% endif %}
+        <p class="page" data-max="{{max_page}}">/ {{max_page}}</p>
+        {% if search %}
+        <a
+          class="page__up action__btn page__btn"
+          data-search="true"
+          data-tipo="{{tipo}}"
+          data-value="{{value}}"
+          >></a
+        >
+        {% else %}
+        <a class="page__up action__btn page__btn">></a>
+        {% endif %}
+      </div>
+
+
+      <a class="add__btn action__btn" href="/socios"
+        ><span class="material-symbols-outlined"> sync </span>
+      </a>
+
+
+
+      <a class="add__btn" href="/socios/crearSocio">+</a>
     </div>
     <table class="admin__table">
       <thead class="admin__table__head">
@@ -51,13 +95,10 @@
           <td>{{user.fecha_alta}}</td>
           <td>
             <div class="admin__table__actions">
-              <a class="delete__btn action__btn" data-id="{{user.id}}">
+              <a class="delete__btn action__btn" href="/socios/delete/{{user.id}}">
                 <span class="material-symbols-outlined"> delete </span>
               </a>
-              <a
-                class="patch__btn action__btn"
-                href="/perAsoc/editarSocio/{{user.id}}"
-              >
+              <a class="patch__btn action__btn" href="/socios/editarSocio/{{user.id}}">
                 <span class="material-symbols-outlined"> edit </span>
               </a>
             </div>
@@ -66,28 +107,57 @@
         {% endfor %}
       </tbody>
     </table>
+    
+    
+      <a href="./descargarPDF/<{{socio}}>"> <img src="/admin/public/img/pdf.png" alt="Descargar como PDF" style="width:42px;height:42px;"> </a>
+      <a href="./descargarCSV"><img src="/admin/public/img/CSV.png" alt="Descargar como CSV" style="width:42px;height:42px;"></a>
   </div>
-  
+
   <script>
-    [...document.querySelectorAll(".delete__btn")].forEach((btn) => {
-      btn.addEventListener("click", async (e) => {
-        try {
-          const res = await fetch(
-            `http://${location.host}/perAsoc/delete/${btn.dataset.id}`,
-            {
-              method: "DELETE",
-              credentials: "same-origin",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
+    // IMPLEMENTAMOS LA PAGINACION
+    const page = location.href.split("/").at(-1);
+    const pageCount = document.querySelector(".page");
+    pageCount.textContent =
+      page * 1 + 1 + document.querySelector(".page").textContent;
   
-          if (res.status == 200) location.href = "/perAsoc";
-        } catch (err) {
-          console.log(err);
-        }
-      });
+    const pageUp = document.querySelector(".page__up");
+    const pageDown = document.querySelector(".page__down");
+  
+    if (pageCount.dataset.max * 1 - 1 <= page * 1)
+      pageUp.classList.add("page__btn--disabled");
+    if (page * 1 <= 0) pageDown.classList.add("page__btn--disabled");
+  
+    pageUp.addEventListener("click", (e) => {
+      if (pageCount.dataset.max * 1 - 1 <= page * 1) return;
+  
+      const href = `${
+        e.target.dataset.search == "true"
+          ? `/search/${e.target.dataset.tipo}/${e.target.dataset.value}`
+          : ""
+      }`;
+  
+      location.href = `/socios/paginado${href}/${page * 1 + 1}`;
     });
+  
+    pageDown.addEventListener("click", (e) => {
+      if (page * 1 <= 0) return;
+  
+      const href = `${
+        e.target.dataset.search == "true"
+          ? `/search/${e.target.dataset.tipo}/${e.target.dataset.value}`
+          : ""
+      }`;
+  
+      location.href = `/socios/paginado${href}/${page * 1 - 1}`;
+    });
+    // REDIRIGIMOS A LA PESTAÑA DE BUSQUEDA
+  document.querySelector(".form__search").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const tipo = document.querySelector(".select__search").value;
+    const value = document.querySelector(".input__search").value;
+    console.log(tipo, value);
+    location.href = `/admin/users/search/${tipo}/${value}/0`;
+  });
   </script>
-  {% endblock %}
+  
+{% endblock %}
