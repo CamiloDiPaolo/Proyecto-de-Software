@@ -3,6 +3,9 @@ import json,datetime,random
 from src.core.db import db_session
 from src.core.models.Socio import Socio
 from src.web.controllers.FactoryCrud import create_doc_json, delete_doc_json, get_all_docs_json, get_doc_json
+from src.core.models.Configuracion import Configuracion
+
+import math
 
 
 
@@ -68,6 +71,24 @@ def update_user(id):
 @perAsoc_blueprint.route("/delete/<int:id>", methods=["DELETE"])
 def deleteSoc(id):
     return jsonify(delete_doc_json(Socio, id))
+
+def get_all_partners_paginated_filter_json(page, value, tipo):
+    config = get_doc_json(Configuracion, 1)
+    rows_per_page = config["elementos_por_pag"]
+
+    json = []
+    if(tipo == "nombre"):
+        result = db_session.query(Socio).filter(Socio.nombre.ilike("%" + value + "%")).limit(rows_per_page).offset(int(page)*rows_per_page)
+    else:
+        result = db_session.query(Socio).filter(Socio.nro_socio == value).limit(rows_per_page).offset(int(page)*rows_per_page)
+        # TODO: Implementar el ILIKE pero con numeros
+        # result = db_session.query(Socio).filter(Socio.nro_socio.ilike("%" + value + "%")).limit(rows_per_page).offset(int(page)*rows_per_page)
+    for row in result:
+        json.append(row.json())
+
+    result = db_session.query(Socio).all()
+    all_pages = math.floor(len(result) / rows_per_page) if math.floor(len(result) / rows_per_page) > 0 else 1
+    return {"docs": json, "total_pages": all_pages}
 
 
 

@@ -1,15 +1,19 @@
+from __future__ import print_function
 from flask import Blueprint, render_template, request,jsonify, redirect
 from src.web.controllers.Auth import allowed_request
 from src.core.models.Usuario import Usuario
 from src.core.models.Rol import Rol
 from src.core.models.Categoria import Categoria
 from src.core.models.Disciplina import Disciplina
+from src.core.models.pago import pago
 from src.core.models.relations.SocioSuscriptoDisciplina import SocioSuscriptoDisciplina
 from src.web.controllers.Usuario import get_all_user_paginated_filter_json
+from src.web.controllers.perAsoc import get_all_partners_paginated_filter_json
 from src.core.models.Configuracion import Configuracion
 from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, update_doc_json, get_all_docs_paginated_json
 from src.core.models.Socio import Socio
 from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json
+
 
 # TODO: pulir las response, agregar codigos HTTP descriptivos
 admin_blueprint = Blueprint("admin", __name__, url_prefix="/admin")
@@ -98,3 +102,28 @@ def categories():
 @admin_blueprint.route("/categories/new", methods=["GET"])
 def new_category():
     return render_template('admin_categorias_new.html', categories=get_all_docs_json(Categoria))
+
+#---------------------------------------------
+#Blueprints de PAGOS
+
+@admin_blueprint.route("/pagos/<page>",methods=["GET"])
+def payments(page):
+    partners = get_all_docs_paginated_json(Socio, page)
+    partners["docs"].sort(key = lambda u: u["nombre"])
+    return render_template('admin_payments.html', partners=partners["docs"], max_page = partners["total_pages"])
+
+@admin_blueprint.route("/pagos/search/<tipo>/<value>/<page>", methods=["GET"])
+def partners_search_get(tipo, value, page):
+    partners = []
+    if(tipo == "nombre"):
+        partners = get_all_partners_paginated_filter_json( page, value, "nombre")
+    else:
+        partners = get_all_partners_paginated_filter_json( page, value, "nro_socio")
+
+    partners["docs"].sort(key = lambda u: u["nombre"])
+    # print("-----------------------------")
+    # print(partners["docs"])
+    # print("-----------------------------")
+    # print(partners["total_pages"])
+    # print("-----------------------------")
+    return render_template('admin_payments.html', partners=partners["docs"], max_page = partners["total_pages"], search = True, tipo = tipo, value = value)
