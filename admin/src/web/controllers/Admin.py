@@ -11,6 +11,7 @@ from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, upd
 from src.core.models.Socio import Socio
 from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json
 
+
 # TODO: pulir las response, agregar codigos HTTP descriptivos
 admin_blueprint = Blueprint("admin", __name__, url_prefix="/admin")
 
@@ -85,7 +86,7 @@ def edit_discipline(id):
 
 @admin_blueprint.route("/disciplines/registerMember/<int:id>", methods=["GET"])
 def register_member_discipline(id):
-     return render_template('inscribir_socio_disciplina.html', disciplines=get_all_docs_json(Disciplina), memberDisc=SocioSuscriptoDisciplina.get_member_disciplines(id))
+    return render_template('inscribir_socio_disciplina.html', id=id, disciplines=Disciplina.get_member_available_disciplines(id))
 
 
 #---------------------------------------------

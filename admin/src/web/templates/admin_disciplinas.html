@@ -63,29 +63,6 @@
 </div>
 
 <script>
-  [...document.querySelectorAll(".delete")].forEach((btn) => {
-    btn.addEventListener("click", async (e) => {
-      if (confirm("Estas seguro de que quieres eliminar esta disciplina?")){
-      try {
-        const res = await fetch(
-          `http://${location.host}/disciplines/delete/${btn.dataset.id}`,
-          {
-            method: "DELETE",
-            credentials: "same-origin",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        //if (res.status == 200) location.href = "/admin/disciplines";
-      } catch (err) {
-        console.log(err);
-      }
-      }
-    });
-  });
-
   const page = location.href.split("/").at(-1);
   const pageCount = document.querySelector(".page");
   pageCount.textContent =

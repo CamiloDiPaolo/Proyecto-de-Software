@@ -1,6 +1,9 @@
 from flask import Blueprint, render_template, request,jsonify, redirect
 from src.core.db import db_session
 from src.core.models.Disciplina import Disciplina
+from src.core.models.Disciplina import Disciplina
+from src.core.models.relations.SocioSuscriptoDisciplina import SocioSuscriptoDisciplina
+
 from src.web.controllers.Auth import allowed_request
 from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, create_doc_json, delete_doc_json
 
@@ -60,14 +63,21 @@ def switch(id,state):
     result = db_session.query(Disciplina).filter_by(id = id).all()
     updated_disc = result[0]
     if(state == "true"):
-        updated_disc.habilitada = True;
+        updated_disc.habilitada = True
     else:
-        updated_disc.habilitada = False;
+        updated_disc.habilitada = False
     db_session.add_all([updated_disc])
     db_session.commit()
     return redirect("/admin/disciplines/0")
 
 def create_discipline_json(data):
-    disc = create_doc_json(Disciplina, data);
+    disc = create_doc_json(Disciplina, data)
     db_session.commit()
 
+@disciplines_blueprint.route("/addMemberDisc/<int:idDisc>/<int:idSoc>" ,methods=["GET"])
+def addMemberToDiscipline(idDisc,idSoc):
+    disc = {}
+    disc["id_socio"] = idSoc
+    disc["id_disciplina"] = idDisc
+    membDisc = create_doc_json(SocioSuscriptoDisciplina,disc)
+    return render_template('inscribir_socio_disciplina.html', id=idSoc,disciplines=Disciplina.get_member_available_disciplines(idSoc))
