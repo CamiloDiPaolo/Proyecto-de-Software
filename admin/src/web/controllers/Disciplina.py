@@ -1,11 +1,11 @@
 from flask import Blueprint, render_template, request,jsonify, redirect, flash
 from src.core.db import db_session
 from src.core.models.Disciplina import Disciplina
-from src.core.models.Disciplina import Disciplina
+from src.core.models.Socio import Socio
 from src.core.models.relations.SocioSuscriptoDisciplina import SocioSuscriptoDisciplina
 
 from src.web.controllers.Auth import allowed_request
-from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, create_doc_json, delete_doc_json
+from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, create_doc_json, delete_doc_json, exists_entity
 
 disciplines_blueprint = Blueprint("disciplines", __name__, url_prefix="/disciplines")
 
@@ -77,13 +77,21 @@ def create_discipline_json(data):
 @disciplines_blueprint.route("/addMemberDisc/<int:idDisc>/<int:idSoc>" ,methods=["GET"])
 def addMemberToDiscipline(idDisc,idSoc):
     result = db_session.query(SocioSuscriptoDisciplina).filter_by(id_socio = idSoc,id_disciplina=idDisc).all()
-    discipline= get_doc_json(Disciplina,idDisc)
+    soc = get_doc_json(Socio,idSoc)
+    #Valido que el socio exista
+    if(soc == {}):
+        errorMsg = "Error: El socio no existe"
+        flash(errorMsg)
+    #Verifico que el socio este habilitado
+    elif(soc["estado"] == False):
+        errorMsg = "Error: El socio no esta activo"
+        flash(errorMsg)
     #Valido que el socio no este inscripto a esa disciplina
-    if(result != []):
+    elif(result != []):
         errorMsg = "Error: El socio ya esta inscripto a esta disciplina"
         flash(errorMsg)
     #Valido que la disciplina exista
-    elif (discipline == {}):
+    elif (not exists_entity(Disciplina,idDisc)):
         errorMsg = "Error: La disciplina no existe"
         flash(errorMsg)
     else:

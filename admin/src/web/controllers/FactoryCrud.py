@@ -73,4 +73,10 @@ def check_role(role):
     print(arrayRoles)
     return usuarioTieneRoles
 
+#Para verificar si existe un determinado elemento
+def exists_entity(Model,id):
+    entity = get_doc_json(Model,id)
+    if (entity == {}):
+        return False
+    return True
 
