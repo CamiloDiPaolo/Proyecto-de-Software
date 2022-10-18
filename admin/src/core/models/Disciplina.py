@@ -71,8 +71,6 @@ class Disciplina(Base):
             self.categoria_id = data["categoria_id"]
 
     def get_member_available_disciplines(id):
-        print("ROLES")
-        
         disc = db_session.query(Disciplina).filter_by(habilitada=True).all()
         arraySubs= []
         arrayDisc= []

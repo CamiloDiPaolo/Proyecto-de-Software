@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request,jsonify, redirect
+from flask import Blueprint, render_template, request,jsonify, redirect, flash
 from src.core.db import db_session
 from src.core.models.Disciplina import Disciplina
 from src.core.models.Disciplina import Disciplina
@@ -76,8 +76,17 @@ def create_discipline_json(data):
 
 @disciplines_blueprint.route("/addMemberDisc/<int:idDisc>/<int:idSoc>" ,methods=["GET"])
 def addMemberToDiscipline(idDisc,idSoc):
-    disc = {}
-    disc["id_socio"] = idSoc
-    disc["id_disciplina"] = idDisc
-    membDisc = create_doc_json(SocioSuscriptoDisciplina,disc)
+    result = db_session.query(SocioSuscriptoDisciplina).filter_by(id_socio = idSoc,id_disciplina=idDisc).all()
+    if(result != []):
+        errorMsg = "Error: El socio ya esta inscripto a esta disciplina"
+        flash(errorMsg)
+    else:
+        print(type(result))
+        print("------")
+        disc = {}
+        disc["id_socio"] = idSoc
+        disc["id_disciplina"] = idDisc
+        membDisc = create_doc_json(SocioSuscriptoDisciplina,disc)
+        successMsg = "Disciplina registrada correctamente"
+        flash(successMsg)
     return render_template('inscribir_socio_disciplina.html', id=idSoc,disciplines=Disciplina.get_member_available_disciplines(idSoc))

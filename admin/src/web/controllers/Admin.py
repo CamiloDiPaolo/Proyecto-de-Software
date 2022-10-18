@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request,jsonify, redirect
+from flask import Blueprint, render_template, request,jsonify, redirect, flash
 from src.web.controllers.Auth import allowed_request
 from src.core.models.Usuario import Usuario
 from src.core.models.Rol import Rol
