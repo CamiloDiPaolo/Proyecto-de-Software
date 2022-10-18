@@ -1,7 +1,8 @@
-from flask import Blueprint, jsonify, request, make_response
+from flask import Blueprint, jsonify, request, make_response, session
 from src.core.db import db_session
 from src.core.models.Usuario import Usuario
 from src.core.models.Disciplina import Disciplina
+from src.core.models.relations.SocioSuscriptoDisciplina import SocioSuscriptoDisciplina
 from src.web.config import config
 from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, update_doc_json, get_all_docs_paginated_json
 
@@ -49,11 +50,41 @@ def profile():
     
     return jsonify(user[0].json())
 
+## Endpoints de DISCIPLINAS    
+
 @api_blueprint.route("/club/disciplines", methods=["GET"])
 def all_disc():
     disciplines = db_session.query(Disciplina).all()
     return jsonify(get_all_docs_json(Disciplina))
 
+@api_blueprint.route("/me/disciplines", methods=["GET"])
+def my_disciplines():    
+    token = request.cookies.get('jwt')
+    if (not token):
+        res = make_response("Tenes que loguearte para acceder a esta funcionalidad")
+        res.status = 401
+        return res
+    decoded = decode_jwt(token)
+    if(not decoded):
+        res = make_response("Tenes que loguearte para acceder a esta funcionalidad")
+        res.status = 401
+        return res
+    disciplines = get_user_disciplines(decoded["data"])
+    return jsonify(disciplines)
+
+# Funciones Auxiliares
+
+def get_user_disciplines(id):
+        disc = db_session.query(Disciplina).all()
+        arraySubs= []
+        arrayDisc= []
+        suscriptions = db_session.query(SocioSuscriptoDisciplina).filter(SocioSuscriptoDisciplina.id_socio==id).all()
+        for sub in suscriptions:
+            arraySubs.append(sub.id_disciplina)
+        for discipline in disc:
+            if (discipline.id in arraySubs):
+                arrayDisc.append(discipline.json())
+        return arrayDisc
 
 def valid_user(username, password):
     result = db_session.query(Usuario.username).filter_by(username=username, contraseña=password).all()
