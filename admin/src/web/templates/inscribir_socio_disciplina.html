@@ -3,13 +3,6 @@
   <div class="admin__panel__header">
     <h2>Inscribir a disciplina</h2>
   </div>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      {%for message in messages%}
-        <script> alert("{{message}}")</script>
-      {% endfor %}
-    {%  endif  %}
-    {%  endwith  %}
     {% for discipline in disciplines %} 
     <div class="disc-box">
       <h2>{{discipline.nombre}}</h2>

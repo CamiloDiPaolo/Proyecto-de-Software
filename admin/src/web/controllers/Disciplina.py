@@ -77,12 +77,16 @@ def create_discipline_json(data):
 @disciplines_blueprint.route("/addMemberDisc/<int:idDisc>/<int:idSoc>" ,methods=["GET"])
 def addMemberToDiscipline(idDisc,idSoc):
     result = db_session.query(SocioSuscriptoDisciplina).filter_by(id_socio = idSoc,id_disciplina=idDisc).all()
+    discipline= get_doc_json(Disciplina,idDisc)
+    #Valido que el socio no este inscripto a esa disciplina
     if(result != []):
         errorMsg = "Error: El socio ya esta inscripto a esta disciplina"
         flash(errorMsg)
+    #Valido que la disciplina exista
+    elif (discipline == {}):
+        errorMsg = "Error: La disciplina no existe"
+        flash(errorMsg)
     else:
-        print(type(result))
-        print("------")
         disc = {}
         disc["id_socio"] = idSoc
         disc["id_disciplina"] = idDisc
