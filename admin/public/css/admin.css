@@ -103,3 +103,25 @@ body {
 }
 
 /* DISEÑO RESPONSIVE */
+/* @media only screen and (min-width: 360px) and (max-width: 768px) {
+  body {
+    background-color: red;
+  }
+} */
+
+@media only screen and (max-width: 768px) {
+  .admin__nav {
+    height: 130vh;
+  }
+  .admin__main {
+    width: 300vh;
+  }
+  .admin__nav__link__text {
+    display: none;
+  }
+  .admin__main {
+    justify-content: none;
+    padding-left: 4vh;
+    padding-right: 4vh;
+  }
+}

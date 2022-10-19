@@ -207,3 +207,48 @@
   border: none;
   padding-left: 10px;
 }
+
+@media only screen and (max-width: 768px) {
+  .admin__panel {
+    width: 85vh;
+  }
+
+  .admin__table__head tr th,
+  .admin__table__body tr td {
+    padding-left: 0;
+    padding-right: 0;
+    min-width: 14.5vh;
+    max-width: 14.5vh;
+    font-size: 80%;
+  }
+
+  .delete__btn,
+  .patch__btn,
+  .action__btn {
+    width: 3vh;
+  }
+
+  .admin__panel__header {
+    font-size: 80%;
+  }
+  .user__search input {
+    max-width: 10vh;
+  }
+  .search__btn {
+    max-width: 5vh;
+    min-width: 5vh;
+  }
+
+  .discipline tr th,
+  .discipline tr td {
+    min-width: 12vh;
+    max-width: 12vh;
+  }
+
+  .sync {
+    width: 5vh;
+  }
+  .payment {
+    width: 6vh;
+  }
+}

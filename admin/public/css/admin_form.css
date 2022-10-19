@@ -81,3 +81,11 @@ input[type="submit"]:hover {
   padding: 10px;
   color: var(--gris-oscuro-2);
 }
+
+@media only screen and (min-width: 768px) {
+  .admin__form {
+    max-width: 75%;
+    min-width: 75%;
+    align-self: center;
+  }
+}
