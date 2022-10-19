@@ -21,15 +21,13 @@
       href="{{ url_for('static', filename='css/admin_form.css') }}"
     />
     <title>Panel de administrador</title>
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-      <script>
-        {%for message in messages%}
-          alert("{{message}}")
-          </script>
-        {% endfor %}
-      {%  endif  %}
-    {%  endwith  %}
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <script>
+      for (const message in messages) {
+        alert("{{message}}");
+      }
+    </script>
+    {% endif %} {% endwith %}
   </head>
   <body>
     <nav class="admin__nav">
@@ -41,7 +39,7 @@
           >
         </li>
         <li>
-          <a class="admin__nav__link" href="/socios/paginado/0"
+          <a class="admin__nav__link" href="/admin/socios/paginado/0"
             ><span class="material-symbols-outlined"> school </span
             ><span class="admin__nav__link__text"> Socios </span>
           </a>

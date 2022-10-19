@@ -5,11 +5,7 @@ from src.core.models.Socio import Socio
 from src.core.models.relations.SocioSuscriptoDisciplina import SocioSuscriptoDisciplina
 
 from src.web.controllers.Auth import allowed_request
-<<<<<<< HEAD
-from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, create_doc_json, delete_doc_json,get_all_docs_paginated_json
-=======
 from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, create_doc_json, delete_doc_json, exists_entity
->>>>>>> 59845d3d8d1618388bc202698170816411c31cf5
 
 disciplines_blueprint = Blueprint("disciplines", __name__, url_prefix="/disciplines")
 

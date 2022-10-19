@@ -120,12 +120,8 @@ def get_all_user_paginated_filter_json(page, value, tipo):
     all_pages = 1
 
     json = []
-<<<<<<< HEAD
-
-=======
     result = []
  
->>>>>>> 59845d3d8d1618388bc202698170816411c31cf5
     if(tipo == "email"):
         result = db_session.query(Usuario).filter(Usuario.email.ilike("%" + value + "%")).limit(rows_per_page).offset(int(page)*rows_per_page)
         len_result = b_session.query(Usuario).filter(Usuario.email.ilike("%" + value + "%")).all()

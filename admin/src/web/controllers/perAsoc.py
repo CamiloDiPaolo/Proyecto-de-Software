@@ -8,40 +8,28 @@ from src.web.controllers.FactoryCrud import create_doc_json, delete_doc_json, ge
 
 
 
-perAsoc_blueprint = Blueprint('perAsoc_blueprint', __name__, url_prefix='/socios')
-
-@perAsoc_blueprint.route("/", methods=["GET"])
-def all_users():
-    return redirect("/socios/paginado/0")
-
-
-@perAsoc_blueprint.route("/paginado/<page>", methods=["GET"])
-def socios(page):
-    socios=get_all_docs_paginated_json(Socio, page)
-    socios["docs"].sort(key = lambda u: u["nro_socio"])
-    return render_template("index_perAsoc.html", socio=socios["docs"], max_page = socios["total_pages"])
+perAsoc_blueprint = Blueprint('perAsoc_blueprint', __name__, url_prefix='/admin/socios')
 
 @perAsoc_blueprint.route("/<int:id>", methods=["GET"])
 def get_user(id):
     return jsonify(get_doc_json(Socio, id))
 
-@perAsoc_blueprint.route("/crearSocio", methods=["GET"])
-def createSoc():
-    return render_template("create_perAsoc.html")
 
 @perAsoc_blueprint.route("/socioCreado", methods=["POST"])
 def socioCreado():
-    
-  
-    
     #Primero sanitizar los argumentos recibidos
     result = request.form.to_dict()
+    result['nro_socio']=random.randint(1,1000000)
     print (result)
-    if (db_session.query(Socio).filter_by(nro_documento = result['nro_documento']).all()):
+    if (db_session.query(Socio).filter_by(nro_documento = result['nro_documento']).all()) :
         return render_template("create_perAsoc.html", error='Dni ya registrado')
     
+    while (db_session.query(Socio).filter_by(nro_socio = result['nro_socio']).all()):
+        result['nro_socio']=random.randint(1,1000000)
+        
+        
     #ASIGNO VALORES FUERA DE FORMULARIO Y AJUSTO ALGUNOS
-    result['nro_socio']=random.randint(1,100000000) #verificar en base q no exista
+    #verificar en base q no exista
     result['fecha_alta'] = datetime.datetime.now()
     if result['email']== '': 'null'
     if result['telefono']=='': 'null' 
@@ -53,14 +41,8 @@ def socioCreado():
         
     create_doc_json(Socio, result)
     
-    return redirect("/socios/")
+    return redirect("/admin/socios/paginado/0")
     
-@perAsoc_blueprint.route("/editarSocio/<int:id>", methods=["GET"])
-def editSoc(id):
-    return render_template("edit_perAsoc.html", user=get_doc_json(Socio, id))
-
-
-
 @perAsoc_blueprint.route("/update/<int:id>", methods=["POST"])
 def update_user(id):
     disc = request.form.to_dict()
@@ -77,13 +59,9 @@ def update_user(id):
     db_session.commit()
     
     
-    return redirect("/socios")
+    return redirect("/admin/socios")
     
 
-@perAsoc_blueprint.route("/delete/<int:id>", methods=["DELETE","GET"])
-def deleteSoc(id):
-    delete_doc_json(Socio, id)
-    return redirect("/socios")
 
 def get_all_partners_paginated_filter_json(page, value, tipo):
     config = get_doc_json(Configuracion, 1)
@@ -134,7 +112,7 @@ def buscador(page,tipo,value):
             result=get_all_partners_paginated_filter_json(page, False, "estado")
             
     elif ((socios_dict["apellido"]=='vacio') & (socios_dict["estado"]=='nada')):
-        return redirect ("/socios/paginado/0")
+        return redirect ("/admin/socios")
 
     return render_template("index_perAsoc.html", socio=result["docs"], max_page = result["total_pages"], tipo=tipo, value=value)
     
