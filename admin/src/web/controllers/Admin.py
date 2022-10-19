@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 from __future__ import print_function
 from flask import Blueprint, render_template, request,jsonify, redirect
+=======
+from flask import Blueprint, render_template, request,jsonify, redirect, flash
+>>>>>>> 59845d3d8d1618388bc202698170816411c31cf5
 from src.web.controllers.Auth import allowed_request
 from src.core.models.Usuario import Usuario
 from src.core.models.Rol import Rol
@@ -10,7 +14,7 @@ from src.core.models.relations.SocioSuscriptoDisciplina import SocioSuscriptoDis
 from src.web.controllers.Usuario import get_all_user_paginated_filter_json
 from src.web.controllers.perAsoc import get_all_partners_paginated_filter_json
 from src.core.models.Configuracion import Configuracion
-from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, update_doc_json, get_all_docs_paginated_json
+from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, update_doc_json, get_all_docs_paginated_json, exists_entity
 from src.core.models.Socio import Socio
 from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json
 
@@ -84,13 +88,22 @@ def new_discipline():
 
 @admin_blueprint.route("/disciplines/edit/<int:id>", methods=["GET"])
 def edit_discipline(id):
-    return render_template('admin_disciplinas_edit.html', discipline=get_doc_json(Disciplina, id), categories=get_all_docs_json(Categoria))
-
+    if (exists_entity(Disciplina,id)):
+        return render_template('admin_disciplinas_edit.html', discipline=get_doc_json(Disciplina, id), categories=get_all_docs_json(Categoria))
+    else:
+        errorMsg = "Error: La disciplina no existe"
+        flash(errorMsg)
+        return redirect('/admin')
 
 @admin_blueprint.route("/disciplines/registerMember/<int:id>", methods=["GET"])
 def register_member_discipline(id):
-     return render_template('inscribir_socio_disciplina.html', disciplines=get_all_docs_json(Disciplina), memberDisc=SocioSuscriptoDisciplina.get_member_disciplines(id))
-
+    #Verifico que se ingrese un id valido
+    if (exists_entity(Socio,id)):
+        return render_template('inscribir_socio_disciplina.html', id=id, disciplines=Disciplina.get_member_available_disciplines(id))
+    else:
+        errorMsg = "Error: El socio no existe"
+        flash(errorMsg)
+        return redirect('/admin')
 
 #---------------------------------------------
 #Blueprints de CATEGORIAS

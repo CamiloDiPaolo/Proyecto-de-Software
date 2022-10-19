@@ -24,15 +24,23 @@
   font-weight: bold;
   text-align: center;
   height: 30px;
-  position: fixed;
-  padding-top: 10px;
+  padding-top: 5px;
   width: 180px;
+  display: flex;
+align-items: center;
+justify-content: center;
 }
 
 .link__btn:hover {
   cursor: pointer;
   transition: 10ms;
   background-color: rgb(28, 146, 140);
+}
+
+.disc_div{
+  display: flex; 
+  justify-content: space-between; 
+  gap:10px;
 }
 
 .add__btn {

@@ -2,6 +2,7 @@ from flask import jsonify
 from src.core.db import Base, db_session
 from src.core.models.relations.SocioSuscriptoDisciplina import SocioSuscriptoDisciplina
 from src.core.models.Categoria import Categoria
+from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, update_doc_json, get_all_docs_paginated_json
 
 from sqlalchemy import ForeignKey
 from sqlalchemy import Column
@@ -32,7 +33,7 @@ class Disciplina(Base):
         self.habilitada = data["habilitada"]
 
     def __repr__(self):
-        return f"Disciplina(id={self.id!r}, nombre={self.nombre!r}, categoria_id={self.categoria_id!r}, instructores={self.instructores!r}, horarios={self.horarios!r}, costo={self.costo!r}, habilitada={self.habilitada!r})"
+        return f"Disciplina(id={self.id!r}, nombre={self.nombre!r}, categoria_id={self.categoria_id!r}, categoria_nombre={self.get_nombre_categoria()!r}, instructores={self.instructores!r}, horarios={self.horarios!r}, costo={self.costo!r}, habilitada={self.habilitada!r})"
 
     def json(self):
         return {
@@ -50,6 +51,11 @@ class Disciplina(Base):
         cat= categoria[0].json()
         return cat
     
+    def get_nombre_categoria(self):
+        categoria = db_session.query(Categoria.nombre).filter_by(id = self.categoria_id)
+        cat= categoria[0]
+        return cat.nombre
+
     def update(self, data):
         if "nombre" in data:
             self.nombre = data["nombre"]
@@ -64,10 +70,19 @@ class Disciplina(Base):
         if "categoria_id" in data:
             self.categoria_id = data["categoria_id"]
 
-    def get_disc_available(idS):
-        disciplines = db_session.query(SocioSuscriptoDisciplina.id_disciplina).filter(SocioSuscriptoDisciplina.id_socio == idS)
-        result = db_session.query(Disciplina).filter(Disciplina.id.not_in(disciplines))
-        for res in result:    
-            print(result.json())
-            print("-----------------------------")
-        return result
+    def get_member_available_disciplines(id):
+        disc = db_session.query(Disciplina).filter_by(habilitada=True).all()
+        arraySubs= []
+        arrayDisc= []
+        suscriptions = db_session.query(SocioSuscriptoDisciplina).filter(SocioSuscriptoDisciplina.id_socio==id).all()
+        for sub in suscriptions:
+            arraySubs.append(sub.id_disciplina)
+        for discipline in disc:
+            if (discipline.id not in arraySubs):
+                arrayDisc.append(discipline.json())
+        return arrayDisc
+    
+
+
+    
+

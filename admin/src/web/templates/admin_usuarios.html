@@ -131,9 +131,9 @@
   // REDIRIGIMOS A LA PESTAÑA DE BUSQUEDA
   document.querySelector(".form__search").addEventListener("submit", (e) => {
     e.preventDefault();
-    const tipo = document.querySelector(".select__search").value;
-    const value = document.querySelector(".input__search").value;
-    console.log(tipo, value);
+    let tipo = document.querySelector(".select__search").value;
+    let value = document.querySelector(".input__search").value;
+    if (value == "") return;
     location.href = `/admin/users/search/${tipo}/${value}/0`;
   });
 </script>

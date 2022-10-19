@@ -1,14 +1,21 @@
 {% extends "admin.html" %} {% block content %}
 <div class="admin__panel">
   <div class="admin__panel__header">
-    <h2>Disciplinas</h2>
+    <div class="disc_div"><a class="link__btn" href="/admin/disciplines/new">Crear disciplina</a>
+      <a class="link__btn" href="/admin/categories/new">Crear categoría</a>
+    </div>
     <div class="pages__btn">
       <a class="page__down action__btn page__btn"><</a>
       <p class="page" data-max="{{max_page}}">/ {{max_page}}</p>
       <a class="page__up action__btn page__btn">></a>
     </div>
+<<<<<<< HEAD
     <a class="link__btn" href="/admin/categories/new">Crear categoría</a>
     <a class="add__btn" href="/admin/disciplines/new">+</a>
+=======
+   
+  
+>>>>>>> 59845d3d8d1618388bc202698170816411c31cf5
   </div>
   <table class="admin__table">
     <thead class="admin__table__head discipline">
@@ -73,6 +80,7 @@
 </div>
 
 <script>
+<<<<<<< HEAD
   [...document.querySelectorAll(".delete")].forEach((btn) => {
     btn.addEventListener("click", async (e) => {
       if (confirm("Estas seguro de que quieres eliminar esta disciplina?")) {
@@ -96,6 +104,8 @@
     });
   });
 
+=======
+>>>>>>> 59845d3d8d1618388bc202698170816411c31cf5
   const page = location.href.split("/").at(-1);
   const pageCount = document.querySelector(".page");
   pageCount.textContent =
