@@ -9,7 +9,7 @@ from src.web.controllers.PDFCreate import createPDF
 import datetime
 import math
 
-pagos_socios_blueprint = Blueprint("socios",__name__, url_prefix="/socioss")
+pagos_socios_blueprint = Blueprint("socios",__name__, url_prefix="/admin/pagos/socio")
 
 @pagos_socios_blueprint.route("/")
 def socios():
