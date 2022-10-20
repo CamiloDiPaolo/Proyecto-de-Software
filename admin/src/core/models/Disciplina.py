@@ -81,6 +81,18 @@ class Disciplina(Base):
             if (discipline.id not in arraySubs):
                 arrayDisc.append(discipline.json())
         return arrayDisc
+
+    def get_member_registered_disciplines(id):
+        disc = db_session.query(Disciplina).all()
+        arraySubs= []
+        arrayDisc= []
+        suscriptions = db_session.query(SocioSuscriptoDisciplina).filter(SocioSuscriptoDisciplina.id_socio==id).all()
+        for sub in suscriptions:
+            arraySubs.append(sub.id_disciplina)
+        for discipline in disc:
+            if (discipline.id in arraySubs):
+                arrayDisc.append(discipline.json())
+        return arrayDisc
     
 
 

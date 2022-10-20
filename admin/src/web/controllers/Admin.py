@@ -94,7 +94,7 @@ def edit_discipline(id):
 def register_member_discipline(id):
     #Verifico que se ingrese un id valido
     if (exists_entity(Socio,id)):
-        return render_template('inscribir_socio_disciplina.html', id=id, disciplines=Disciplina.get_member_available_disciplines(id))
+        return render_template('inscribir_socio_disciplina.html', id=id, disciplines=Disciplina.get_member_available_disciplines(id), disciplinesRegistered=Disciplina.get_member_registered_disciplines(id))
     else:
         errorMsg = "Error: El socio no existe"
         flash(errorMsg)
