@@ -27,8 +27,8 @@
   padding-top: 5px;
   width: 180px;
   display: flex;
-align-items: center;
-justify-content: center;
+  align-items: center;
+  justify-content: center;
 }
 
 .link__btn:hover {
@@ -37,10 +37,10 @@ justify-content: center;
   background-color: rgb(28, 146, 140);
 }
 
-.disc_div{
-  display: flex; 
-  justify-content: space-between; 
-  gap:10px;
+.disc_div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 .add__btn {
@@ -214,4 +214,153 @@ justify-content: center;
   color: var(--gris-claro-5);
   border: none;
   padding-left: 10px;
+}
+
+@media only screen and (max-width: 360px) {
+  .admin__panel {
+    width: 50vh;
+  }
+
+  .admin__table__head tr th,
+  .admin__table__body tr td {
+    padding-left: 0;
+    padding-right: 0;
+    min-width: 1vh;
+    max-width: 1vh;
+    font-size: 50%;
+  }
+
+  .admin__table__actions {
+    gap: 2px;
+  }
+
+  .delete__btn,
+  .patch__btn,
+  .action__btn {
+    width: 2vh;
+    height: 2vh;
+  }
+
+  .delete__btn span,
+  .patch__btn span,
+  .action__btn span {
+    font-size: 50%;
+  }
+
+  .add__btn .add__btn__partner {
+    width: 2vh;
+    height: 2vh;
+  }
+
+  .admin__panel__header {
+    font-size: 80%;
+    flex-direction: column;
+  }
+  .user__search input {
+    max-width: 8vh;
+    height: 3vh;
+  }
+  .search__btn {
+    max-width: 3.5vh;
+    min-width: 3.5vh;
+    max-height: 3.5vh;
+    min-height: 3.5vh;
+  }
+
+  .page__btn {
+    max-width: 4vh;
+    min-width: 4vh;
+    max-height: 4vh;
+    min-height: 4vh;
+  }
+
+  .add__btn_resp {
+    max-width: 6vh;
+    min-width: 6vh;
+    max-height: 6vh;
+    min-height: 6vh;
+  }
+
+  .select__search {
+    max-width: 13vh;
+    min-width: 13vh;
+  }
+
+  .discipline tr th,
+  .discipline tr td {
+    min-width: 7.5vh;
+    max-width: 7.5vh;
+    font-size: 50%;
+  }
+
+  .link__btn {
+    max-width: 18vh;
+    min-width: 18vh;
+  }
+  .partner tr th,
+  .partner tr td {
+    min-width: 4.4vh;
+    max-width: 4.4vh;
+    font-size: 45%;
+  }
+
+  .sync {
+    width: 5vh;
+    height: 5vh;
+  }
+  .payment {
+    width: 6vh;
+    height: 6vh;
+  }
+}
+
+@media only screen and (max-width: 768px) and (min-width: 360px) {
+  .admin__panel {
+    width: 85vh;
+  }
+
+  .admin__table__head tr th,
+  .admin__table__body tr td {
+    padding-left: 0;
+    padding-right: 0;
+    min-width: 14.5vh;
+    max-width: 14.5vh;
+    font-size: 80%;
+  }
+
+  .delete__btn,
+  .patch__btn,
+  .action__btn {
+    width: 3vh;
+  }
+
+  .admin__panel__header {
+    font-size: 80%;
+  }
+  .user__search input {
+    max-width: 10vh;
+  }
+  .search__btn {
+    max-width: 5vh;
+    min-width: 5vh;
+  }
+
+  .discipline tr th,
+  .discipline tr td {
+    min-width: 12vh;
+    max-width: 12vh;
+  }
+  .partner tr th,
+  .partner tr td {
+    min-width: 7vh;
+    max-width: 7vh;
+    font-size: 50%;
+  }
+
+  .sync {
+    width: 5vh;
+  }
+  .payment {
+    width: 6vh;
+  }
 }

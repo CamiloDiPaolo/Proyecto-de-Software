@@ -1,11 +1,14 @@
-{% extends 'layout_perAsoc.html' %}
+{% extends 'admin.html' %}
 {% block title %} Panel de personas Asociadas {% endblock %}
-{% block body %}
+{% block content %}
 <div class="admin__panel">
     <div class="admin__panel__header">
       <h2>Crear Socio</h2>
     </div>
-    <form class="admin__form admin__form--create" action="/perAsoc/socioCreado" method="POST">
+    {% if error %}
+    <div class="error"> {{error}} </div>
+    {% endif %}
+    <form class="admin__form admin__form--create" action="/socios/socioCreado" method="POST">
       <div class="admin__form__input">
         <label >Nombre</label>
         <input type="text" name="nombre" required />
@@ -34,7 +37,7 @@
         <label>Genero </label>
         <div class="roles__input">
           <select value="" name="genero"required>
-            <option disabled selected hidden > Seleccione genero </option>
+            <option disabled selected hidden value=""> Seleccione genero </option>
             <option value="Masculino">Masculino</option>
             <option value="Femenino">Femenino</option>
             <option value="Otro">Otro</option>

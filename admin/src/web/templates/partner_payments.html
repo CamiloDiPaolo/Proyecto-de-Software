@@ -4,9 +4,34 @@
 <div class="admin__panel">
   <div class="admin__panel__header">
     <h2>Pagos de {{partner.nombre}} {{partner.apellido}}</h2>
+    <div class="pages__btn">
+      {% if search %}
+      <a
+        class="page__down action__btn page__btn"
+        data-search="true"
+        data-tipo="{{tipo}}"
+        data-value="{{value}}"
+        ><</a
+      >
+      {% else %}
+      <a class="page__down action__btn page__btn"><</a>
+      {% endif %}
+      <p class="page" data-max="{{max_page}}">/ {{max_page}}</p>
+      {% if search %}
+      <a
+        class="page__up action__btn page__btn"
+        data-search="true"
+        data-tipo="{{tipo}}"
+        data-value="{{value}}"
+        >></a
+      >
+      {% else %}
+      <a class="page__up action__btn page__btn">></a>
+      {% endif %}
+    </div>
   </div> 
     <div>
-      <a class="add__btn action__btn" href="/pagos/{{partner.id}}/new"
+      <a class="add__btn add__btn_resp" href="/admin/pagos/socio/{{partner.id}}/new"
         ><span class="material-symbols-outlined"> add </span></a
       >
     </div>
@@ -19,16 +44,16 @@
         </tr>
       </thead>
       <tbody class="admin__table__body">
-        {% for data in pagos_socio %}
+        {% for data in partner_payments %}
         <tr>
           <td>{{data.pago}}</td>
           <td>{{data.fecha}}</td>
           <td>
             <div class="admin__table__actions">
-              <form action="/pagos/delete/{{partner.id}}/{{data.id}}" method="DELETE">
+              <form action="/admin/pagos/socio/delete/{{partner.id}}/{{data.id}}" method="DELETE">
                 <input type="submit" class="material-symbols-outlined delete__btn action__btn" style="background-color:#cd104d ;" value="delete">
               </form>
-              <a class="patch__btn action__btn" data-id="{{data.id}}" href="/pagos/{{partner.id}}/download/{{data.id}}">
+              <a class="patch__btn action__btn" data-id="{{data.id}}" href="/admin/pagos/socio/{{partner.id}}/download/{{data.id}}">
                 <span class="material-symbols-outlined"> file_download </span>
               </a>
             </div>
@@ -38,31 +63,28 @@
       </tbody>
     </table>
   </div>
-
-  <!-- <script>
-    [...document.querySelectorAll(".delete__btn")].forEach((btn) => {
-      btn.addEventListener("click", async (e) => {
-        if (confirm("¿Estas seguro de que quieres eliminar este pago?")) {
-          try {
-            const res = await fetch(
-              `http://${location.host}/pagos/delete/${partner.id}/${btn.dataset.id}`,
-              {
-                method: "DELETE",
-                credentials: "same-origin",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
-            );
-
-            if (res.status == 200) location.href = "/socios/{{partner.id}}";
-          } catch (err) {
-            console.log(err);
-          }
-        }
-      });
-    });
-  </script> -->
-
-  {% endblock %}
 </div>
+<script>
+  const page = location.href.split("/").at(-1);
+  const partner_id = location.href.split("/").at(-2);
+  const pageCount = document.querySelector(".page");
+  pageCount.textContent = page * 1 + 1 + document.querySelector(".page").textContent;
+
+  const pageUp = document.querySelector(".page__up");
+  const pageDown = document.querySelector(".page__down");
+
+  if (pageCount.dataset.max * 1 - 1 <= page * 1)
+    pageUp.classList.add("page__btn--disabled");
+  if (page * 1 <= 0) pageDown.classList.add("page__btn--disabled");
+
+  pageUp.addEventListener("click", (e) => {
+    if (pageCount.dataset.max * 1 - 1 <= page * 1) return;
+    location.href = `/admin/pagos/socio/${partner_id}/${page * 1 + 1}`;
+  });
+
+  pageDown.addEventListener("click", (e) => {
+    if (page * 1 <= 0) return;
+    location.href = `/admin/pagos/socio/${partner_id}/${page * 1 - 1}`;
+  });
+</script>
+{% endblock %}

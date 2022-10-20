@@ -54,6 +54,7 @@ ul {
 
 body {
   display: flex;
+  background-color: var(--gris-oscuro-5);
 }
 
 /* BARRA DE NAVEGACION */
@@ -103,25 +104,63 @@ body {
 }
 
 /* DISCIPLINAS */
-.disc-box{
-  background:rgb(110, 102, 102);
-  padding:10px;
+.disc-box {
+  background: rgb(110, 102, 102);
+  padding: 10px;
   border-radius: 5px;
   padding-left: 15px;
 }
 
-.btn-insc{
-  background:rgb(36, 160, 237);
+.btn-insc {
+  background: rgb(36, 160, 237);
   font-weight: bold;
-  color:black;
+  color: black;
   border-radius: 5px;
   border-color: black;
 }
 
-.btn-insc:hover{
+.btn-insc:hover {
   transform: scale(1.1) 3s;
   background-color: rgb(22, 132, 200);
   cursor: pointer;
 }
 
 /* DISEÑO RESPONSIVE */
+/* @media only screen and (min-width: 360px) and (max-width: 768px) {
+  body {
+    background-color: red;
+  }
+} */
+
+@media only screen and (max-width: 360px) {
+  .admin__nav {
+    width: 6vh;
+    height: 160vh;
+  }
+  .admin__nav__link {
+    padding: 5px;
+    padding-bottom: 20px;
+  }
+  .admin__nav__link__text {
+    display: none;
+  }
+  .admin__main {
+    justify-content: none;
+    padding-left: 1vh;
+    padding-right: 1vh;
+  }
+}
+
+@media only screen and (max-width: 768px) and (min-width: 360px) {
+  .admin__nav {
+    height: 130vh;
+  }
+  .admin__nav__link__text {
+    display: none;
+  }
+  .admin__main {
+    justify-content: none;
+    padding-left: 4vh;
+    padding-right: 4vh;
+  }
+}
