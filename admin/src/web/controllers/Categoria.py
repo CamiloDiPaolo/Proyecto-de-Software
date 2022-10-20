@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request,jsonify, redirect
+from flask import Blueprint, render_template, request,jsonify, redirect, flash
 from src.core.db import db_session
 from src.core.models.Categoria import Categoria
 from src.web.controllers.Auth import allowed_request
@@ -19,8 +19,17 @@ def all_categories():
 @categories_blueprint.route("/create", methods=["POST"])
 def create_categories():
     cat = request.form.to_dict()
-    create_doc_json(Categoria,cat)
-    return redirect("/admin/disciplines/0")
+    query = db_session.query(Categoria).filter_by(nombre = cat["nombre"]).all()
+    print (query)
+    if (query == []):
+        create_doc_json(Categoria,cat)
+        successMsg = "La categoría se registro correctamente"
+        flash(successMsg)
+        return redirect("/admin/disciplines/0")
+    else:
+        errorMsg = "Error: Ya existe una categoría con ese nombre"
+        flash(errorMsg)
+        return redirect("/admin/categories/new")
 
 @categories_blueprint.route("/delete/<id>", methods=["DELETE"])
 def delete_categorie(id):

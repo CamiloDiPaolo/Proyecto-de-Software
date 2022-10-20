@@ -1,15 +1,18 @@
-from flask import Blueprint, render_template, request,jsonify, redirect
+from flask import Blueprint, render_template, request,jsonify, redirect, flash
 from src.web.controllers.Auth import allowed_request
 from src.core.models.Usuario import Usuario
 from src.core.models.Rol import Rol
 from src.core.models.Categoria import Categoria
 from src.core.models.Disciplina import Disciplina
+from src.core.models.pago import pago
 from src.core.models.relations.SocioSuscriptoDisciplina import SocioSuscriptoDisciplina
 from src.web.controllers.Usuario import get_all_user_paginated_filter_json
+from src.web.controllers.perAsoc import get_all_partners_paginated_filter_json
 from src.core.models.Configuracion import Configuracion
-from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, update_doc_json, get_all_docs_paginated_json
+from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, update_doc_json, get_all_docs_paginated_json, exists_entity
 from src.core.models.Socio import Socio
 from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json
+
 
 # TODO: pulir las response, agregar codigos HTTP descriptivos
 admin_blueprint = Blueprint("admin", __name__, url_prefix="/admin")
@@ -80,13 +83,22 @@ def new_discipline():
 
 @admin_blueprint.route("/disciplines/edit/<int:id>", methods=["GET"])
 def edit_discipline(id):
-    return render_template('admin_disciplinas_edit.html', discipline=get_doc_json(Disciplina, id), categories=get_all_docs_json(Categoria))
-
+    if (exists_entity(Disciplina,id)):
+        return render_template('admin_disciplinas_edit.html', discipline=get_doc_json(Disciplina, id), categories=get_all_docs_json(Categoria))
+    else:
+        errorMsg = "Error: La disciplina no existe"
+        flash(errorMsg)
+        return redirect('/admin')
 
 @admin_blueprint.route("/disciplines/registerMember/<int:id>", methods=["GET"])
 def register_member_discipline(id):
-     return render_template('inscribir_socio_disciplina.html', disciplines=get_all_docs_json(Disciplina), memberDisc=SocioSuscriptoDisciplina.get_member_disciplines(id))
-
+    #Verifico que se ingrese un id valido
+    if (exists_entity(Socio,id)):
+        return render_template('inscribir_socio_disciplina.html', id=id, disciplines=Disciplina.get_member_available_disciplines(id))
+    else:
+        errorMsg = "Error: El socio no existe"
+        flash(errorMsg)
+        return redirect('/admin')
 
 #---------------------------------------------
 #Blueprints de CATEGORIAS
@@ -98,3 +110,23 @@ def categories():
 @admin_blueprint.route("/categories/new", methods=["GET"])
 def new_category():
     return render_template('admin_categorias_new.html', categories=get_all_docs_json(Categoria))
+
+#---------------------------------------------
+#Blueprints de PAGOS
+
+@admin_blueprint.route("/pagos/<page>",methods=["GET"])
+def payments(page):
+    partners = get_all_docs_paginated_json(Socio, page)
+    partners["docs"].sort(key = lambda u: u["nombre"])
+    return render_template('admin_payments.html', partners=partners["docs"], max_page = partners["total_pages"])
+
+@admin_blueprint.route("/pagos/search/<tipo>/<value>/<page>", methods=["GET"])
+def partners_search_get(tipo, value, page):
+    partners = []
+    if(tipo == "nombre"):
+        partners = get_all_partners_paginated_filter_json( page, value, "nombre")
+    else:
+        partners = get_all_partners_paginated_filter_json( page, value, "nro_socio")
+
+    partners["docs"].sort(key = lambda u: u["nombre"])
+    return render_template('admin_payments.html', partners=partners["docs"], max_page = partners["total_pages"], search = True, tipo = tipo, value = value)

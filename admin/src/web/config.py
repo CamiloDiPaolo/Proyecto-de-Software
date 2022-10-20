@@ -22,8 +22,8 @@ class DevelopmentConfig(Config):
     """Development configuration"""
 
     DEBUG = True
-    DB_USER = "postgres"
-    DB_PASS = "adminadmin"
+    DB_USER = "admin"
+    DB_PASS = "admin"
     DB_HOST = "localhost"
     DB_NAME = "proyectoSoftware"
     SQLALCHEMY_DATABASE_URI = f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:5432/{DB_NAME}"

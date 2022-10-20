@@ -1,0 +1,132 @@
+{% extends "admin.html" %} {% block content %}
+<div class="admin__panel">
+  <div class="admin__panel__header">
+    <h2>Elija un Socio</h2>
+    <form class="form__search" action="/pagos/socio/find" method="GET">
+      <div class="user__search">
+        <input
+          type="text"
+          name="search"
+          class="input__search"
+          placeholder="Buscar..."
+          required
+          disabled
+        />
+        <button class="search__btn action__btn">
+          <span class="material-symbols-outlined"> search </span>
+        </button>
+      </div>
+      <select name="type" class="select__search" required>
+        <option disabled selected hidden value="">--Buscar por--</option>
+        <option value="nombre">Nombre</option>
+        <option value="nro_socio">Numero Socio</option>
+      </select>
+    </form>
+    <div class="pages__btn">
+      {% if search %}
+      <a
+        class="page__down action__btn page__btn"
+        data-search="true"
+        data-tipo="{{tipo}}"
+        data-value="{{value}}"
+        ><</a
+      >
+      {% else %}
+      <a class="page__down action__btn page__btn"><</a>
+      {% endif %}
+      <p class="page" data-max="{{max_page}}">/ {{max_page}}</p>
+      {% if search %}
+      <a
+        class="page__up action__btn page__btn"
+        data-search="true"
+        data-tipo="{{tipo}}"
+        data-value="{{value}}"
+        >></a
+      >
+      {% else %}
+      <a class="page__up action__btn page__btn">></a>
+      {% endif %}
+    </div>
+    <div class="admin__table__actions">
+      <a class="add__btn action__btn sync" href="/admin/pagos/0"
+        ><span class="material-symbols-outlined"> sync </span>
+      </a>
+    </div>
+  </div>
+
+  <table class="admin__table">
+    <thead class="admin__table__head">
+      <tr>
+        <th>NOMBRE</th>
+        <th>APELLIDO</th>
+        <th>NRO DOC</th>
+        <th>NRO SOCIO</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody class="admin__table__body">
+      {% for data in partners %}
+      <tr>
+        <td>{{data.nombre}}</td>
+        <td>{{data.apellido}}</td>
+        <td>{{data.nro_documento}}</td>
+        <td>{{data.nro_socio}}</td>
+        <td>
+          <div class="admin__table__actions">
+            <a
+              class="add__btn action__btn payment"
+              href="/admin/pagos/socio/{{data.id}}/0"
+              ><span class="material-symbols-outlined"> payments </span>
+            </a>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<script>
+  const page = location.href.split("/").at(-1);
+  const pageCount = document.querySelector(".page");
+  pageCount.textContent =
+    page * 1 + 1 + document.querySelector(".page").textContent;
+
+  const pageUp = document.querySelector(".page__up");
+  const pageDown = document.querySelector(".page__down");
+
+  if (pageCount.dataset.max * 1 - 1 <= page * 1)
+    pageUp.classList.add("page__btn--disabled");
+  if (page * 1 <= 0) pageDown.classList.add("page__btn--disabled");
+
+  pageUp.addEventListener("click", (e) => {
+    if (pageCount.dataset.max * 1 - 1 <= page * 1) return;
+    location.href = `/admin/pagos/${page * 1 + 1}`;
+  });
+
+  pageDown.addEventListener("click", (e) => {
+    if (page * 1 <= 0) return;
+    location.href = `/admin/pagos/${page * 1 - 1}`;
+  });
+
+  // REDIRIGIMOS A LA PESTAÑA DE BUSQUEDA
+  document.querySelector(".form__search").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const tipo = document.querySelector(".select__search").value;
+    const value = document.querySelector(".input__search").value;
+    console.log(tipo, value);
+    location.href = `/admin/pagos/search/${tipo}/${value}/0`;
+  });
+
+  document.querySelector(".form__search").addEventListener("change", (e) => {
+    e.preventDefault();
+    const input = document.querySelector(".input__search");
+    input.disabled = false;
+    console.log(e.target.value);
+    if (e.target.value === "nro_socio") {
+      input.type = "number";
+    } else if (e.target.value === "nombre") {
+      input.type = "text";
+    }
+  });
+</script>
+{% endblock %}

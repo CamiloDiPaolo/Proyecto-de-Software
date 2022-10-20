@@ -1,18 +1,18 @@
 {% extends "admin.html" %} {% block content %}
 <div class="admin__panel">
   <div class="admin__panel__header">
-    <h2>Disciplinas</h2>
+    <div class="disc_div">
+      <a class="link__btn" href="/admin/disciplines/new">Crear disciplina</a>
+      <a class="link__btn" href="/admin/categories/new">Crear categoría</a>
+    </div>
     <div class="pages__btn">
       <a class="page__down action__btn page__btn"><</a>
       <p class="page" data-max="{{max_page}}">/ {{max_page}}</p>
       <a class="page__up action__btn page__btn">></a>
     </div>
-    <a class="link__btn" href="/admin/categories/new">Crear categoría</a>
-    <a class="add__btn" href="/admin/disciplines/new">+</a>
-  
   </div>
   <table class="admin__table">
-    <thead class="admin__table__head">
+    <thead class="admin__table__head discipline">
       <th>Nombre</th>
       <th>Categoria</th>
       <th>Instructores</th>
@@ -21,7 +21,7 @@
       <th>Habilitada</th>
       <td>Acciones</td>
     </thead>
-    <tbody class="admin__table__body">
+    <tbody class="admin__table__body discipline">
       {% for discipline in disciplines %}
       <tr>
         <td>{{discipline.nombre}}</td>
@@ -29,21 +29,32 @@
         <td>{{discipline.instructores}}</td>
         <td>{{discipline.horarios}}</td>
         <td>{{discipline.costo}}</td>
-        <td>{% if discipline.habilitada == true%} Si {% else %} No {% endif %} </td>
+        <td>
+          {% if discipline.habilitada == true%} Si {% else %} No {% endif %}
+        </td>
         <td>
           <div class="admin__table__actions">
-            <form method="DELETE" action="/disciplines/delete/{{discipline.id}}">
+            <form
+              method="DELETE"
+              action="/disciplines/delete/{{discipline.id}}"
+            >
               <button class="delete__btn action__btn">
                 <span class="material-symbols-outlined"> delete </span>
               </button>
             </form>
-        
+
             {% if discipline.habilitada == true %}
-            <a class="delete__btn action__btn switch" href="/disciplines/switch/{{discipline.id}}/false">
+            <a
+              class="delete__btn action__btn switch"
+              href="/disciplines/switch/{{discipline.id}}/false"
+            >
               <span class="material-symbols-outlined"> pause </span>
             </a>
             {% else %}
-            <a class="play__btn action__btn switch" href="/disciplines/switch/{{discipline.id}}/true">
+            <a
+              class="play__btn action__btn switch"
+              href="/disciplines/switch/{{discipline.id}}/true"
+            >
               <span class="material-symbols-outlined"> play_arrow </span>
             </a>
             {% endif %}
@@ -63,29 +74,6 @@
 </div>
 
 <script>
-  [...document.querySelectorAll(".delete")].forEach((btn) => {
-    btn.addEventListener("click", async (e) => {
-      if (confirm("Estas seguro de que quieres eliminar esta disciplina?")){
-      try {
-        const res = await fetch(
-          `http://${location.host}/disciplines/delete/${btn.dataset.id}`,
-          {
-            method: "DELETE",
-            credentials: "same-origin",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        //if (res.status == 200) location.href = "/admin/disciplines";
-      } catch (err) {
-        console.log(err);
-      }
-      }
-    });
-  });
-
   const page = location.href.split("/").at(-1);
   const pageCount = document.querySelector(".page");
   pageCount.textContent =
@@ -108,4 +96,5 @@
     location.href = `/admin/disciplines/${page * 1 - 1}`;
   });
 </script>
+<script src="admin/public/js/form-validation.js""></script>
 {% endblock %}

@@ -117,17 +117,25 @@ def check_exist_user(username, email, id = False):
 def get_all_user_paginated_filter_json(page, value, tipo):
     config = get_doc_json(Configuracion, 1)
     rows_per_page = config["elementos_por_pag"]
+    all_pages = 1
 
     json = []
+
+    result = []
+ 
     if(tipo == "email"):
-        # result = db_session.query(Usuario).filter_by(email = value).limit(rows_per_page).offset(int(page)*rows_per_page)
         result = db_session.query(Usuario).filter(Usuario.email.ilike("%" + value + "%")).limit(rows_per_page).offset(int(page)*rows_per_page)
+        len_result = db_session.query(Usuario).filter(Usuario.email.ilike("%" + value + "%")).all()
+        all_pages = math.ceil(len(len_result) / rows_per_page)
     else:
         result = db_session.query(Usuario).filter(Usuario.username.ilike("%" + value + "%")).limit(rows_per_page).offset(int(page)*rows_per_page)
-        # result = db_session.query(Usuario).filter_by(username = value).limit(rows_per_page).offset(int(page)*rows_per_page)
+        len_result = db_session.query(Usuario).filter(Usuario.username.ilike("%" + value + "%")).all()
+        all_pages = math.ceil(len(len_result) / rows_per_page)
+
     for row in result:
         json.append(row.json())
     
-    result = db_session.query(Usuario).all();
-    all_pages = math.ceil(len(result) / rows_per_page)
+    # result = db_session.query(Usuario).all();
+    # all_pages = math.ceil(len(json) / rows_per_page)
+    # print(len(json), rows_per_page, all_pages)
     return {"docs": json, "total_pages": all_pages}
