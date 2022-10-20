@@ -1,3 +1,4 @@
+from flask import Blueprint, jsonify, request, make_response, session
 from src.core.db import db_session
 from src.core.models.Configuracion import Configuracion
 import math
@@ -61,4 +62,21 @@ def delete_doc_json(Model, doc_id):
         db_session.commit()
 
     return {}
+
+def check_role(role):
+    id= session["user_id"]
+    arrayRoles = []
+    roles= get_all_docs_json(Rol)
+    for row in roles:
+        arrayRoles.append(row)
+    usuarioTieneRoles= get_all_docs_json(usuarioTieneRoles)
+    print(arrayRoles)
+    return usuarioTieneRoles
+
+#Para verificar si existe un determinado elemento
+def exists_entity(Model,id):
+    entity = get_doc_json(Model,id)
+    if (entity == {}):
+        return False
+    return True
 

@@ -120,6 +120,7 @@ def get_all_user_paginated_filter_json(page, value, tipo):
     all_pages = 1
 
     json = []
+
     result = []
  
     if(tipo == "email"):
