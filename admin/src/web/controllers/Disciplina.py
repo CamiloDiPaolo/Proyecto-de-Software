@@ -101,4 +101,4 @@ def addMemberToDiscipline(idDisc,idSoc):
         membDisc = create_doc_json(SocioSuscriptoDisciplina,disc)
         successMsg = "Disciplina registrada correctamente"
         flash(successMsg)
-    return render_template('inscribir_socio_disciplina.html', id=idSoc,disciplines=Disciplina.get_member_available_disciplines(idSoc))
+    return redirect("/admin/disciplines/registerMember/"+str(idSoc))
