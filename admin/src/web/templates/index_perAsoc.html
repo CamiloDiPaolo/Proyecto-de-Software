@@ -1,28 +1,31 @@
-{% extends 'admin.html' %}
-
-{% block title %} Panel de personas Asociadas {% endblock %}
-{% block content %}
+{% extends 'admin.html' %} {% block title %} Panel de personas Asociadas {%
+endblock %} {% block content %}
 
 <div class="admin__panel">
   <div class="admin__panel__header">
     <h2>Socios</h2>
 
-
     <form class="form__search" method="GET">
       <div class="user__search">
-        <input type="text" name="apellido" class="input__search" placeholder="Apellido" />
+        <input
+          type="text"
+          name="apellido"
+          class="input__search"
+          placeholder="Apellido"
+        />
         <button class="search__btn action__btn">
           <span class="material-symbols-outlined"> search </span>
         </button>
       </div>
       <select name="estado" id="type" class="select__search" required>
-        <option disabled selected hidden value="" required>Seleccione Estado</option>
-        <option value="nada"> No buscar por estado</option>
+        <option disabled selected hidden value="" required>
+          Seleccione Estado
+        </option>
+        <option value="nada">No buscar por estado</option>
         <option value="activo">Activo</option>
         <option value="inactivo">Inactivo</option>
       </select>
     </form>
-
 
     <div class="pages__btn">
       {% if search %}
@@ -50,17 +53,14 @@
       {% endif %}
     </div>
 
-
-
-    <a class="add__btn action__btn" href="/socios"><span class="material-symbols-outlined"> sync </span>
+    <a class="add__btn action__btn sync" href="/socios"
+      ><span class="material-symbols-outlined"> sync </span>
     </a>
 
-
-
-    <a class="add__btn" href="/socios/crearSocio">+</a>
+    <a class="add__btn add__btn_resp" href="/socios/crearSocio">+</a>
   </div>
   <table class="admin__table">
-    <thead class="admin__table__head">
+    <thead class="admin__table__head partner">
       <th>Numero de Socio</th>
       <th>Email</th>
       <th>Nombre</th>
@@ -74,7 +74,7 @@
       <th>Fecha de alta</th>
       <th>Acciones</th>
     </thead>
-    <tbody class="admin__table__body">
+    <tbody class="admin__table__body partner">
       {% for user in socio %}
       <tr>
         <td>{{user.nro_socio}}</td>
@@ -93,8 +93,7 @@
         <td>Activo</td>
         {% else %}
         <td>Inactivo</td>
-        {% endif %}
-        {% if user.telefono %}
+        {% endif %} {% if user.telefono %}
         <td>{{user.telefono}}</td>
         {% else %}
         <td>Sin especificar</td>
@@ -102,13 +101,22 @@
         <td>{{user.fecha_alta}}</td>
         <td>
           <div class="admin__table__actions">
-            <a class="delete__btn action__btn" href="/socios/delete/{{user.id}}">
+            <a
+              class="delete__btn action__btn"
+              href="/socios/delete/{{user.id}}"
+            >
               <span class="material-symbols-outlined"> delete </span>
             </a>
-            <a class="patch__btn action__btn" href="/socios/editarSocio/{{user.id}}">
+            <a
+              class="patch__btn action__btn"
+              href="/socios/editarSocio/{{user.id}}"
+            >
               <span class="material-symbols-outlined"> edit </span>
             </a>
-            <a class="add__btn action__btn" href="/admin/disciplines/registerMember/{{user.id}}">
+            <a
+              class="add__btn action__btn add__btn__partner"
+              href="/admin/disciplines/registerMember/{{user.id}}"
+            >
               <span class="material-symbols-outlined"> content_paste</span>
             </a>
           </div>
@@ -118,11 +126,19 @@
     </tbody>
   </table>
 
-
-  <a href="/socios/descargarPDF/{{socio}}"> <img src="/admin/public/img/pdf.png" alt="Descargar como PDF"
-      style="width:42px;height:42px;"> </a>
-  <a href="/socios/descargarCSV"><img src="/admin/public/img/CSV.png" alt="Descargar como CSV"
-      style="width:42px;height:42px;"></a>
+  <a href="/socios/descargarPDF/{{socio}}">
+    <img
+      src="/admin/public/img/pdf.png"
+      alt="Descargar como PDF"
+      style="width: 42px; height: 42px"
+    />
+  </a>
+  <a href="/socios/descargarCSV"
+    ><img
+      src="/admin/public/img/CSV.png"
+      alt="Descargar como CSV"
+      style="width: 42px; height: 42px"
+  /></a>
 </div>
 
 <script>
@@ -143,10 +159,10 @@
     if (pageCount.dataset.max * 1 - 1 <= page * 1) return;
 
     const href = `${
-        e.target.dataset.search == "true"
-          ? `/search/${e.target.dataset.tipo}/${e.target.dataset.value}`
-          : ""
-      }`;
+      e.target.dataset.search == "true"
+        ? `/search/${e.target.dataset.tipo}/${e.target.dataset.value}`
+        : ""
+    }`;
 
     location.href = `/socios/paginado/${href}/${page * 1 + 1}`;
   });
@@ -155,10 +171,10 @@
     if (page * 1 <= 0) return;
 
     const href = `${
-        e.target.dataset.search == "true"
-          ? `/search/${e.target.dataset.tipo}/${e.target.dataset.value}`
-          : ""
-      }`;
+      e.target.dataset.search == "true"
+        ? `/search/${e.target.dataset.tipo}/${e.target.dataset.value}`
+        : ""
+    }`;
 
     location.href = `/socios/paginado/${href}/${page * 1 - 1}`;
   });
@@ -166,9 +182,11 @@
   document.querySelector(".form__search").addEventListener("submit", (e) => {
     e.preventDefault();
     const tipo = document.querySelector(".select__search").value;
-    const value = document.querySelector(".input__search").value ? document.querySelector(".input__search").value : "vacio";
+    const value = document.querySelector(".input__search").value
+      ? document.querySelector(".input__search").value
+      : "vacio";
     console.log("TIPO Y VALOOOOOOOOOOOOOOOOOOOOOOOOOOOOR " + tipo, value);
-    location.href = `/socios/find/${tipo}/${value}/0`
+    location.href = `/socios/find/${tipo}/${value}/0`;
   });
 </script>
 

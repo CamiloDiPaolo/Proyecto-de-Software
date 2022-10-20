@@ -1,7 +1,8 @@
 {% extends "admin.html" %} {% block content %}
 <div class="admin__panel">
   <div class="admin__panel__header">
-    <div class="disc_div"><a class="link__btn" href="/admin/disciplines/new">Crear disciplina</a>
+    <div class="disc_div">
+      <a class="link__btn" href="/admin/disciplines/new">Crear disciplina</a>
       <a class="link__btn" href="/admin/categories/new">Crear categoría</a>
     </div>
     <div class="pages__btn">
@@ -9,13 +10,6 @@
       <p class="page" data-max="{{max_page}}">/ {{max_page}}</p>
       <a class="page__up action__btn page__btn">></a>
     </div>
-<<<<<<< HEAD
-    <a class="link__btn" href="/admin/categories/new">Crear categoría</a>
-    <a class="add__btn" href="/admin/disciplines/new">+</a>
-=======
-   
-  
->>>>>>> 59845d3d8d1618388bc202698170816411c31cf5
   </div>
   <table class="admin__table">
     <thead class="admin__table__head discipline">
@@ -80,32 +74,6 @@
 </div>
 
 <script>
-<<<<<<< HEAD
-  [...document.querySelectorAll(".delete")].forEach((btn) => {
-    btn.addEventListener("click", async (e) => {
-      if (confirm("Estas seguro de que quieres eliminar esta disciplina?")) {
-        try {
-          const res = await fetch(
-            `http://${location.host}/disciplines/delete/${btn.dataset.id}`,
-            {
-              method: "DELETE",
-              credentials: "same-origin",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-
-          //if (res.status == 200) location.href = "/admin/disciplines";
-        } catch (err) {
-          console.log(err);
-        }
-      }
-    });
-  });
-
-=======
->>>>>>> 59845d3d8d1618388bc202698170816411c31cf5
   const page = location.href.split("/").at(-1);
   const pageCount = document.querySelector(".page");
   pageCount.textContent =

@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-from __future__ import print_function
-from flask import Blueprint, render_template, request,jsonify, redirect
-=======
 from flask import Blueprint, render_template, request,jsonify, redirect, flash
->>>>>>> 59845d3d8d1618388bc202698170816411c31cf5
 from src.web.controllers.Auth import allowed_request
 from src.core.models.Usuario import Usuario
 from src.core.models.Rol import Rol

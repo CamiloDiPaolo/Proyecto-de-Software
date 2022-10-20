@@ -21,15 +21,13 @@
       href="{{ url_for('static', filename='css/admin_form.css') }}"
     />
     <title>Panel de administrador</title>
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-      <script>
-        {%for message in messages%}
-          alert("{{message}}")
-          </script>
-        {% endfor %}
-      {%  endif  %}
-    {%  endwith  %}
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <script>
+      for (const message in messages) {
+        alert("{{message}}");
+      }
+    </script>
+    {% endif %} {% endwith %}
   </head>
   <body>
     <nav class="admin__nav">
