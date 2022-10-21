@@ -134,9 +134,13 @@ def get_all_user_paginated_filter_json(page, value, tipo):
         result = db_session.query(Usuario).filter(Usuario.email.ilike("%" + value + "%")).limit(rows_per_page).offset(int(page)*rows_per_page)
         len_result = db_session.query(Usuario).filter(Usuario.email.ilike("%" + value + "%")).all()
         all_pages = math.ceil(len(len_result) / rows_per_page)
-    else:
+    elif(tipo == "username"):
         result = db_session.query(Usuario).filter(Usuario.username.ilike("%" + value + "%")).limit(rows_per_page).offset(int(page)*rows_per_page)
         len_result = db_session.query(Usuario).filter(Usuario.username.ilike("%" + value + "%")).all()
+        all_pages = math.ceil(len(len_result) / rows_per_page)
+    elif(tipo == "activo"):
+        result = db_session.query(Usuario).filter(Usuario.activo==value).limit(rows_per_page).offset(int(page)*rows_per_page)
+        len_result = db_session.query(Usuario).filter(Usuario.activo==value).all()
         all_pages = math.ceil(len(len_result) / rows_per_page)
 
     for row in result:

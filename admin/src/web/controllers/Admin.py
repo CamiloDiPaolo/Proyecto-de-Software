@@ -39,8 +39,12 @@ def users_search_get(tipo, value, page):
     users = []
     if(tipo == "email"):
         users = get_all_user_paginated_filter_json( page, value, "email")
-    else:
+    elif(tipo == "username"):
         users = get_all_user_paginated_filter_json( page, value, "username")
+    elif(tipo == "activo"):
+        users = get_all_user_paginated_filter_json( page, True, "activo")
+    else:
+        users = get_all_user_paginated_filter_json( page, False, "activo")
 
     users["docs"].sort(key = lambda u: u["username"])
     return render_template('admin_usuarios.html', users=users["docs"], max_page = users["total_pages"], search = True, tipo = tipo, value = value)

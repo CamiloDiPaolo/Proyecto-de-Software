@@ -12,6 +12,8 @@
       <select name="type_search" class="select__search">
         <option>email</option>
         <option>username</option>
+        <option>activo</option>
+        <option>inactivo</option>
       </select>
     </form>
     <div class="pages__btn">
@@ -133,7 +135,12 @@
     e.preventDefault();
     let tipo = document.querySelector(".select__search").value;
     let value = document.querySelector(".input__search").value;
+
+    if (tipo == "activo" || tipo == "inactivo")
+      location.href = `/admin/users/search/${tipo}/-/0`;
+
     if (value == "") return;
+
     location.href = `/admin/users/search/${tipo}/${value}/0`;
   });
 </script>
