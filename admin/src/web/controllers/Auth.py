@@ -12,13 +12,17 @@ def login_view():
 def login():
     data = request.form.to_dict()
     if not valid_user(data['username'], data['contraseña']):
-        res = make_response("alguno de los datos ingresados es incorrecto")
-        res.status = 401
-        return res
+        return render_template('login.html', error="alguno de los datos ingresados es incorrecto")
     
     user_id = db_session.query(Usuario.id).filter_by(username=data['username'], contraseña=data['contraseña']).all()
 
     session['user_id'] = user_id[0][0]
+
+    return redirect("/admin")
+
+@auth_blueprint.route("/logout", methods=["GET"])
+def logout():
+    session.clear()
 
     return redirect("/admin")
 
