@@ -11,7 +11,7 @@ from src.web.controllers.perAsoc import get_all_partners_paginated_filter_json
 from src.core.models.Configuracion import Configuracion
 from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, update_doc_json, get_all_docs_paginated_json, exists_entity
 from src.core.models.Socio import Socio
-from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json
+from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, delete_doc_json
 
 
 # TODO: pulir las response, agregar codigos HTTP descriptivos
@@ -19,7 +19,7 @@ admin_blueprint = Blueprint("admin", __name__, url_prefix="/admin")
 
 @admin_blueprint.before_request
 def protect():
-    if(not allowed_request(request, ["admin"])):
+    if(not allowed_request(request, ["admin","operador"])):
         return redirect("/auth/login")
 
 @admin_blueprint.route("/", methods=["GET"])
@@ -154,7 +154,7 @@ def editSoc(id):
 @admin_blueprint.route("/socios/delete/<int:id>", methods=["DELETE","GET"])
 def deleteSoc(id):
     delete_doc_json(Socio, id)
-    return redirect("/admin/socios")
+    return redirect("/admin/socios/paginado/0")
 
 @admin_blueprint.route("/socios/find/<tipo>/<value>/<page>", methods=["POST","GET"])
 def buscador(page,tipo,value):
@@ -182,6 +182,6 @@ def buscador(page,tipo,value):
             result=get_all_partners_paginated_filter_json(page, False, "estado")
             
     elif ((socios_dict["apellido"]=='vacio') & (socios_dict["estado"]=='nada')):
-        return redirect ("/admin/socios")
+        return redirect ("/admin/socios/paginado/0")
 
     return render_template("index_perAsoc.html", socio=result["docs"], max_page = result["total_pages"], tipo=tipo, value=value)

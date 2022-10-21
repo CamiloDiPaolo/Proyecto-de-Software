@@ -59,7 +59,7 @@ def update_user(id):
     db_session.commit()
     
     
-    return redirect("/admin/socios")
+    return redirect("/admin/socios/paginado/0")
     
 
 
@@ -112,21 +112,22 @@ def buscador(page,tipo,value):
             result=get_all_partners_paginated_filter_json(page, False, "estado")
             
     elif ((socios_dict["apellido"]=='vacio') & (socios_dict["estado"]=='nada')):
-        return redirect ("/admin/socios")
+        return redirect("admin/socio/paginado/0")
 
     return render_template("index_perAsoc.html", socio=result["docs"], max_page = result["total_pages"], tipo=tipo, value=value)
+
+
+@perAsoc_blueprint.route("/descargarPDF/<tipo>/<value>", methods=["GET"])
+def descargarPDF(tipo,value):
+    result=descargas(tipo, value)    
+    return render_template("prueba.html", socio=result)
     
     
-@perAsoc_blueprint.route("/descargarPDF/<lista>", methods=["GET"])
-def descargarPDF(lista):
-    lista_dict=ast.literal_eval(json.dumps(lista))
-    #print(type(lista_dict))
-    return render_template("prueba.html", data=lista_dict)
     
-    
-@perAsoc_blueprint.route("/paginado/descargarCSV/<lista>")
-def descargarCSV(lista):
-    return render_template("prueba.html", data=lista)
+@perAsoc_blueprint.route("/descargarCSV/<tipo>/<value>")
+def descargarCSV(tipo,value):
+    result=descargas(tipo, value)    
+    return render_template("prueba.html", socio=result)
     
 
 def get_all_partners_paginated_filter_json(page, value, tipo):
@@ -169,3 +170,30 @@ def get_all_partners_paginated_filter_json(page, value, tipo):
 
     return {"docs": json, "total_pages": all_pages}
 
+def descargas(tipo,value):
+    socios_dict={"estado":tipo, "apellido":value}
+    result=[] 
+    if (socios_dict["apellido"] != 'vacio'):
+        if (socios_dict["estado"]=='nada'):
+            result = db_session.query(Socio).filter(Socio.apellido.ilike("%" + value + "%")).all()
+            
+        elif (socios_dict["estado"]=='activo'):
+            socios_dict["estado"]=True
+            result=db_session.query(Socio).filter(Socio.apellido.ilike("%" + value + "%")).filter_by(estado=True).all()
+            
+        elif (socios_dict["estado"]=='inactivo'):
+            socios_dict["estado"]=False
+            result=db_session.query(Socio).filter(Socio.apellido.ilike("%" + value + "%")).filter_by(estado=False).all()
+   
+    elif (socios_dict["estado"] != 'nada'):
+        
+        if (socios_dict["estado"]=='activo'):
+            result=db_session.query(Socio).filter_by(estado=True).all()
+            
+        elif (socios_dict["estado"]=='inactivo'):
+            result=db_session.query(Socio).filter_by(estado=False).all()
+            
+    elif ((socios_dict["apellido"]=='vacio') & (socios_dict["estado"]=='nada')):
+        result=get_all_docs_json(Socio)
+    
+    return result

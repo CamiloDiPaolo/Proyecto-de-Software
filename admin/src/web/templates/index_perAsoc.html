@@ -52,7 +52,7 @@
 
 
 
-    <a class="add__btn action__btn" href="/admin/socios"><span class="material-symbols-outlined"> sync </span>
+    <a class="add__btn action__btn" href="/admin/socios/paginado/0"><span class="material-symbols-outlined"> sync </span>
     </a>
 
 
@@ -65,41 +65,25 @@
       <th>Email</th>
       <th>Nombre</th>
       <th>Apellido</th>
-      <th>Genero</th>
       <th>Tipo de Documento</th>
       <th>Nro de Documento</th>
-      <th>Direccion</th>
-      <th>Estado</th>
-      <th>Telefono</th>
-      <th>Fecha de alta</th>
       <th>Acciones</th>
     </thead>
     <tbody class="admin__table__body">
       {% for user in socio %}
       <tr>
         <td>{{user.nro_socio}}</td>
+
         {% if user.email %}
         <td>{{user.email}}</td>
         {% else %}
         <td>Sin especificar</td>
         {% endif %}
+
         <td>{{user.nombre}}</td>
         <td>{{user.apellido}}</td>
-        <td>{{user.genero}}</td>
         <td>{{user.tipo_documento}}</td>
         <td>{{user.nro_documento}}</td>
-        <td>{{user.direccion}}</td>
-        {% if user.estado %}
-        <td>Activo</td>
-        {% else %}
-        <td>Inactivo</td>
-        {% endif %}
-        {% if user.telefono %}
-        <td>{{user.telefono}}</td>
-        {% else %}
-        <td>Sin especificar</td>
-        {% endif %}
-        <td>{{user.fecha_alta}}</td>
         <td>
           <div class="admin__table__actions">
             <a class="delete__btn action__btn" href="/admin/socios/delete/{{user.id}}">
@@ -118,13 +102,56 @@
     </tbody>
   </table>
 
-  <p>
-    <a href="/admin/socios/descargarPDF/{{socio}}"> <img src="https://cutt.ly/4BMjFc6" alt="Descargar como PDF"
-      style="width:75px;height:75px;"> </a>
-    <a href="/admin/socios/descargarCSV"><img src="https://cutt.ly/EBMjP21" alt="Descargar como CSV"
+  {% if not tipo %}
+    {% if not value %}
+      <p>
+      <a href="/admin/socios/descargarPDF/nada/vacio"> 
+        <img 
+        src="https://cdn-icons-png.flaticon.com/512/337/337946.png" 
+        alt="Descargar como PDF"
+        style="width:75px;height:75px;"> </a>
+
+      <a href="/admin/socios/descargarCSV/nada/vacio"><img src="https://cdn-icons-png.flaticon.com/512/6133/6133884.png" alt="Descargar como CSV"
       style="width:75px;height:75px;"></a>
-  </p>
+      </p>
+    {% else %}
+      <p>
+      <a href="/admin/socios/descargarPDF/nada/{{value}}"> 
+        <img 
+        src="https://cdn-icons-png.flaticon.com/512/337/337946.png" 
+        alt="Descargar como PDF"
+        style="width:75px;height:75px;"> </a>
+
+      <a href="/admin/socios/descargarCSV/nada/{{value}}"><img src="https://cdn-icons-png.flaticon.com/512/6133/6133884.png" alt="Descargar como CSV"
+      style="width:75px;height:75px;"></a>
+      </p>
+    {% endif %}
+
+  {% elif not value %}
+    <p>
+    <a href="/admin/socios/descargarPDF/{{tipo}}/vacio"> 
+      <img 
+      src="https://cdn-icons-png.flaticon.com/512/337/337946.png" 
+      alt="Descargar como PDF"
+      style="width:75px;height:75px;"> </a>
+
+    <a href="/admin/socios/descargarCSV/{{tipo}}/vacio"><img src="https://cdn-icons-png.flaticon.com/512/6133/6133884.png" alt="Descargar como CSV"
+    style="width:75px;height:75px;"></a>
+    </p>
+  {% else %}
+    <p>
+    <a href="/admin/socios/descargarPDF/{{tipo}}/{{value}}"> 
+      <img 
+      src="https://cdn-icons-png.flaticon.com/512/337/337946.png" 
+      alt="Descargar como PDF"
+      style="width:75px;height:75px;"> </a>
+
+    <a href="/admin/socios/descargarCSV/{{tipo}}/{{value}}"><img src="https://cdn-icons-png.flaticon.com/512/6133/6133884.png" alt="Descargar como CSV"
+    style="width:75px;height:75px;"></a>
+    </p>
+  {% endif %}
 </div>
+
 
 <script>
   // IMPLEMENTAMOS LA PAGINACION
@@ -144,10 +171,10 @@
     if (pageCount.dataset.max * 1 - 1 <= page * 1) return;
 
     const href = `${
-        e.target.dataset.search == "true"
-          ? `/search/${e.target.dataset.tipo}/${e.target.dataset.value}`
-          : ""
-      }`;
+      e.target.dataset.search == "true"
+        ? `/search/${e.target.dataset.tipo}/${e.target.dataset.value}`
+        : ""
+    }`;
 
     location.href = `/admin/socios/paginado/${href}/${page * 1 + 1}`;
   });
@@ -156,20 +183,21 @@
     if (page * 1 <= 0) return;
 
     const href = `${
-        e.target.dataset.search == "true"
-          ? `/search/${e.target.dataset.tipo}/${e.target.dataset.value}`
-          : ""
-      }`;
+      e.target.dataset.search == "true"
+        ? `/search/${e.target.dataset.tipo}/${e.target.dataset.value}`
+        : ""
+    }`;
 
     location.href = `/admin/socios/paginado/${href}/${page * 1 - 1}`;
   });
+
   // REDIRIGIMOS A LA PESTAÑA DE BUSQUEDA
   document.querySelector(".form__search").addEventListener("submit", (e) => {
     e.preventDefault();
-    const tipo = document.querySelector(".select__search").value;
-    const value = document.querySelector(".input__search").value ? document.querySelector(".input__search").value : "vacio";
-    console.log("TIPO Y VALOOOOOOOOOOOOOOOOOOOOOOOOOOOOR " + tipo, value);
-    location.href = `/admin/socios/find/${tipo}/${value}/0`
+    let tipo = document.querySelector(".select__search").value;
+    let value = document.querySelector(".input__search").value ? document.querySelector(".input__search").value : "vacio";
+    if (value == "") return;
+    location.href = `/admin/socios/find/${tipo}/${value}/0`;
   });
 </script>
 
