@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request,make_response, render_template, session, redirect
 from src.core.db import db_session
 from src.core.models.Usuario import Usuario
+import hashlib
 
 auth_blueprint = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -11,14 +12,21 @@ def login_view():
 @auth_blueprint.route("/login", methods=["POST"])
 def login():
     data = request.form.to_dict()
+    hasher = hashlib.sha256()
+    hasher.update(data["contraseña"].encode('utf-8'))
+    data['contraseña'] = hasher.hexdigest()
     if not valid_user(data['username'], data['contraseña']):
-        res = make_response("alguno de los datos ingresados es incorrecto")
-        res.status = 401
-        return res
+        return render_template('login.html', error="alguno de los datos ingresados es incorrecto")
     
     user_id = db_session.query(Usuario.id).filter_by(username=data['username'], contraseña=data['contraseña']).all()
 
     session['user_id'] = user_id[0][0]
+
+    return redirect("/admin")
+
+@auth_blueprint.route("/logout", methods=["GET"])
+def logout():
+    session.clear()
 
     return redirect("/admin")
 

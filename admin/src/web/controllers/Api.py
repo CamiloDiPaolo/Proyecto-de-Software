@@ -5,7 +5,8 @@ from src.core.models.Disciplina import Disciplina
 from src.core.models.pago import pago
 from src.core.models.relations.SocioSuscriptoDisciplina import SocioSuscriptoDisciplina
 from src.web.config import config
-from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, update_doc_json, get_all_docs_paginated_json, create_doc_json
+from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, update_doc_json, get_all_docs_paginated_json
+import hashlib
 
 import jwt
 
@@ -15,6 +16,9 @@ api_blueprint = Blueprint("api", __name__, url_prefix="/api")
 
 @api_blueprint.route("/auth", methods=["POST"])
 def token():
+    hasher = hashlib.sha256()
+    hasher.update(request.json['password'].encode('utf-8'))
+    request.json['password'] = hasher.hexdigest()
     if not valid_user(request.json['username'], request.json['password']):
         res = make_response("alguno de los datos ingresados es incorrecto")
         res.status = 401

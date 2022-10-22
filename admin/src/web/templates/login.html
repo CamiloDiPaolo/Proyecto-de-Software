@@ -28,6 +28,9 @@
         <label>Contraseña</label>
         <input type="password" required name="contraseña" />
       </div>
+      {% if error %}
+      <p class="error">{{error}}</p>
+      {% endif%}
       <input type="submit" class="submit__btn" value="Iniciar sesion" />
     </form>
   </body>
