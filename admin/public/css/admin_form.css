@@ -82,6 +82,19 @@ input[type="submit"]:hover {
   color: var(--gris-oscuro-2);
 }
 
+.admin__form__input .desc {
+  margin-top: 0;
+  font-size: 70%;
+  font-style: italic;
+}
+
+.alert {
+  background-color: var(--alerta-2);
+  color: black;
+  padding: 5px;
+  border-radius: 99px;
+}
+
 @media only screen and (max-width: 360px) {
   .admin__form {
     max-width: 60%;

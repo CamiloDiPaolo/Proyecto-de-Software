@@ -86,6 +86,7 @@
   </table>
 </div>
 <script>
+  // IMPLEMENTAMOS LA PAGINACION
   const page = location.href.split("/").at(-1);
   const pageCount = document.querySelector(".page");
   pageCount.textContent =
@@ -100,20 +101,34 @@
 
   pageUp.addEventListener("click", (e) => {
     if (pageCount.dataset.max * 1 - 1 <= page * 1) return;
-    location.href = `/admin/pagos/${page * 1 + 1}`;
+
+    const href = `${
+      e.target.dataset.search == "true"
+        ? `/search/${e.target.dataset.tipo}/${e.target.dataset.value}`
+        : ""
+    }`;
+
+    location.href = `/admin/pagos${href}/${page * 1 + 1}`;
   });
 
   pageDown.addEventListener("click", (e) => {
     if (page * 1 <= 0) return;
-    location.href = `/admin/pagos/${page * 1 - 1}`;
+
+    const href = `${
+      e.target.dataset.search == "true"
+        ? `/search/${e.target.dataset.tipo}/${e.target.dataset.value}`
+        : ""
+    }`;
+
+    location.href = `/admin/pagos${href}/${page * 1 - 1}`;
   });
 
   // REDIRIGIMOS A LA PESTAÑA DE BUSQUEDA
   document.querySelector(".form__search").addEventListener("submit", (e) => {
     e.preventDefault();
-    const tipo = document.querySelector(".select__search").value;
-    const value = document.querySelector(".input__search").value;
-    console.log(tipo, value);
+    let tipo = document.querySelector(".select__search").value;
+    let value = document.querySelector(".input__search").value;
+    if (value == "") return;
     location.href = `/admin/pagos/search/${tipo}/${value}/0`;
   });
 

@@ -1,10 +1,15 @@
-from flask import Blueprint,render_template,redirect, request,send_file
+from flask import Blueprint,render_template,redirect, request,jsonify
 from src.core.db import db_session
 from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, create_doc_json, delete_doc_json
 from src.core.models.pago import pago
 from src.core.models.Socio import Socio
 from src.core.models.Configuracion import Configuracion
+from src.core.models.Disciplina import Disciplina
+from src.core.models.relations.SocioSuscriptoDisciplina import SocioSuscriptoDisciplina
+
 from src.web.controllers.PDFCreate import createPDF
+
+from sqlalchemy.dialects.postgresql import Any
 
 import datetime
 import math
@@ -26,13 +31,14 @@ def create_payment(id_socio):
     ac_year= datetime.datetime.now().date().year
     max_date= datetime.datetime.now().replace(year=ac_year+1,month=12,day=31).date()
     min_date= datetime.datetime.now().replace(year=ac_year-2,month=1,day=1).date()
-    return render_template("create_payment.html", socio=get_doc_json(Socio,id_socio), max_date=max_date,min_date=min_date)
+    pay = get_partner_pay(get_doc_json(Socio,id_socio))
+    return render_template("create_payment.html", socio=get_doc_json(Socio,id_socio), max_date=max_date,min_date=min_date,base=pay["base"],disciplines=pay["disciplines"],rec=pay["rec"])
 
 @pagos_socios_blueprint.route("/create",methods=["POST"])
 def create_payment_POST():
     payment_dict = request.form.to_dict()
     create_doc_json(pago,payment_dict)
-    return redirect(f'/admin/pagos/socio/{payment_dict["id_socio"]}')
+    return redirect(f'/admin/pagos/socio/{payment_dict["id_socio"]}/0')
 
 @pagos_socios_blueprint.route("/delete/<partner_id>/<id>", methods=["DELETE","GET"])
 def delete_payment(partner_id,id):
@@ -42,14 +48,8 @@ def delete_payment(partner_id,id):
 @pagos_socios_blueprint.route("/<partner_id>/download/<payment_id>")
 def downloadPDF(partner_id,payment_id):
     partner = get_doc_json(Socio,partner_id)
-    payment = get_doc_json(pago,payment_id);
-    print("--------------------------")
-    print(partner)
-    print("--------------------------")
-    print(payment)
-    print("--------------------------")
-
-    return send_file(createPDF(partner,payment),download_name="recibo.pdf",mimetype='image/pdf',as_attachment=True)
+    payment = get_doc_json(pago,payment_id)
+    return createPDF(partner,payment)
 
 def get_all_partners_payments_paginated_filter_json(page, value):
     config = get_doc_json(Configuracion, 1)
@@ -66,7 +66,28 @@ def get_all_partners_payments_paginated_filter_json(page, value):
     for row in result:
         json.append(row.json())
 
-    print("--------------------------")
-    print(json)
-    print("--------------------------")
     return {"docs": json, "total_pages": all_pages}
+
+def get_partner_pay(partner):
+    config = get_doc_json(Configuracion, 1)
+    disciplines_ids = []
+    costs = [] 
+    pay= {}
+
+    relations = db_session.query(SocioSuscriptoDisciplina).filter_by(id_socio=partner["id"]).all()
+    for dis in relations:
+        disciplines_ids.append(dis.id_disciplina)
+
+    disciplines = db_session.query(Disciplina).filter(Disciplina.id.in_(disciplines_ids)).all()
+    for row in disciplines:
+        if(row.habilitada):
+            costs.append(row.costo)
+
+    total = sum(costs)
+    pay["disciplines"] = total
+    pay["base"]= config["valor_cuota_base"]
+    pay["rec"] = config["recargo_deuda"]
+    print("-------------------------------")
+    print(pay)
+    print("-------------------------------")
+    return pay
