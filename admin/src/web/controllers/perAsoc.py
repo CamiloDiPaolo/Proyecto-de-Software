@@ -1,10 +1,10 @@
-from flask import Blueprint,render_template,redirect,request,jsonify
+from flask import Blueprint,render_template,redirect,request,jsonify,make_response
 import json,datetime,random,ast,math
 from src.core.db import db_session
 from src.core.models.Socio import Socio
 from src.core.models.Configuracion import Configuracion
 from src.web.controllers.FactoryCrud import create_doc_json, delete_doc_json, get_all_docs_json, get_doc_json, get_all_docs_paginated_json
-
+from fpdf import FPDF
 
 
 
@@ -119,8 +119,72 @@ def buscador(page,tipo,value):
 
 @perAsoc_blueprint.route("/descargarPDF/<tipo>/<value>", methods=["GET"])
 def descargarPDF(tipo,value):
-    result=descargas(tipo, value)    
-    return render_template("prueba.html", socio=result)
+    result=descargas(tipo, value)
+    print(result)
+    pdf=FPDF(orientation='P', unit='mm', format='A4')
+    pdf.add_page()
+    pdf.set_font('Arial', 'B', 16)
+    image_path = "https://cdve.files.wordpress.com/2017/06/cropped-cropped-logodepo1.png"
+    pdf.image(name=image_path,x=10,y=8,w=30,h=30)
+    
+    
+    if (value != 'vacio'): #apellido cargado
+        
+        if (tipo=='nada'): #estado sin cargar
+            pdf.text(x=50,y=25,txt=f'Tabla De Socios filtrada por apellido: {value}')
+        
+        else: #estado cargado
+            pdf.text(x=82,y=21,txt=f'Tabla De Socios filtrada por:')
+            pdf.text(x=74, y=28, txt=f'Apellido: {value} y Estado: {tipo}')
+              
+    else: #apellido sin cargar
+        if (tipo=='nada'): #Estado sin cargar
+            pdf.text(x=60,y=25,txt=f'Tabla De Socios sin filtrar ')    
+        else: #Estado cargado
+            pdf.text(x=60,y=25,txt=f'Tabla De Socios filtada por Estado: {tipo}')
+    pdf.line(0, 45, 256, 45) 
+    pdf.ln(40) 
+
+    #CREO LA TABLA
+    pdf.set_fill_color(r= 184, g=190 , b=250)
+    pdf.cell(w=50,h=15, txt='Nro socio', border = 1, align='C', fill=1)
+    pdf.cell(w=50,h=15, txt='Nombre', border = 1, align='C', fill=1)
+    pdf.cell(w=50,h=15, txt='Apellido', border = 1, align='C', fill=1)
+    pdf.cell(w=40,h=15, txt='Estado', border = 1, align='C', ln=1, fill=1)
+    
+    pdf.set_fill_color(r=232 , g=232 , b=232)
+    
+    result=list(result)
+    print(type(result))
+    if (type(result) == 'list'):
+        for socio in result:
+            pdf.cell(w=50,h=15, txt=str(socio.nro_socio), border = 1, align='C', fill=1)
+            pdf.cell(w=50,h=15, txt=socio.nombre, border = 1, align='C', fill=1)
+            pdf.cell(w=50,h=15, txt=socio.apellido, border = 1, align='C', fill=1)
+            if (socio.estado == True):
+                pdf.cell(w=40,h=15, txt='Activo', border = 1, align='C', ln=1, fill=1)
+            else:
+                pdf.cell(w=40,h=15, txt='Inactivo', border = 1, align='C', ln=1, fill=1)
+            
+            
+    else:
+        for socio in result:
+            pdf.cell(w=50,h=15, txt=str(socio['nro_socio']), border = 1, align='C', fill=1)
+            pdf.cell(w=50,h=15, txt=socio['nombre'], border = 1, align='C', fill=1)
+            pdf.cell(w=50,h=15, txt=socio['apellido'], border = 1, align='C', fill=1)
+            if (socio['estado'] == True):
+                pdf.cell(w=40,h=15, txt='Activo', border = 1, align='C', ln=1, fill=1)
+            else:
+                pdf.cell(w=40,h=15, txt='Inactivo', border = 1, align='C', ln=1, fill=1)
+        
+    
+    
+    
+     
+    response = make_response(pdf.output(dest="S").encode('latin-1'))
+    response.headers.set("Content-Disposition","attachment",filename="tabla_de_socios.pdf")
+    response.headers.set('Content-Type', 'application/pdf')
+    return response
     
     
     
