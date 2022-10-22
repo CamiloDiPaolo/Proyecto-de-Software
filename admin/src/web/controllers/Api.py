@@ -2,9 +2,10 @@ from flask import Blueprint, jsonify, request, make_response, session
 from src.core.db import db_session
 from src.core.models.Usuario import Usuario
 from src.core.models.Disciplina import Disciplina
+from src.core.models.pago import pago
 from src.core.models.relations.SocioSuscriptoDisciplina import SocioSuscriptoDisciplina
 from src.web.config import config
-from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, update_doc_json, get_all_docs_paginated_json
+from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, update_doc_json, get_all_docs_paginated_json, create_doc_json
 
 import jwt
 
@@ -71,6 +72,55 @@ def my_disciplines():
         return res
     disciplines = get_user_disciplines(decoded["data"])
     return jsonify(disciplines)
+
+## Endpoints de PAGOS
+@api_blueprint.route("/me/payments", methods=["GET"])
+def my_payments():
+    token = request.cookies.get('jwt')
+
+    if (not token):
+        res = make_response("Tenes que loguearte para acceder a esta funcionalidad")
+        res.status = 401
+        return res
+
+    decoded = decode_jwt(token)
+    if(not decoded):
+        res = make_response("Tenes que loguearte para acceder a esta funcionalidad")
+        res.status = 401
+        return res
+
+    payments = db_session.query(pago).filter_by(id_socio=decoded["data"]).all()
+    if (not payments):
+        res = make_response("Los datos de la sesion almacenada pertenecen a un usuario que ya no existe")
+        res.status = 401
+        return res
+    
+    return jsonify(payments[0].json())
+
+@api_blueprint.route("/me/payments", methods=["POST"])
+def my_payments():
+    token = request.cookies.get('jwt')
+
+    if (not token):
+        res = make_response("Tenes que loguearte para acceder a esta funcionalidad")
+        res.status = 401
+        return res
+
+    decoded = decode_jwt(token)
+    if(not decoded):
+        res = make_response("Tenes que loguearte para acceder a esta funcionalidad")
+        res.status = 401
+        return res
+
+    payments = db_session.query(pago).filter_by(id_socio=decoded["data"]).all()
+    if (not payments):
+        res = make_response("Los datos de la sesion almacenada pertenecen a un usuario que ya no existe")
+        res.status = 401
+        return res
+
+    payment_dict = request.form.to_dict()
+    return jsonify(create_doc_json(pago,payment_dict))
+
 
 # Funciones Auxiliares
 
