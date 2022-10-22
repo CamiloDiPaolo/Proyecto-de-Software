@@ -102,7 +102,7 @@ def my_payments():
     return jsonify(payments[0].json())
 
 @api_blueprint.route("/me/payments", methods=["POST"])
-def my_payments():
+def my_paymentsPost():
     token = request.cookies.get('jwt')
 
     if (not token):

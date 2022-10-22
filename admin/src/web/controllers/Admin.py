@@ -103,7 +103,7 @@ def edit_discipline(id):
     else:
         errorMsg = "Error: La disciplina no existe"
         flash(errorMsg)
-        return redirect('/admin')
+        return redirect('/admin/disciplines/0')
 
 @admin_blueprint.route("/disciplines/registerMember/<int:id>", methods=["GET"])
 def register_member_discipline(id):
