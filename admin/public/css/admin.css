@@ -124,14 +124,6 @@ body {
   background-color: rgb(22, 132, 200);
   cursor: pointer;
 }
-
-/* DISEÑO RESPONSIVE */
-/* @media only screen and (min-width: 360px) and (max-width: 768px) {
-  body {
-    background-color: red;
-  }
-} */
-
 @media only screen and (max-width: 360px) {
   .admin__nav {
     width: 6vh;

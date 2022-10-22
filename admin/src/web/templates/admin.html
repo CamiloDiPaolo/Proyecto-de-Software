@@ -21,16 +21,12 @@
       href="{{ url_for('static', filename='css/admin_form.css') }}"
     />
     <title>Panel de administrador</title>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
+    {% with messages = get_flashed_messages() %} {% if messages %} {%for message
+    in messages%}
     <script>
-      {%for message in messages%}
-        alert("{{message}}")
-        </script>
-      {% endfor %}
-    {%  endif  %}
-  {%  endwith  %}
-
+      alert("{{message}}");
+    </script>
+    {% endfor %} {% endif %} {% endwith %}
   </head>
   <body>
     <nav class="admin__nav">
@@ -63,6 +59,18 @@
           <a class="admin__nav__link" href="/admin/config"
             ><span class="material-symbols-outlined"> settings </span
             ><span class="admin__nav__link__text">Configuracion</span></a
+          >
+        </li>
+        <li>
+          <a class="admin__nav__link" href="/auth/logout"
+            ><span class="material-symbols-outlined"> logout </span
+            ><span class="admin__nav__link__text">Salir</span></a
+          >
+        </li>
+        <li>
+          <a class="admin__nav__link" href="/admin/me"
+            ><span class="material-symbols-outlined"> account_circle </span
+            ><span class="admin__nav__link__text">Mi cuenta</span></a
           >
         </li>
       </ul>

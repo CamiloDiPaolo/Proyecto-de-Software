@@ -1,0 +1,29 @@
+{% extends "admin.html" %} {% block content %}
+<div class="admin__panel me">
+  <div class="admin__panel__header me">
+    <h2>Datos personales</h2>
+    <div>
+      <p>Nombre: <span>{{user.nombre}}</span></p>
+      <p>Apellido: <span>{{user.apellido}}</span></p>
+      <p>Nombre de usuario: <span>{{user.username}}</span></p>
+      <p>Email: <span>{{user.email}}</span></p>
+    </div>
+  </div>
+</div>
+<style>
+  .me {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--gris-oscuro-3);
+    width: auto !important;
+    padding: 20px;
+  }
+
+  .me div p {
+    color: var(--acento-1);
+  }
+  .me div span {
+    color: var(--acento-2-suave);
+  }
+</style>
+{% endblock%}

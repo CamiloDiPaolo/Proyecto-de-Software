@@ -8,6 +8,8 @@ from sqlalchemy import String
 from sqlalchemy import Boolean
 from sqlalchemy import Date
 
+import hashlib
+
 import datetime
 
 class Usuario(Base):
@@ -29,7 +31,13 @@ class Usuario(Base):
 
         self.email = data["email"]
         self.username = data["username"]
-        self.contraseña = data["contraseña"]
+
+        # hasheamos las contraseñas
+        hasher = hashlib.sha256()
+        hasher.update(data["contraseña"].encode('utf-8'))
+        self.contraseña = hasher.hexdigest()
+
+        # self.contraseña = data["contraseña"]
         if "activo" in data:
             self.activo = data["activo"]
         else:
@@ -71,7 +79,9 @@ class Usuario(Base):
         if "username" in data:
             self.username = data["username"]
         if "contraseña" in data:
-            self.contraseña = data["contraseña"]
+            hasher = hashlib.sha256()
+            hasher.update(data["contraseña"].encode('utf-8'))
+            self.contraseña = hasher.hexdigest()
         if "activo" in data:
             self.activo = data["activo"]
         self.ultima_actualizacion = datetime.datetime.now()
