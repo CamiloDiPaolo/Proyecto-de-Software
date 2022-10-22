@@ -11,7 +11,7 @@ disciplines_blueprint = Blueprint("disciplines", __name__, url_prefix="/discipli
 
 #@disciplines_blueprint.before_request
 #def protect():
-#    if(not allowed_request(request, ["admin"])):
+#   if(not allowed_request(request, ["admin"])):
 #        return "no tenes los permisos necesarios para acceder a este request"
 
 @disciplines_blueprint.route("/", methods=["GET"])

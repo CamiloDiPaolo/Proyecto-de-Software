@@ -47,6 +47,10 @@ def users_search_get(tipo, value, page):
 
 @admin_blueprint.route("/users/new", methods=["GET"])
 def new_user():
+    if(not allowed_request(request, ["admin","operador"])):
+        errorMsg = "No tenes los permisos necesarios para acceder a esta función"
+        flash(errorMsg)
+        return redirect("/admin")
     return render_template('admin_usuarios_new.html', roles=get_all_docs_json(Rol))
 
 @admin_blueprint.route("/users/edit/<int:id>", methods=["GET"])
