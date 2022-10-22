@@ -156,3 +156,19 @@ body {
     padding-right: 4vh;
   }
 }
+
+  .bold_text{
+    font-size:20px;
+    font-weight: 500;
+  }
+
+  .titulo-disc{
+    color:rgb(144, 183, 125);
+  }
+
+  .active{
+    color:var(--acento-1-suave);
+  }
+  .inactive{
+    color:var(--alerta-1-suave);
+  }

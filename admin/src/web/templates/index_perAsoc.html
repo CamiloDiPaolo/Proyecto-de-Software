@@ -113,11 +113,15 @@ endblock %} {% block content %}
             >
               <span class="material-symbols-outlined"> edit </span>
             </a>
-            <a
-              class="add__btn action__btn add__btn__partner"
-              href="/admin/disciplines/registerMember/{{user.id}}"
-            >
+            {% if user.estado == false %}
+            <a onclick="alert('Error: El usuario debe estar activo para inscribirse a una disciplina');" class="delete__btn action__btn" >
               <span class="material-symbols-outlined"> content_paste</span>
+            </a>
+            {% else %}
+            <a class="add__btn action__btn" href="/admin/disciplines/registerMember/{{user.id}}">
+              <span class="material-symbols-outlined"> content_paste</span>
+            </a>
+            {% endif %}
             </a>
           </div>
         </td>
