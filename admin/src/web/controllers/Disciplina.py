@@ -10,10 +10,12 @@ from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, cre
 
 disciplines_blueprint = Blueprint("disciplines", __name__, url_prefix="/disciplines")
 
-#@disciplines_blueprint.before_request
-#def protect():
-#   if(not allowed_request(request, ["admin"])):
-#        return "no tenes los permisos necesarios para acceder a este request"
+@disciplines_blueprint.before_request
+def protect():
+   if(not allowed_request(request, ["admin","operador"])):
+        errorMsg= "No tenes el rol necesario para realizar esta acción"
+        flash(errorMsg)
+        return redirect("/admin/")
 
 @disciplines_blueprint.route("/", methods=["GET"])
 def all_disciplines():
@@ -66,7 +68,10 @@ def update_discipline(id):
 
 @disciplines_blueprint.route("/delete/<id>", methods=["DELETE","GET"])
 def delete_discipline(id):
-    
+    if(not allowed_request(request, ["admin"])):
+        errorMsg= "No tenes el rol necesario para realizar esta acción"
+        flash(errorMsg)
+        return redirect("/admin/")
     #Chequeo que no hayan cambiado el id a borrar por uno invalido
     if (not exists_entity(Disciplina,id)):
         errorMsg = "Error: La disciplina a borrar no existe"

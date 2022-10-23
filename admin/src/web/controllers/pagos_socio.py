@@ -1,4 +1,4 @@
-from flask import Blueprint,render_template,redirect, request,jsonify
+from flask import Blueprint,render_template,redirect, request,jsonify, flash
 from src.core.db import db_session
 from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, create_doc_json, delete_doc_json
 from src.core.models.pago import pago
@@ -6,6 +6,7 @@ from src.core.models.Socio import Socio
 from src.core.models.Configuracion import Configuracion
 from src.core.models.Disciplina import Disciplina
 from src.core.models.relations.SocioSuscriptoDisciplina import SocioSuscriptoDisciplina
+from src.web.controllers.Auth import allowed_request
 
 from src.web.controllers.PDFCreate import createPDF
 
@@ -15,6 +16,13 @@ import datetime
 import math
 
 pagos_socios_blueprint = Blueprint("socios",__name__, url_prefix="/admin/pagos/socio")
+
+@pagos_socios_blueprint.before_request
+def protect():
+   if(not allowed_request(request, ["admin","operador"])):
+        errorMsg= "No tenes el rol necesario para realizar esta acción"
+        flash(errorMsg)
+        return redirect("/admin/")
 
 @pagos_socios_blueprint.route("/")
 def socios():
@@ -42,6 +50,10 @@ def create_payment_POST():
 
 @pagos_socios_blueprint.route("/delete/<partner_id>/<id>", methods=["DELETE","GET"])
 def delete_payment(partner_id,id):
+    if(not allowed_request(request, ["admin"])):
+        errorMsg= "No tenes el rol necesario para realizar esta acción"
+        flash(errorMsg)
+        return redirect("/admin/")
     delete_doc_json(pago, id)
     return redirect(f'/admin/pagos/socio/{partner_id}/0')
 

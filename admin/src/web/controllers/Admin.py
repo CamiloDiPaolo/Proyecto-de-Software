@@ -19,7 +19,7 @@ admin_blueprint = Blueprint("admin", __name__, url_prefix="/admin")
 
 @admin_blueprint.before_request
 def protect():
-    if(not allowed_request(request, ["admin"])):
+    if(not allowed_request(request, ["admin","operador"])):
         return redirect("/auth/login")
 
 @admin_blueprint.route("/", methods=["GET"])
@@ -58,14 +58,18 @@ def users_search_get(tipo, value, page):
 
 @admin_blueprint.route("/users/new", methods=["GET"])
 def new_user():
-    if(not allowed_request(request, ["admin","operador"])):
-        errorMsg = "No tenes los permisos necesarios para acceder a esta función"
+    if(not allowed_request(request, ["admin"])):
+        errorMsg= "No tenes el rol necesario para realizar esta acción"
         flash(errorMsg)
-        return redirect("/admin")
+        return redirect("/admin/")
     return render_template('admin_usuarios_new.html', roles=get_all_docs_json(Rol))
 
 @admin_blueprint.route("/users/edit/<int:id>", methods=["GET"])
 def edit_user(id):
+    if(not allowed_request(request, ["admin"])):
+        errorMsg= "No tenes el rol necesario para realizar esta acción"
+        flash(errorMsg)
+        return redirect("/admin/")
     return render_template('admin_usuarios_edit.html', user=get_doc_json(Usuario, id), roles=get_all_docs_json(Rol))
 
 # pestaña de configuracion
@@ -77,6 +81,10 @@ def config():
 
 @admin_blueprint.route("/config", methods=["POST"])
 def update_config():
+    if(not allowed_request(request, ["admin"])):
+        errorMsg = "No tenes los permisos necesarios para acceder a esta función"
+        flash(errorMsg)
+        return redirect("/admin")
     data = request.form.to_dict()
     update_doc_json(Configuracion, 1, data)
     return redirect("/admin/config")
