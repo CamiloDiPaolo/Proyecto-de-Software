@@ -10,9 +10,6 @@ from fpdf import FPDF
 
 perAsoc_blueprint = Blueprint('perAsoc_blueprint', __name__, url_prefix='/admin/socios')
 
-@perAsoc_blueprint.route("/<int:id>", methods=["GET"])
-def get_user(id):
-    return jsonify(get_doc_json(Socio, id))
 
 
 @perAsoc_blueprint.route("/socioCreado", methods=["POST"])
@@ -41,7 +38,7 @@ def socioCreado():
         
     create_doc_json(Socio, result)
     
-    return redirect("/admin/socios/paginado/0")
+    return redirect("/admin/socios/0")
     
 @perAsoc_blueprint.route("/update/<int:id>", methods=["POST"])
 def update_user(id):
@@ -59,7 +56,7 @@ def update_user(id):
     db_session.commit()
     
     
-    return redirect("/admin/socios/paginado/0")
+    return redirect("/admin/socios/0")
     
 
 
@@ -112,9 +109,9 @@ def buscador(page,tipo,value):
             result=get_all_partners_paginated_filter_json(page, False, "estado")
             
     elif ((socios_dict["apellido"]=='vacio') & (socios_dict["estado"]=='nada')):
-        return redirect("admin/socio/paginado/0")
+        return redirect("admin/socio/0")
 
-    return render_template("index_perAsoc.html", socio=result["docs"], max_page = result["total_pages"], tipo=tipo, value=value)
+    return render_template("index_perAsoc.html", socio=result["docs"], max_page = result["total_pages"], tipo=tipo, value=value, search=True)
 
 
 @perAsoc_blueprint.route("/descargarPDF/<tipo>/<value>", methods=["GET"])
@@ -176,10 +173,6 @@ def descargarPDF(tipo,value):
                 pdf.cell(w=40,h=15, txt='Activo', border = 1, align='C', ln=1, fill=1)
             else:
                 pdf.cell(w=40,h=15, txt='Inactivo', border = 1, align='C', ln=1, fill=1)
-        
-    
-    
-    
      
     response = make_response(pdf.output(dest="S").encode('latin-1'))
     response.headers.set("Content-Disposition","attachment",filename="tabla_de_socios.pdf")

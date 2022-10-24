@@ -52,7 +52,7 @@
 
 
 
-    <a class="add__btn action__btn" href="/admin/socios/paginado/0"><span class="material-symbols-outlined"> sync </span>
+    <a class="add__btn action__btn" href="/admin/socios/0"><span class="material-symbols-outlined"> sync </span>
     </a>
 
 
@@ -172,11 +172,11 @@
 
     const href = `${
       e.target.dataset.search == "true"
-        ? `/search/${e.target.dataset.tipo}/${e.target.dataset.value}`
+        ? `find/${e.target.dataset.tipo}/${e.target.dataset.value}`
         : ""
     }`;
 
-    location.href = `/admin/socios/paginado/${href}/${page * 1 + 1}`;
+    location.href = `/admin/socios/${href}/${page * 1 + 1}`;
   });
 
   pageDown.addEventListener("click", (e) => {
@@ -184,11 +184,11 @@
 
     const href = `${
       e.target.dataset.search == "true"
-        ? `/search/${e.target.dataset.tipo}/${e.target.dataset.value}`
+        ? `find/${e.target.dataset.tipo}/${e.target.dataset.value}`
         : ""
     }`;
 
-    location.href = `/admin/socios/paginado/${href}/${page * 1 - 1}`;
+    location.href = `/admin/socios/${href}/${page * 1 - 1}`;
   });
 
   // REDIRIGIMOS A LA PESTAÑA DE BUSQUEDA

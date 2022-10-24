@@ -136,7 +136,7 @@ def partners_search_get(tipo, value, page):
 #Blueprint de SOCIOS
 
 
-@admin_blueprint.route("/socios/paginado/<page>", methods=["GET"])
+@admin_blueprint.route("/socios/<page>", methods=["GET"])
 def socios(page):
     socios=get_all_docs_paginated_json(Socio, page)
     socios["docs"].sort(key = lambda u: u["nro_socio"])
@@ -154,7 +154,7 @@ def editSoc(id):
 @admin_blueprint.route("/socios/delete/<int:id>", methods=["DELETE","GET"])
 def deleteSoc(id):
     delete_doc_json(Socio, id)
-    return redirect("/admin/socios/paginado/0")
+    return redirect("/admin/socios/0")
 
 @admin_blueprint.route("/socios/find/<tipo>/<value>/<page>", methods=["POST","GET"])
 def buscador(page,tipo,value):
@@ -182,6 +182,6 @@ def buscador(page,tipo,value):
             result=get_all_partners_paginated_filter_json(page, False, "estado")
             
     elif ((socios_dict["apellido"]=='vacio') & (socios_dict["estado"]=='nada')):
-        return redirect ("/admin/socios/paginado/0")
+        return redirect ("/admin/socios/0")
 
-    return render_template("index_perAsoc.html", socio=result["docs"], max_page = result["total_pages"], tipo=tipo, value=value)
+    return render_template("index_perAsoc.html", socio=result["docs"], max_page = result["total_pages"], tipo=tipo, value=value, search=True)
