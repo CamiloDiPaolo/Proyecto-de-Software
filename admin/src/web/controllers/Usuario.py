@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request,jsonify, redirect
+from flask import Blueprint, render_template, request,jsonify, redirect, flash
 from src.core.db import db_session
 from src.core.models.Usuario import Usuario
 from src.core.models.Rol import Rol
@@ -16,7 +16,9 @@ users_blueprint = Blueprint("users", __name__, url_prefix="/users")
 @users_blueprint.before_request
 def protect():
     if(not allowed_request(request, ["admin"])):
-        return "no tenes los permisos necesarios para acceder a este request"
+        errorMsg= "No tenes el rol necesario para realizar esta acción"
+        flash(errorMsg)
+        return redirect("/admin/")
 
 @users_blueprint.route("/", methods=["GET"])
 def all_users():
