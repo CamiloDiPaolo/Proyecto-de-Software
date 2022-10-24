@@ -3,9 +3,8 @@
   <h2 class="titulo-disc">Disciplinas a las que esta inscripto:</h2>
   <ul>
     {% for disc in disciplinesRegistered %}
-    <li class="bold_text"> > {{disc.nombre}}
+    <li class="bold_text"> > <span class="bold_text active">(Habilitada)</span> <span class="material-symbols-outlined"></span>{{disc.nombre}}
       {% if disc.habilitada == true %}
-      <span class="bold_text active">(Habilitada)</span>
       {% else %}
       <span class="bold_text inactive">(Deshabilitada)</span>
       {% endif %}

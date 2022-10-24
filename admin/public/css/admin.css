@@ -159,7 +159,7 @@ body {
 
   .bold_text{
     font-size:20px;
-    font-weight: 500;
+    font-weight: 600;
   }
 
   .titulo-disc{
@@ -167,7 +167,7 @@ body {
   }
 
   .active{
-    color:var(--acento-1-suave);
+    color:rgb(61, 151, 17);
   }
   .inactive{
     color:var(--alerta-1-suave);

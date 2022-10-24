@@ -53,11 +53,14 @@ endblock %} {% block content %}
       {% endif %}
     </div>
 
-    <a class="add__btn action__btn sync" href="/socios"
-      ><span class="material-symbols-outlined"> sync </span>
+
+
+    <a class="add__btn action__btn" href="/admin/socios/0"><span class="material-symbols-outlined"> sync </span>
     </a>
 
-    <a class="add__btn add__btn_resp" href="/socios/crearSocio">+</a>
+
+
+    <a class="add__btn" href="/admin/socios/crearSocio">+</a>
   </div>
   <table class="admin__table">
     <thead class="admin__table__head partner">
@@ -65,52 +68,31 @@ endblock %} {% block content %}
       <th>Email</th>
       <th>Nombre</th>
       <th>Apellido</th>
-      <th>Genero</th>
       <th>Tipo de Documento</th>
       <th>Nro de Documento</th>
-      <th>Direccion</th>
-      <th>Estado</th>
-      <th>Telefono</th>
-      <th>Fecha de alta</th>
       <th>Acciones</th>
     </thead>
     <tbody class="admin__table__body partner">
       {% for user in socio %}
       <tr>
         <td>{{user.nro_socio}}</td>
+
         {% if user.email %}
         <td>{{user.email}}</td>
         {% else %}
         <td>Sin especificar</td>
         {% endif %}
+
         <td>{{user.nombre}}</td>
         <td>{{user.apellido}}</td>
-        <td>{{user.genero}}</td>
         <td>{{user.tipo_documento}}</td>
         <td>{{user.nro_documento}}</td>
-        <td>{{user.direccion}}</td>
-        {% if user.estado %}
-        <td>Activo</td>
-        {% else %}
-        <td>Inactivo</td>
-        {% endif %} {% if user.telefono %}
-        <td>{{user.telefono}}</td>
-        {% else %}
-        <td>Sin especificar</td>
-        {% endif %}
-        <td>{{user.fecha_alta}}</td>
         <td>
           <div class="admin__table__actions">
-            <a
-              class="delete__btn action__btn"
-              href="/socios/delete/{{user.id}}"
-            >
+            <a class="delete__btn action__btn" href="/admin/socios/delete/{{user.id}}">
               <span class="material-symbols-outlined"> delete </span>
             </a>
-            <a
-              class="patch__btn action__btn"
-              href="/socios/editarSocio/{{user.id}}"
-            >
+            <a class="patch__btn action__btn" href="/admin/socios/editarSocio/{{user.id}}">
               <span class="material-symbols-outlined"> edit </span>
             </a>
             {% if user.estado == false %}
@@ -130,20 +112,56 @@ endblock %} {% block content %}
     </tbody>
   </table>
 
-  <a href="/socios/descargarPDF/{{socio}}">
-    <img
-      src="/admin/public/img/pdf.png"
+  {% if not tipo %}
+    {% if not value %}
+      <p>
+      <a href="/admin/socios/descargarPDF/nada/vacio"> 
+        <img 
+        src="https://cdn-icons-png.flaticon.com/512/337/337946.png" 
+        alt="Descargar como PDF"
+        style="width:75px;height:75px;"> </a>
+
+      <a href="/admin/socios/descargarCSV/nada/vacio"><img src="https://cdn-icons-png.flaticon.com/512/6133/6133884.png" alt="Descargar como CSV"
+      style="width:75px;height:75px;"></a>
+      </p>
+    {% else %}
+      <p>
+      <a href="/admin/socios/descargarPDF/nada/{{value}}"> 
+        <img 
+        src="https://cdn-icons-png.flaticon.com/512/337/337946.png" 
+        alt="Descargar como PDF"
+        style="width:75px;height:75px;"> </a>
+
+      <a href="/admin/socios/descargarCSV/nada/{{value}}"><img src="https://cdn-icons-png.flaticon.com/512/6133/6133884.png" alt="Descargar como CSV"
+      style="width:75px;height:75px;"></a>
+      </p>
+    {% endif %}
+
+  {% elif not value %}
+    <p>
+    <a href="/admin/socios/descargarPDF/{{tipo}}/vacio"> 
+      <img 
+      src="https://cdn-icons-png.flaticon.com/512/337/337946.png" 
       alt="Descargar como PDF"
-      style="width: 42px; height: 42px"
-    />
-  </a>
-  <a href="/socios/descargarCSV"
-    ><img
-      src="/admin/public/img/CSV.png"
-      alt="Descargar como CSV"
-      style="width: 42px; height: 42px"
-  /></a>
+      style="width:75px;height:75px;"> </a>
+
+    <a href="/admin/socios/descargarCSV/{{tipo}}/vacio"><img src="https://cdn-icons-png.flaticon.com/512/6133/6133884.png" alt="Descargar como CSV"
+    style="width:75px;height:75px;"></a>
+    </p>
+  {% else %}
+    <p>
+    <a href="/admin/socios/descargarPDF/{{tipo}}/{{value}}"> 
+      <img 
+      src="https://cdn-icons-png.flaticon.com/512/337/337946.png" 
+      alt="Descargar como PDF"
+      style="width:75px;height:75px;"> </a>
+
+    <a href="/admin/socios/descargarCSV/{{tipo}}/{{value}}"><img src="https://cdn-icons-png.flaticon.com/512/6133/6133884.png" alt="Descargar como CSV"
+    style="width:75px;height:75px;"></a>
+    </p>
+  {% endif %}
 </div>
+
 
 <script>
   // IMPLEMENTAMOS LA PAGINACION
@@ -164,11 +182,11 @@ endblock %} {% block content %}
 
     const href = `${
       e.target.dataset.search == "true"
-        ? `/search/${e.target.dataset.tipo}/${e.target.dataset.value}`
+        ? `find/${e.target.dataset.tipo}/${e.target.dataset.value}`
         : ""
     }`;
 
-    location.href = `/socios/paginado/${href}/${page * 1 + 1}`;
+    location.href = `/admin/socios/${href}/${page * 1 + 1}`;
   });
 
   pageDown.addEventListener("click", (e) => {
@@ -176,21 +194,20 @@ endblock %} {% block content %}
 
     const href = `${
       e.target.dataset.search == "true"
-        ? `/search/${e.target.dataset.tipo}/${e.target.dataset.value}`
+        ? `find/${e.target.dataset.tipo}/${e.target.dataset.value}`
         : ""
     }`;
 
-    location.href = `/socios/paginado/${href}/${page * 1 - 1}`;
+    location.href = `/admin/socios/${href}/${page * 1 - 1}`;
   });
+
   // REDIRIGIMOS A LA PESTAÑA DE BUSQUEDA
   document.querySelector(".form__search").addEventListener("submit", (e) => {
     e.preventDefault();
-    const tipo = document.querySelector(".select__search").value;
-    const value = document.querySelector(".input__search").value
-      ? document.querySelector(".input__search").value
-      : "vacio";
-    console.log("TIPO Y VALOOOOOOOOOOOOOOOOOOOOOOOOOOOOR " + tipo, value);
-    location.href = `/socios/find/${tipo}/${value}/0`;
+    let tipo = document.querySelector(".select__search").value;
+    let value = document.querySelector(".input__search").value ? document.querySelector(".input__search").value : "vacio";
+    if (value == "") return;
+    location.href = `/admin/socios/find/${tipo}/${value}/0`;
   });
 </script>
 
