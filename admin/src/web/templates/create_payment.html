@@ -14,19 +14,57 @@
     </div>
     <div class="admin__form__input">
       <label>Pago</label>
-      <input type="number" placeholder="Pago" name="pago" required />
+      <input
+        data-base="{{base}}"
+        data-disciplines="{{disciplines}}"
+        data-rec="{{rec}}"
+        id="pago"
+        type="number"
+        name="pago"
+        placeholder="{{base + disciplines}}"
+        required
+        readonly
+      />
+      <p class="desc">
+        Cuota Base: {{base}}, Costo total de las disciplinas: {{disciplines}},
+        Recargo(si tuviese): {{rec}}
+      </p>
     </div>
     <div class="admin__form__input">
       <input
+        id="fecha"
         type="date"
         name="fecha"
+        onchange="changePay(event)"
         required
         min="{{min_date}}"
         max="{{max_date}}"
       />
     </div>
-
+    <p class="alert" style="display: none">
+      Se establecio un dia mayor al 10. Se cobrara recargo por mora
+    </p>
     <input type="submit" value="Agregar Pago" />
   </form>
 </div>
+<script>
+  const inputFecha = document.querySelector("#fecha");
+  const inputPago = document.querySelector("#pago");
+  const alert = document.querySelector(".alert");
+
+  const changePay = (e) => {
+    const day = e.target.value.split("-")[2];
+    if (day > 10) {
+      inputPago.value =
+        inputPago.dataset.base * 1 +
+        inputPago.dataset.disciplines * 1 +
+        inputPago.dataset.rec * 1;
+      alert.style.display = "block";
+    } else {
+      inputPago.value =
+        inputPago.dataset.base * 1 + inputPago.dataset.disciplines * 1;
+      alert.style.display = "none";
+    }
+  };
+</script>
 {% endblock %}

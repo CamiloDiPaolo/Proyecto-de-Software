@@ -29,6 +29,10 @@ def create_app(env="development", static_folder="static"):
     @app.route("/")
     def hello_world():
         return redirect("/admin")
+
+    @app.errorhandler(404)
+    def not_found(e):
+        return render_template('404.html')
     
     # @app.route("/admin", methods=["GET"])
     # def admin():

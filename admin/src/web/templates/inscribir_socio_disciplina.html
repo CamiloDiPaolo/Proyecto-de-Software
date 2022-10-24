@@ -1,7 +1,19 @@
 {% extends "admin.html" %} {% block content %}
 <div class="admin__panel">
+  <h2 class="titulo-disc">Disciplinas a las que esta inscripto:</h2>
+  <ul>
+    {% for disc in disciplinesRegistered %}
+    <li class="bold_text"> > <span class="bold_text active">(Habilitada)</span> <span class="material-symbols-outlined"></span>{{disc.nombre}}
+      {% if disc.habilitada == true %}
+      {% else %}
+      <span class="bold_text inactive">(Deshabilitada)</span>
+      {% endif %}
+       Categoría: {{disc.categoria.nombre}}  . Costo: {{disc.costo}} . Entrenadores: {{disc.instructores}}
+    </li>
+    {% endfor %}
+  </ul>
   <div class="admin__panel__header">
-    <h2>Inscribir a disciplina</h2>
+    <h2>Inscribir a disciplina:</h2>
   </div>
     {% for discipline in disciplines %} 
     <div class="disc-box">
