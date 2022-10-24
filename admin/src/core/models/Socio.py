@@ -37,7 +37,7 @@ class Socio(Base):
 
 
     def __repr__(self):
-        return f"Pago(id={self.id!r}, email={self.email!r}, nombre={self.nombre!r}, apellido={self.apellido!r}, tipo_documento={self.tipo_documento!r},nro_documento={self.nro_documento!r},genero={self.genero!r},nro_socio={self.nro_socio!r},direccion={self.direccion!r},estado={self.estado!r},telefono={self.telefono!r},fecha_alta={self.fecha_alta!r},)"
+        return f"id={self.id!r}, email={self.email!r}, nombre={self.nombre!r}, apellido={self.apellido!r}, tipo_documento={self.tipo_documento!r},nro_documento={self.nro_documento!r},genero={self.genero!r},nro_socio={self.nro_socio!r},direccion={self.direccion!r},estado={self.estado!r},telefono={self.telefono!r},fecha_alta={self.fecha_alta!r},)"
 
     def json(self):
         return {

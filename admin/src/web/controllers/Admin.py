@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request,jsonify, redirect, flash, session
 from src.core.db import db_session
+from src.web.controllers.Auth import allowed_request
 from src.core.models.Usuario import Usuario
 from src.core.models.Rol import Rol
 from src.core.models.Categoria import Categoria
@@ -11,8 +12,7 @@ from src.core.models.Socio import Socio
 from src.web.controllers.Auth import allowed_request
 from src.web.controllers.Usuario import get_all_user_paginated_filter_json
 from src.web.controllers.perAsoc import get_all_partners_paginated_filter_json
-from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, update_doc_json, get_all_docs_paginated_json, exists_entity
-
+from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, update_doc_json, get_all_docs_paginated_json, exists_entity, delete_doc_json
 
 # TODO: pulir las response, agregar codigos HTTP descriptivos
 admin_blueprint = Blueprint("admin", __name__, url_prefix="/admin")
@@ -153,3 +153,58 @@ def partners_search_get(tipo, value, page):
 
     partners["docs"].sort(key = lambda u: u["nombre"])
     return render_template('admin_payments.html', partners=partners["docs"], max_page = partners["total_pages"], search = True, tipo = tipo, value = value)
+
+
+#------------------------------------------------------
+#Blueprint de SOCIOS
+
+
+@admin_blueprint.route("/socios/<page>", methods=["GET"])
+def socios(page):
+    socios=get_all_docs_paginated_json(Socio, page)
+    socios["docs"].sort(key = lambda u: u["nro_socio"])
+    return render_template("index_perAsoc.html", socio=socios["docs"], max_page = socios["total_pages"])
+
+
+@admin_blueprint.route("/socios/crearSocio", methods=["GET"])
+def createSoc():
+    return render_template("create_perAsoc.html")
+
+@admin_blueprint.route("/socios/editarSocio/<int:id>", methods=["GET"])
+def editSoc(id):
+    return render_template("edit_perAsoc.html", user=get_doc_json(Socio, id))
+
+@admin_blueprint.route("/socios/delete/<int:id>", methods=["DELETE","GET"])
+def deleteSoc(id):
+    delete_doc_json(Socio, id)
+    return redirect("/admin/socios/0")
+
+@admin_blueprint.route("/socios/find/<tipo>/<value>/<page>", methods=["POST","GET"])
+def buscador(page,tipo,value):
+    socios_dict={"estado":tipo, "apellido":value}
+    result=[] 
+    if (socios_dict["apellido"] != 'vacio'):
+        #if (socios_dict["estado"] == 'Activo'):
+        if (socios_dict["estado"]=='nada'):
+            result=get_all_partners_paginated_filter_json(page, socios_dict["apellido"], "apellido")
+        
+        elif (socios_dict["estado"]=='activo'):
+            socios_dict["estado"]=True
+            result=get_all_partners_paginated_filter_json(page, True, socios_dict)
+            
+        elif (socios_dict["estado"]=='inactivo'):
+            socios_dict["estado"]=False
+            result=get_all_partners_paginated_filter_json(page, False, socios_dict)
+        
+    elif (socios_dict["estado"] != 'nada'):
+        
+        if (socios_dict["estado"]=='activo'):
+            result=get_all_partners_paginated_filter_json(page, True, "estado")
+            
+        elif (socios_dict["estado"]=='inactivo'):
+            result=get_all_partners_paginated_filter_json(page, False, "estado")
+            
+    elif ((socios_dict["apellido"]=='vacio') & (socios_dict["estado"]=='nada')):
+        return redirect ("/admin/socios/0")
+
+    return render_template("index_perAsoc.html", socio=result["docs"], max_page = result["total_pages"], tipo=tipo, value=value, search=True)
