@@ -176,6 +176,10 @@ def editSoc(id):
 
 @admin_blueprint.route("/socios/delete/<int:id>", methods=["DELETE","GET"])
 def deleteSoc(id):
+    if(not allowed_request(request, ["admin"])):
+        errorMsg= "No tenes el rol necesario para realizar esta acción"
+        flash(errorMsg)
+        return redirect("/admin/socios")
     delete_doc_json(Socio, id)
     return redirect("/admin/socios/0")
 

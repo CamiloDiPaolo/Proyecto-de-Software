@@ -7,6 +7,8 @@ from src.web.controllers.Auth import allowed_request
 from src.core.models.Configuracion import Configuracion
 from src.web.controllers.FactoryCrud import create_doc_json, delete_doc_json, get_all_docs_json, get_doc_json, get_all_docs_paginated_json
 from fpdf import FPDF
+from src.web.validators.validatorsSocio import validate_data
+import csv
 
 
 
@@ -18,6 +20,10 @@ perAsoc_blueprint = Blueprint('perAsoc_blueprint', __name__, url_prefix='/admin/
 def socioCreado():
     #Primero sanitizar los argumentos recibidos
     result = request.form.to_dict()
+    error = validate_data(result)
+    if (error):
+        return render_template('create_perAsoc.html', error=error)
+    
     result['nro_socio']=random.randint(1,1000000)
     print (result)
     if (db_session.query(Socio).filter_by(nro_documento = result['nro_documento']).all()) :
@@ -45,6 +51,9 @@ def socioCreado():
 @perAsoc_blueprint.route("/update/<int:id>", methods=["POST"])
 def update_user(id):
     disc = request.form.to_dict()
+    error = validate_data(disc)
+    if (error):
+        return render_template('edit_perAsoc.html', error=error)
     if disc['estado']=='Activo': #in result.keys():
         disc['estado'] = True
     else:
@@ -160,29 +169,17 @@ def descargarPDF(tipo,value):
     pdf.cell(w=40,h=15, txt='Estado', border = 1, align='C', ln=1, fill=1)
     
     pdf.set_fill_color(r=232 , g=232 , b=232)
-    
-    result=list(result)
+
     print(type(result))
-    if (type(result) == 'list'):
-        for socio in result:
-            pdf.cell(w=50,h=15, txt=str(socio.nro_socio), border = 1, align='C', fill=1)
-            pdf.cell(w=50,h=15, txt=socio.nombre, border = 1, align='C', fill=1)
-            pdf.cell(w=50,h=15, txt=socio.apellido, border = 1, align='C', fill=1)
-            if (socio.estado == True):
-                pdf.cell(w=40,h=15, txt='Activo', border = 1, align='C', ln=1, fill=1)
-            else:
-                pdf.cell(w=40,h=15, txt='Inactivo', border = 1, align='C', ln=1, fill=1)
-            
-            
-    else:
-        for socio in result:
-            pdf.cell(w=50,h=15, txt=str(socio['nro_socio']), border = 1, align='C', fill=1)
-            pdf.cell(w=50,h=15, txt=socio['nombre'], border = 1, align='C', fill=1)
-            pdf.cell(w=50,h=15, txt=socio['apellido'], border = 1, align='C', fill=1)
-            if (socio['estado'] == True):
-                pdf.cell(w=40,h=15, txt='Activo', border = 1, align='C', ln=1, fill=1)
-            else:
-                pdf.cell(w=40,h=15, txt='Inactivo', border = 1, align='C', ln=1, fill=1)
+
+    for socio in result:
+        pdf.cell(w=50,h=15, txt=str(socio.nro_socio), border = 1, align='C', fill=1)
+        pdf.cell(w=50,h=15, txt=socio.nombre, border = 1, align='C', fill=1)
+        pdf.cell(w=50,h=15, txt=socio.apellido, border = 1, align='C', fill=1)
+        if (socio.estado == True):
+            pdf.cell(w=40,h=15, txt='Activo', border = 1, align='C', ln=1, fill=1)
+        else:
+            pdf.cell(w=40,h=15, txt='Inactivo', border = 1, align='C', ln=1, fill=1)
      
     response = make_response(pdf.output(dest="S").encode('latin-1'))
     response.headers.set("Content-Disposition","attachment",filename="tabla_de_socios.pdf")
@@ -190,11 +187,23 @@ def descargarPDF(tipo,value):
     return response
     
     
-    
 @perAsoc_blueprint.route("/descargarCSV/<tipo>/<value>")
 def descargarCSV(tipo,value):
-    result=descargas(tipo, value)    
-    return render_template("prueba.html", socio=result)
+    result=descargas(tipo, value) 
+    with open('listado.csv', 'w', newline='')as csvfile:
+        fieldnames=['nro_socio','email','nombre','apellido','tipo_documento','nro_documento']
+        thewriter = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        thewriter.writeheader()
+        
+        for socio in result:
+            thewriter.writerow({'nro_socio':socio['nro_socio'],'email':socio['email'],'nombre':socio['nombre'],'apellzido':socio['apellido'],'tipo_documento':socio['tipo_documento'],'nro_documento':socio['nro_documento']})
+            
+    response = make_response(csvfile)
+    response.headers.set("Content-Disposition","attachment",filename="listado.csv")
+    response.headers.set('Content-Type', 'application/csv')
+    return response
+
+
     
 
 def get_all_partners_paginated_filter_json(page, value, tipo):
@@ -240,6 +249,7 @@ def get_all_partners_paginated_filter_json(page, value, tipo):
 def descargas(tipo,value):
     socios_dict={"estado":tipo, "apellido":value}
     result=[] 
+    retorno=[]
     if (socios_dict["apellido"] != 'vacio'):
         if (socios_dict["estado"]=='nada'):
             result = db_session.query(Socio).filter(Socio.apellido.ilike("%" + value + "%")).all()
@@ -259,8 +269,13 @@ def descargas(tipo,value):
             
         elif (socios_dict["estado"]=='inactivo'):
             result=db_session.query(Socio).filter_by(estado=False).all()
+       
             
     elif ((socios_dict["apellido"]=='vacio') & (socios_dict["estado"]=='nada')):
-        result=get_all_docs_json(Socio)
+        result=db_session.query(Socio).all()
+        
+        
+    for index in result:
+        retorno.append(index)
     
-    return result
+    return retorno
