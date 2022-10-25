@@ -45,6 +45,9 @@
       Se establecio un dia mayor al 10. Se cobrara recargo por mora
     </p>
     <input type="submit" value="Agregar Pago" />
+    {% if error %}
+    <p class="error">{{error}}</p>
+    {% endif%}
   </form>
 </div>
 <script>

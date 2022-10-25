@@ -8,6 +8,8 @@ from src.core.models.Disciplina import Disciplina
 from src.core.models.relations.SocioSuscriptoDisciplina import SocioSuscriptoDisciplina
 from src.web.controllers.Auth import allowed_request
 
+from src.web.validators.validatorsPagos import validate_data
+
 from src.web.controllers.PDFCreate import createPDF
 
 from sqlalchemy.dialects.postgresql import Any
@@ -45,6 +47,22 @@ def create_payment(id_socio):
 @pagos_socios_blueprint.route("/create",methods=["POST"])
 def create_payment_POST():
     payment_dict = request.form.to_dict()
+    error = validate_data(payment_dict)
+    if (error):
+        ac_year= datetime.datetime.now().date().year
+        max_date= datetime.datetime.now().replace(year=ac_year+1,month=12,day=31).date()
+        min_date= datetime.datetime.now().replace(year=ac_year-2,month=1,day=1).date()
+        pay = get_partner_pay(get_doc_json(Socio,payment_dict["id_socio"]))
+        return render_template("create_payment.html", socio=get_doc_json(Socio,payment_dict["id_socio"]), max_date=max_date,min_date=min_date,base=pay["base"],disciplines=pay["disciplines"],rec=pay["rec"],error=error)
+
+    error = check_exist_payment(payment_dict["fecha"].split("-")[0],payment_dict["fecha"].split("-")[1],payment_dict["id_socio"])
+    if (error):
+        ac_year= datetime.datetime.now().date().year
+        max_date= datetime.datetime.now().replace(year=ac_year+1,month=12,day=31).date()
+        min_date= datetime.datetime.now().replace(year=ac_year-2,month=1,day=1).date()
+        pay = get_partner_pay(get_doc_json(Socio,payment_dict["id_socio"]))
+        return render_template("create_payment.html", socio=get_doc_json(Socio,payment_dict["id_socio"]), max_date=max_date,min_date=min_date,base=pay["base"],disciplines=pay["disciplines"],rec=pay["rec"],error=error)
+    
     create_doc_json(pago,payment_dict)
     return redirect(f'/admin/pagos/socio/{payment_dict["id_socio"]}/0')
 
@@ -99,7 +117,17 @@ def get_partner_pay(partner):
     pay["disciplines"] = total
     pay["base"]= config["valor_cuota_base"]
     pay["rec"] = config["recargo_deuda"]
-    print("-------------------------------")
-    print(pay)
-    print("-------------------------------")
     return pay
+
+
+def check_exist_payment(year,month,id):
+    rest = False
+    result = db_session.query(pago).filter_by(id_socio = id).all()
+    for row in result:
+        rowYear = str(row.json()["fecha"]).split("-")[0]
+        rowMonth = str(row.json()["fecha"]).split("-")[1]
+
+        if(rowYear == year and rowMonth == month):
+            rest = "Ya existe un pago para esa fecha"
+            break
+    return rest
