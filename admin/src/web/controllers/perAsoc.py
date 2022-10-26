@@ -51,9 +51,10 @@ def socioCreado():
 @perAsoc_blueprint.route("/update/<int:id>", methods=["POST"])
 def update_user(id):
     disc = request.form.to_dict()
-    error = validate_data(disc)
+    error = validate_data(disc,"UPDATE")
     if (error):
-        return render_template('edit_perAsoc.html', error=error)
+        return render_template('edit_perAsoc.html', error=error, user=get_doc_json(Socio, id))
+    
     if disc['estado']=='Activo': #in result.keys():
         disc['estado'] = True
     else:
