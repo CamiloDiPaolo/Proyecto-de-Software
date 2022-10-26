@@ -9,6 +9,9 @@
     </div>
     <form class="admin__form admin__form--update" action="/admin/socios/update/{{user.id}}" method="POST">
       <div class="admin__form__input">
+        {% if error %}
+        <div class="error"> {{error}} </div>
+        {% endif %}
         <label>Nombre</label>
         <input name="nombre" type="text" placeolder="Nombre" required value="{{user.nombre}} " />
       </div>
