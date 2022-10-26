@@ -10,7 +10,7 @@ from src.web.controllers.Auth import allowed_request
 
 from src.web.validators.validatorsPagos import validate_data
 
-from src.web.controllers.PDFCreate import createPDF
+from src.web.controllers.PDFCreate import createPDF_payment
 
 from sqlalchemy.dialects.postgresql import Any
 
@@ -79,7 +79,7 @@ def delete_payment(partner_id,id):
 def downloadPDF(partner_id,payment_id):
     partner = get_doc_json(Socio,partner_id)
     payment = get_doc_json(pago,payment_id)
-    return createPDF(partner,payment)
+    return createPDF_payment(partner,payment)
 
 def get_all_partners_payments_paginated_filter_json(page, value):
     config = get_doc_json(Configuracion, 1)
