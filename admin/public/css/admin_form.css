@@ -81,3 +81,33 @@ input[type="submit"]:hover {
   padding: 10px;
   color: var(--gris-oscuro-2);
 }
+
+.admin__form__input .desc {
+  margin-top: 0;
+  font-size: 70%;
+  font-style: italic;
+}
+
+.alert {
+  background-color: var(--alerta-2);
+  color: black;
+  padding: 5px;
+  border-radius: 99px;
+}
+
+@media only screen and (max-width: 360px) {
+  .admin__form {
+    max-width: 60%;
+    min-width: 60%;
+    align-self: center;
+    gap: 10px;
+  }
+}
+
+@media only screen and (min-width: 768px) and (min-width: 360px) {
+  .admin__form {
+    max-width: 75%;
+    min-width: 75%;
+    align-self: center;
+  }
+}

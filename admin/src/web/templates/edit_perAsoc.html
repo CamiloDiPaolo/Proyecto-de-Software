@@ -1,14 +1,17 @@
-{% extends 'layout_perAsoc.html' %}
+{% extends 'admin.html' %}
 {% block title %} Panel de personas Asociadas {% endblock %}
 
-{% block body %}
+{% block content %}
 
 <div class="admin__panel">
     <div class="admin__panel__header">
       <h2>Modificar datos de Usuario</h2>
     </div>
-    <form class="admin__form admin__form--update" action="/perAsoc/update/{{user.id}}" method="POST">
+    <form class="admin__form admin__form--update" action="/admin/socios/update/{{user.id}}" method="POST">
       <div class="admin__form__input">
+        {% if error %}
+        <div class="error"> {{error}} </div>
+        {% endif %}
         <label>Nombre</label>
         <input name="nombre" type="text" placeolder="Nombre" required value="{{user.nombre}} " />
       </div>
@@ -31,8 +34,8 @@
         <label>Estado </label>
         <div class="roles__input">
           <select value="" name="estado" required>
-            {% if user.estado %} <option value="Activo"disabled selected hidden >Activo</option>
-            {% else %} <option value="Inactivo"disabled selected hidden >Inactivo</option>
+            {% if user.estado %} <option value=""disabled selected hidden >Activo</option>
+            {% else %} <option value=""disabled selected hidden >Inactivo</option>
             {% endif %}
             <option value="Activo">Activo </option>
             <option value="Inactivo">Inactivo</option>

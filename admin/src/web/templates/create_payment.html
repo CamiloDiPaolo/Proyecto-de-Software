@@ -6,7 +6,7 @@
 
   <form
     class="admin__form admin__from--create"
-    action="/pagos/create"
+    action="/admin/pagos/socio/create"
     method="POST"
   >
     <div style="display: none">
@@ -14,41 +14,60 @@
     </div>
     <div class="admin__form__input">
       <label>Pago</label>
-      <input type="number" placeholder="Pago" name="Pago" required />
+      <input
+        data-base="{{base}}"
+        data-disciplines="{{disciplines}}"
+        data-rec="{{rec}}"
+        id="pago"
+        type="number"
+        name="pago"
+        placeholder="{{base + disciplines}}"
+        required
+        readonly
+      />
+      <p class="desc">
+        Cuota Base: {{base}}, Costo total de las disciplinas: {{disciplines}},
+        Recargo(si tuviese): {{rec}}
+      </p>
     </div>
     <div class="admin__form__input">
-      <label>Año</label>
       <input
-        type="number"
+        id="fecha"
+        type="date"
+        name="fecha"
+        onchange="changePay(event)"
         required
-        min="2000"
-        max="{{ac_year}}"
-        name="Año"
-        required
+        min="{{min_date}}"
+        max="{{max_date}}"
       />
     </div>
-    <div class="admin__form__input">
-      <label>Mes</label>
-      <div class="roles__input">
-        <select name="month" id="month" required>
-          <option disabled selected hidden value="">--Elija un mes--</option>
-          <option value="01">Enero</option>
-          <option value="02">Febrero</option>
-          <option value="03">Marzo</option>
-          <option value="04">Abril</option>
-          <option value="05">Mayo</option>
-          <option value="06">Junio</option>
-          <option value="07">Julio</option>
-          <option value="08">Agosto</option>
-          <option value="09">Septiembre</option>
-          <option value="10">Octubre</option>
-          <option value="11">Noviembre</option>
-          <option value="12">Diciembre</option>
-        </select>
-      </div>
-    </div>
-
+    <p class="alert" style="display: none">
+      Se establecio un dia mayor al 10. Se cobrara recargo por mora
+    </p>
     <input type="submit" value="Agregar Pago" />
+    {% if error %}
+    <p class="error">{{error}}</p>
+    {% endif%}
   </form>
-  {% endblock %}
 </div>
+<script>
+  const inputFecha = document.querySelector("#fecha");
+  const inputPago = document.querySelector("#pago");
+  const alert = document.querySelector(".alert");
+
+  const changePay = (e) => {
+    const day = e.target.value.split("-")[2];
+    if (day > 10) {
+      inputPago.value =
+        inputPago.dataset.base * 1 +
+        inputPago.dataset.disciplines * 1 +
+        inputPago.dataset.rec * 1;
+      alert.style.display = "block";
+    } else {
+      inputPago.value =
+        inputPago.dataset.base * 1 + inputPago.dataset.disciplines * 1;
+      alert.style.display = "none";
+    }
+  };
+</script>
+{% endblock %}

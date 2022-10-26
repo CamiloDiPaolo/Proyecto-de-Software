@@ -8,7 +8,7 @@ body {
   gap: 10px;
 
   width: 200px;
-  height: 220px;
+  height: auto;
   padding: 20px;
 
   position: absolute;

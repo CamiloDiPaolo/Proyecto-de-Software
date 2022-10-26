@@ -1,19 +1,25 @@
 {% extends "admin.html" %} {% block content %}
 <div class="admin__panel">
   <div class="admin__panel__header">
-    <h2>Usuarios</h2>
-    <form class="form__search">
+    <h2>Elija un Socio</h2>
+    <form class="form__search" action="/pagos/socio/find" method="GET">
       <div class="user__search">
-        <input type="text" name="input_search" class="input__search" />
+        <input
+          type="text"
+          name="search"
+          class="input__search"
+          placeholder="Buscar..."
+          required
+          disabled
+        />
         <button class="search__btn action__btn">
           <span class="material-symbols-outlined"> search </span>
         </button>
       </div>
-      <select name="type_search" class="select__search">
-        <option>email</option>
-        <option>username</option>
-        <option>activo</option>
-        <option>inactivo</option>
+      <select name="type" class="select__search" required>
+        <option disabled selected hidden value="">--Buscar por--</option>
+        <option value="nombre">Nombre</option>
+        <option value="nro_socio">Numero Socio</option>
       </select>
     </form>
     <div class="pages__btn">
@@ -41,49 +47,37 @@
       <a class="page__up action__btn page__btn">></a>
       {% endif %}
     </div>
-    <a class="add__btn add__btn_resp" href="/admin/users/new">+</a>
+    <div class="admin__table__actions">
+      <a class="add__btn action__btn sync__payment" href="/admin/pagos/0"
+        ><span class="material-symbols-outlined"> sync </span>
+      </a>
+    </div>
   </div>
+
   <table class="admin__table">
     <thead class="admin__table__head">
-      <th>email</th>
-      <th>username</th>
-      <th class="hidden">nombre</th>
-      <th class="hidden">apellido</th>
-      <th>roles</th>
-      <th>Acciones</th>
+      <tr>
+        <th>NOMBRE</th>
+        <th>APELLIDO</th>
+        <th>NRO DOC</th>
+        <th>NRO SOCIO</th>
+        <th></th>
+      </tr>
     </thead>
     <tbody class="admin__table__body">
-      {% for user in users %}
+      {% for data in partners %}
       <tr>
-        <td>{{user.email}}</td>
-        <td>{{user.username}}</td>
-        <td class="hidden">{{user.nombre}}</td>
-        <td class="hidden">{{user.apellido}}</td>
-        <td>{% for rol in user.roles %}{{rol.nombre}} {% endfor %}</td>
+        <td>{{data.nombre}}</td>
+        <td>{{data.apellido}}</td>
+        <td>{{data.nro_documento}}</td>
+        <td>{{data.nro_socio}}</td>
         <td>
           <div class="admin__table__actions">
-            <form method="DELETE" action="/users/delete/{{user.id}}">
-              <button class="delete__btn action__btn">
-                <span class="material-symbols-outlined"> delete </span>
-              </button>
-            </form>
             <a
-              class="patch__btn action__btn"
-              href="/admin/users/edit/{{user.id}}"
-            >
-              <span class="material-symbols-outlined"> edit </span>
+              class="add__btn action__btn payment"
+              href="/admin/pagos/socio/{{data.id}}/0"
+              ><span class="material-symbols-outlined"> payments </span>
             </a>
-            <form method="POST" action="/users/active/{{user.id}}">
-              <button
-                class="active__btn--{{user.activo}} action__btn active__btn"
-              >
-                {% if user.activo %}
-                <span class="material-symbols-outlined"> toggle_on </span>
-                {% else %}
-                <span class="material-symbols-outlined"> toggle_off </span>
-                {% endif %}
-              </button>
-            </form>
           </div>
         </td>
       </tr>
@@ -91,7 +85,6 @@
     </tbody>
   </table>
 </div>
-
 <script>
   // IMPLEMENTAMOS LA PAGINACION
   const page = location.href.split("/").at(-1);
@@ -115,7 +108,7 @@
         : ""
     }`;
 
-    location.href = `/admin/users${href}/${page * 1 + 1}`;
+    location.href = `/admin/pagos${href}/${page * 1 + 1}`;
   });
 
   pageDown.addEventListener("click", (e) => {
@@ -127,7 +120,7 @@
         : ""
     }`;
 
-    location.href = `/admin/users${href}/${page * 1 - 1}`;
+    location.href = `/admin/pagos${href}/${page * 1 - 1}`;
   });
 
   // REDIRIGIMOS A LA PESTAÑA DE BUSQUEDA
@@ -135,13 +128,20 @@
     e.preventDefault();
     let tipo = document.querySelector(".select__search").value;
     let value = document.querySelector(".input__search").value;
-
-    if (tipo == "activo" || tipo == "inactivo")
-      location.href = `/admin/users/search/${tipo}/-/0`;
-
     if (value == "") return;
+    location.href = `/admin/pagos/search/${tipo}/${value}/0`;
+  });
 
-    location.href = `/admin/users/search/${tipo}/${value}/0`;
+  document.querySelector(".form__search").addEventListener("change", (e) => {
+    e.preventDefault();
+    const input = document.querySelector(".input__search");
+    input.disabled = false;
+    console.log(e.target.value);
+    if (e.target.value === "nro_socio") {
+      input.type = "number";
+    } else if (e.target.value === "nombre") {
+      input.type = "text";
+    }
   });
 </script>
 {% endblock %}

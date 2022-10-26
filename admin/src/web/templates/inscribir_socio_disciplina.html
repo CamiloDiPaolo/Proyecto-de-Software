@@ -1,17 +1,28 @@
 {% extends "admin.html" %} {% block content %}
 <div class="admin__panel">
+  <h2 class="titulo-disc">Disciplinas a las que esta inscripto:</h2>
+  <ul>
+    {% for disc in disciplinesRegistered %}
+    <li class="bold_text"> > <span class="bold_text active">(Habilitada)</span> <span class="material-symbols-outlined"></span>{{disc.nombre}}
+      {% if disc.habilitada == true %}
+      {% else %}
+      <span class="bold_text inactive">(Deshabilitada)</span>
+      {% endif %}
+       Categoría: {{disc.categoria.nombre}}  . Costo: {{disc.costo}} . Entrenadores: {{disc.instructores}}
+    </li>
+    {% endfor %}
+  </ul>
   <div class="admin__panel__header">
-    <h2>Inscribir a disciplina</h2>
+    <h2>Inscribir a disciplina:</h2>
   </div>
-  <form class="admin__form" method="POST" action="/admin/config">
-    {% for discipline in disciplines %} {% set vals= {'check': True} %} {%for
-    memberd in memberDisc %} {% if memberd.id_disciplina == discipline.id %}
-    {%if vals.update({'check': False}) %} {% endif %} {% endif %} {% endfor %}
-    {% if vals.check %}
-    <div>
+    {% for discipline in disciplines %} 
+    <div class="disc-box">
       <h2>{{discipline.nombre}}</h2>
+      <p>Categoría: {{discipline.categoria.nombre}} {{discipline.categoria_id}} . Horario: {{discipline.horarios}} . Costo: {{discipline.costo}} </p>
+     <form METHOD="GET" action="/disciplines/addMemberDisc/{{discipline.id}}/{{id}}">
+      <button class="bt-insc">Inscribirse</button>
+    </form>
     </div>
-    {% endif %} {% endfor %}
-  </form>
+     {% endfor %}
 </div>
 {% endblock %}

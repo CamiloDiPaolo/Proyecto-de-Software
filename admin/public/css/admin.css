@@ -45,6 +45,8 @@ table {
 body,
 html {
   margin: 0;
+  min-height: 100%;
+  max-height: 100%;
 }
 ul {
   list-style: none;
@@ -54,12 +56,13 @@ ul {
 
 body {
   display: flex;
+  background-color: var(--gris-oscuro-5);
 }
 
 /* BARRA DE NAVEGACION */
 .admin__nav {
   width: 200px;
-  height: 100vh;
+  min-height: 100vh;
   background-color: var(--gris-oscuro-3);
 }
 
@@ -102,4 +105,76 @@ body {
   padding-top: 40px;
 }
 
-/* DISEÑO RESPONSIVE */
+/* DISCIPLINAS */
+.disc-box {
+  background: rgb(110, 102, 102);
+  padding: 10px;
+  border-radius: 5px;
+  padding-left: 15px;
+}
+
+.btn-insc {
+  background: rgb(36, 160, 237);
+  font-weight: bold;
+  color: black;
+  border-radius: 5px;
+  border-color: black;
+}
+
+.btn-insc:hover {
+  transform: scale(1.1) 3s;
+  background-color: rgb(22, 132, 200);
+  cursor: pointer;
+}
+@media only screen and (max-width: 360px) {
+  .admin__nav {
+    width: 6vh;
+    /* height: 160vh; */
+  }
+  .admin__nav__link {
+    padding: 5px;
+    padding-bottom: 20px;
+  }
+  .admin__nav__link__text {
+    display: none;
+  }
+  .admin__main {
+    justify-content: left;
+    padding-left: 1vh;
+    padding-right: 1vh;
+    min-width: 80%;
+    max-width: 80%;
+  }
+}
+
+@media only screen and (max-width: 768px) and (min-width: 360px) {
+  .admin__nav {
+    width: 70px;
+  }
+  .admin__nav__link__text {
+    display: none;
+  }
+  .admin__main {
+    justify-content: left;
+    padding-left: 4vh;
+    padding-right: 4vh;
+    min-width: 80%;
+    max-width: 80%;
+  }
+}
+
+.bold_text {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.titulo-disc {
+  color: rgb(144, 183, 125);
+}
+
+.active {
+  color: rgb(61, 151, 17);
+}
+.inactive {
+  color: var(--alerta-1-suave);
+}

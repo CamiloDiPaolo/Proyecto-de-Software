@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request,jsonify, redirect
+from flask import Blueprint, render_template, request,jsonify, redirect, flash
 from src.core.db import db_session
 from src.core.models.Usuario import Usuario
 from src.core.models.Rol import Rol
@@ -6,6 +6,7 @@ from src.core.models.relations.UsuarioTieneRol import UsuarioTieneRol
 from src.web.controllers.Auth import allowed_request
 from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, create_doc_json, delete_doc_json, get_all_docs_paginated_json
 from src.core.models.Configuracion import Configuracion
+from src.web.validators.ValidatorsUsuario import validate_data
 import math
 import ast
 
@@ -15,7 +16,9 @@ users_blueprint = Blueprint("users", __name__, url_prefix="/users")
 @users_blueprint.before_request
 def protect():
     if(not allowed_request(request, ["admin"])):
-        return "no tenes los permisos necesarios para acceder a este request"
+        errorMsg= "No tenes el rol necesario para realizar esta acción"
+        flash(errorMsg)
+        return redirect("/admin/")
 
 @users_blueprint.route("/", methods=["GET"])
 def all_users():
@@ -34,15 +37,18 @@ def all_users_paginated(page):
 def create_user():
     data = request.form.to_dict()
 
-    if(data["roles"] == "empty"):
-        return render_template('admin_usuarios_new.html', roles=get_all_docs_json(Rol), error="no se selecciono ningun rol")
-
-    data["roles"] = ast.literal_eval(data["roles"] )
+    error = validate_data(data)
+    if (error):
+        return render_template('admin_usuarios_new.html', roles=get_all_docs_json(Rol), error=error)
 
     error = check_exist_user(data["username"], data["email"])
     if (error):
         return render_template('admin_usuarios_new.html', roles=get_all_docs_json(Rol), error=error)
 
+    if(data["roles"] == "empty"):
+        return render_template('admin_usuarios_new.html', roles=get_all_docs_json(Rol), error="no se selecciono ningun rol")
+
+    data["roles"] = ast.literal_eval(data["roles"] )
     create_user_json(data)
     return redirect("/admin/users/0")
 
@@ -55,15 +61,18 @@ def delete_user(id):
 def update_user(id):
     data = request.form.to_dict()
 
+    error = validate_data(data, operation="update")
+    if (error):
+        return render_template('admin_usuarios_new.html', roles=get_all_docs_json(Rol), error=error)
+
+    error = check_exist_user(data["username"], data["email"])
+    if (error):
+        return render_template('admin_usuarios_new.html', roles=get_all_docs_json(Rol), error=error)
+
     if(data["roles"] == "empty"):
-        return render_template('admin_usuarios_edit.html', user=get_doc_json(Usuario, id), roles=get_all_docs_json(Rol), error="no se selecciono ningun rol")
+        return render_template('admin_usuarios_new.html', roles=get_all_docs_json(Rol), error="no se selecciono ningun rol")
 
     data["roles"] = ast.literal_eval(data["roles"] )
-
-    error = check_exist_user(data["username"], data["email"], id)
-    if (error):
-        return render_template('admin_usuarios_edit.html', user=get_doc_json(Usuario, id), roles=get_all_docs_json(Rol), error=error)
-
     update_user_json(id, data)
     return redirect("/admin/users/0")
 
@@ -117,17 +126,29 @@ def check_exist_user(username, email, id = False):
 def get_all_user_paginated_filter_json(page, value, tipo):
     config = get_doc_json(Configuracion, 1)
     rows_per_page = config["elementos_por_pag"]
+    all_pages = 1
 
     json = []
+
+    result = []
+ 
     if(tipo == "email"):
-        # result = db_session.query(Usuario).filter_by(email = value).limit(rows_per_page).offset(int(page)*rows_per_page)
         result = db_session.query(Usuario).filter(Usuario.email.ilike("%" + value + "%")).limit(rows_per_page).offset(int(page)*rows_per_page)
-    else:
+        len_result = db_session.query(Usuario).filter(Usuario.email.ilike("%" + value + "%")).all()
+        all_pages = math.ceil(len(len_result) / rows_per_page)
+    elif(tipo == "username"):
         result = db_session.query(Usuario).filter(Usuario.username.ilike("%" + value + "%")).limit(rows_per_page).offset(int(page)*rows_per_page)
-        # result = db_session.query(Usuario).filter_by(username = value).limit(rows_per_page).offset(int(page)*rows_per_page)
+        len_result = db_session.query(Usuario).filter(Usuario.username.ilike("%" + value + "%")).all()
+        all_pages = math.ceil(len(len_result) / rows_per_page)
+    elif(tipo == "activo"):
+        result = db_session.query(Usuario).filter(Usuario.activo==value).limit(rows_per_page).offset(int(page)*rows_per_page)
+        len_result = db_session.query(Usuario).filter(Usuario.activo==value).all()
+        all_pages = math.ceil(len(len_result) / rows_per_page)
+
     for row in result:
         json.append(row.json())
     
-    result = db_session.query(Usuario).all();
-    all_pages = math.ceil(len(result) / rows_per_page)
+    # result = db_session.query(Usuario).all();
+    # all_pages = math.ceil(len(json) / rows_per_page)
+    # print(len(json), rows_per_page, all_pages)
     return {"docs": json, "total_pages": all_pages}

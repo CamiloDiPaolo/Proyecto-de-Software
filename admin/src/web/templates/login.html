@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+  {% with messages = get_flashed_messages() %} {% if messages %} {%for message
+    in messages%}
+    <script>
+      alert("{{message}}");
+    </script>
+    {% endfor %} {% endif %} {% endwith %}
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -28,6 +34,9 @@
         <label>Contraseña</label>
         <input type="password" required name="contraseña" />
       </div>
+      {% if error %}
+      <p class="error">{{error}}</p>
+      {% endif%}
       <input type="submit" class="submit__btn" value="Iniciar sesion" />
     </form>
   </body>

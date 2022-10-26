@@ -22,7 +22,7 @@ class Socio(Base):
     fecha_alta = Column(Date, nullable=False)
 
     def __init__(self,data):
-        self.id = self.id#data["id"]
+        #self.id = data["id"]
         self.email = data["email"]
         self.nombre = data["nombre"]
         self.apellido = data["apellido"]
@@ -37,7 +37,7 @@ class Socio(Base):
 
 
     def __repr__(self):
-        return f"Pago(id={self.id!r}, email={self.email!r}, nombre={self.nombre!r}, apellido={self.apellido!r}, tipo_documento={self.tipo_documento!r},nro_documento={self.nro_documento!r},genero={self.genero!r},nro_socio={self.nro_socio!r},direccion={self.direccion!r},estado={self.estado!r},telefono={self.telefono!r},fecha_alta={self.fecha_alta!r},)"
+        return f"id={self.id!r}, email={self.email!r}, nombre={self.nombre!r}, apellido={self.apellido!r}, tipo_documento={self.tipo_documento!r},nro_documento={self.nro_documento!r},genero={self.genero!r},nro_socio={self.nro_socio!r},direccion={self.direccion!r},estado={self.estado!r},telefono={self.telefono!r},fecha_alta={self.fecha_alta!r},)"
 
     def json(self):
         return {
@@ -54,20 +54,20 @@ class Socio(Base):
             "telefono": self.telefono,
             "fecha_alta": self.fecha_alta,
         }
-
+        
     def update(self, data):
+        if "email" in data:
+            self.email = data["email"]
         if "nombre" in data:
             self.nombre = data["nombre"]
         if "apellido" in data:
             self.apellido = data["apellido"]
-        if "email" in data:
-            self.email = data["email"]
+        if "estado" in data:
+            self.estado = data["estado"]
         if "genero" in data:
             self.genero = data["genero"]
         if "direccion" in data:
             self.direccion = data["direccion"]
         if "telefono" in data:
             self.telefono = data["telefono"]
-        if "estado" in data:
-            self.estado = data["estado"]
 

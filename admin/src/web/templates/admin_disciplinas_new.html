@@ -1,4 +1,5 @@
 {% extends "admin.html" %} {% block content %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/form-validation.js') }}"></script>
 <div class="admin__panel">
   <div class="admin__panel__header">
     <h2>Crear nueva disciplina</h2>
@@ -6,23 +7,28 @@
   <form class="admin__form admin__form--create" action="/disciplines/create" method="POST">
     <div class="admin__form__input">
       <label>Nombre</label>
-      <input type="text" name="nombre" placeholder="nombre"  required />
+      <input type="text" name="nombre"   />
+      <span></span>
     </div>
     <div class="admin__form__input">
       <label>Horarios</label>
-      <input type="text" name="horarios" required />
+      <input type="text" name="horarios"  />
+      <span></span>
     </div>
     <div class="admin__form__input">
       <label>Entrenadores</label>
-      <input type="text" name="instructores" required />
+      <input type="text" name="instructores"  />
+      <span></span>
     </div>
     <div class="admin__form__input">
       <label>Costo</label>
-      <input type="number" name="costo" required />
+      <input type="number" name="costo"  />
+      <span></span>
     </div>
     <div class="admin__form__input">
       <label>Habilitado</label>
       <input type="checkbox" name="habilitada" />
+      <span></span>
     </div>
     <div class="admin__form__input">
       <label>Categoria</label>
@@ -32,9 +38,35 @@
           <option value='{{cat.id}}'>{{cat.nombre}}</option>
           {% endfor %}
         </select>
+        <span></span>
       </div>
       <br>
     <input type="submit" value="Crear disciplina" />
   </form>
 </div>
+
+<script>
+ 
+  document.addEventListener("DOMContentLoaded", function(event) {
+  // Guardo los campos del FORM 
+
+  const campoNombre = document.querySelector("[name=nombre]");
+  const campoHorarios = document.querySelector("[name=horarios]");
+  const campoInstructores = document.querySelector("[name=instructores]");
+  const campoCosto = document.querySelector("[name=costo]");
+  // Agrego el listener de campo vacío a todos los campos
+  [campoNombre,campoHorarios,campoInstructores,campoCosto].forEach(function(element) {
+    addEmptyListener(element);
+  });
+
+  formulario = document.getElementsByClassName("admin__form")[0];
+  formulario.addEventListener('submit',(e) => {
+    if (validateEmpty(nameField)){
+      console.log("AA");
+    }
+  });
+});
+
+</script>
+
 {% endblock %}

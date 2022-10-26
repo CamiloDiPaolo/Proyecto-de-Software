@@ -6,7 +6,6 @@ from src.web.controllers.Auth import auth_blueprint, allowed_request
 from src.web.controllers.Admin import admin_blueprint
 
 from src.web.controllers.perAsoc import perAsoc_blueprint
-from src.web.controllers.pagos import pago_blueprint
 from src.web.controllers.pagos_socio import pagos_socios_blueprint
 from src.web.config import config
 from src.core import db
@@ -30,6 +29,10 @@ def create_app(env="development", static_folder="static"):
     @app.route("/")
     def hello_world():
         return redirect("/admin")
+
+    @app.errorhandler(404)
+    def not_found(e):
+        return render_template('404.html')
     
     # @app.route("/admin", methods=["GET"])
     # def admin():
@@ -41,7 +44,6 @@ def create_app(env="development", static_folder="static"):
     app.register_blueprint(auth_blueprint)
 
     app.register_blueprint(perAsoc_blueprint)
-    app.register_blueprint(pago_blueprint)
     app.register_blueprint(pagos_socios_blueprint)
     app.register_blueprint(disciplines_blueprint)
     app.register_blueprint(categories_blueprint)
