@@ -54,6 +54,8 @@ def validate_data(data,operation ="create"):
     
     if not(valid_direction(data["direccion"])):
         return "La direccion ingresada no es valida"
+    if (data["direccion"]== " "):
+        return "La direccion no puede quedar vacia"
     if (data["email"] != ''):
         if(not valid_email(data["email"])):
             return "El email ingresado no es valido"    
