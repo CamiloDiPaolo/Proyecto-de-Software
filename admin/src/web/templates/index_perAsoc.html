@@ -55,7 +55,7 @@ endblock %} {% block content %}
 
 
 
-    <a class="add__btn action__btn" href="/admin/socios/0"><span class="material-symbols-outlined"> sync </span>
+    <a class="add__btn action__btn sync" href="/admin/socios/0"><span class="material-symbols-outlined"> sync </span>
     </a>
 
 
@@ -65,10 +65,10 @@ endblock %} {% block content %}
   <table class="admin__table">
     <thead class="admin__table__head partner">
       <th>Numero de Socio</th>
-      <th>Email</th>
+      <th class="hidden">Email</th>
       <th>Nombre</th>
       <th>Apellido</th>
-      <th>Tipo de Documento</th>
+      <th class="hidden">Tipo de Documento</th>
       <th>Nro de Documento</th>
       <th>Acciones</th>
     </thead>
@@ -78,14 +78,14 @@ endblock %} {% block content %}
         <td>{{user.nro_socio}}</td>
 
         {% if user.email %}
-        <td>{{user.email}}</td>
+        <td class="hidden">{{user.email}}</td>
         {% else %}
-        <td>Sin especificar</td>
+        <td class="hidden">Sin especificar</td>
         {% endif %}
 
         <td>{{user.nombre}}</td>
         <td>{{user.apellido}}</td>
-        <td>{{user.tipo_documento}}</td>
+        <td class="hidden">{{user.tipo_documento}}</td>
         <td>{{user.nro_documento}}</td>
         <td>
           <div class="admin__table__actions">
