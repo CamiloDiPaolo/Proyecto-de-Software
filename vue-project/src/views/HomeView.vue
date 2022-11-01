@@ -1,9 +1,8 @@
 <script setup>
-import TheWelcome from '../components/TheWelcome.vue'
+const props = defineProps(["foo"]);
+console.log(props);
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+  <p class="text-rose-500">hol q tal con tailwind {{ props.foo }}</p>
 </template>
