@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, make_response, session
+from flask import Blueprint, jsonify, request, make_response, session, Response
 from src.core.db import db_session
 from src.core.models.Usuario import Usuario
 from src.core.models.Disciplina import Disciplina
@@ -14,46 +14,53 @@ private_key = "mi-clave-privada-y-ultra-secreta-y-larga-para-firmar-jwts-podria-
 
 api_blueprint = Blueprint("api", __name__, url_prefix="/api")
 
+# Metemos esto pq flask nose pq toma una peticion de OPTIONS ¿¿¿¿¿¿??????
+@api_blueprint.route("/auth", methods=[ "OPTIONS"])
+def token_2():
+    return cors(make_response())
+
 @api_blueprint.route("/auth", methods=["POST"])
 def token():
+    print(request.json)
     hasher = hashlib.sha256()
     hasher.update(request.json['password'].encode('utf-8'))
     request.json['password'] = hasher.hexdigest()
+    print(request.json)
     if not valid_user(request.json['username'], request.json['password']):
-        res = make_response("alguno de los datos ingresados es incorrecto")
-        res.status = 401
-        return res
+        res = jsonify({"status": 401, "message": "Los datos ingresados no son correctos"})
+        return cors(res)
     
     user_id = db_session.query(Usuario.id).filter_by(username=request.json['username'], contraseña=request.json['password']).all()
 
-    # return jsonify({"token": sign_jwt(user_id[0][0])})
-    res = make_response("logeado")
-    res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/"
+    res = jsonify({"status": 200})
+    res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/;SameSite=None;Secure"
+    return cors(res)
 
-    return res
+# Metemos esto pq flask nose pq toma una peticion de OPTIONS ¿¿¿¿¿¿??????
+@api_blueprint.route("/me/profile", methods=[ "OPTIONS"])
+def profile_2():
+    return cors(make_response())
 
 @api_blueprint.route("/me/profile", methods=["GET"])
 def profile():
     token = request.cookies.get('jwt')
-
-    if (not token):
-        res = make_response("Tenes que loguearte para acceder a esta funcionalidad")
-        res.status = 401
-        return res
+    print("aaa")
+    if (not token): 
+        res = jsonify({"status": 401, "message": "No estas logeado"})
+        return cors(res)
 
     decoded = decode_jwt(token)
     if(not decoded):
-        res = make_response("Tenes que loguearte para acceder a esta funcionalidad")
-        res.status = 401
-        return res
+        res = jsonify({"status": 401, "message": "El token no es valido"})
+        return cors(res)
 
     user = db_session.query(Usuario).filter_by(id=decoded["data"]).all()
     if (not user):
-        res = make_response("Los datos de la sesion almacenada pertenecen a un usuario que ya no existe")
-        res.status = 401
-        return res
-    
-    return jsonify(user[0].json())
+        res = jsonify({"status": 401, "message": "la sesion pertenece a un usuario que ya no existe"})
+        return cors(res)
+
+    res = make_response(user[0].json())
+    return cors(res)
 
 ## Endpoints de DISCIPLINAS    
 
@@ -153,3 +160,11 @@ def decode_jwt(jwt_signed):
         return decoded_jwt
     except:
         return False
+
+
+def cors(res):
+    res.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
+    res.headers.add("Access-Control-Allow-Headers", "X-Requested-With,content-type")
+    res.headers.add("Access-Control-Allow-Methods", "*")
+    res.headers.add("Access-Control-Allow-Credentials", "true")
+    return res

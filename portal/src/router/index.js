@@ -28,7 +28,6 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  // si no hay una middleware seguimos de largo
   if (to.name == "login") return next();
 
   const res = await auth();
