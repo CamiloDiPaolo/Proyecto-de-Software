@@ -55,58 +55,51 @@ const data3 = ref({});
 })();
 </script>
 <template>
-  <!-- <p>
-    Graficos a mostrar: Cantidad de usuarios registrados a cada disciplina
-    (Barra), Cantidad de usuarios al dia con la cuota(Torta), Cantidad de socios
-    activos e inactivos(Torta)
-  </p> -->
   <div class="flex flex-col gap-10 w-2/3">
-    <h2
-      class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight"
-    >
+    <h1 class="text-4xl text-[#8D72E1] font-semibold whitespace-nowrap">
       Estadisticas
-    </h2>
+    </h1>
     <div class="grid grid-cols-1 gap-10 xl:grid-cols-2">
       <div
-        class="shadow-2xl flex flex-col items-center p-10 border-2 border-gray-300 rounded-lg"
+        class="shadow-2xl flex flex-col items-center p-10 border-2 border-gray-700 rounded-lg bg-gray-900"
       >
-        <p class="font-normal text-gray-700 dark:text-gray-400">
+        <p class="font-normal text-gray-300 dark:text-gray-400">
           Cantidad de socios activos
         </p>
         <ChartPie
           :labels="['activos', 'inactivos']"
           :data="[data1.active, data1.inactive]"
-          :colors="['#232323', '#456756']"
+          :colors="['#8D72E1', '#FF0066']"
           v-if="!loading1"
         ></ChartPie>
         <Spinner v-if="loading1"></Spinner>
       </div>
 
       <div
-        class="shadow-2xl flex flex-col items-center p-10 border-2 border-gray-300 rounded-lg"
+        class="shadow-2xl flex flex-col items-center p-10 border-2 border-gray-700 rounded-lg bg-gray-900"
       >
-        <p class="font-normal text-gray-700 dark:text-gray-400">
+        <p class="font-normal text-gray-300 dark:text-gray-400">
           Cantidad de socios con la cuota al dia
         </p>
         <ChartPie
           :labels="['socios al dia', 'socios morosos']"
           :data="[data2.total - data2.morosos, data2.morosos]"
-          :colors="['#232323', '#456756']"
+          :colors="['#8D72E1', '#FF0066']"
           v-if="!loading2"
         ></ChartPie>
         <Spinner v-if="loading2"></Spinner>
       </div>
 
       <div
-        class="shadow-2xl flex flex-col items-center p-10 col-span-1 xl:col-span-2 w-full border-2 border-gray-300 rounded-lg"
+        class="shadow-2xl flex flex-col items-center p-10 col-span-1 xl:col-span-2 w-full border-2 border-gray-700 rounded-lg bg-gray-900"
       >
-        <p class="font-normal text-gray-700 dark:text-gray-400">
+        <p class="font-normal text-gray-300 dark:text-gray-400">
           Cantidad de socios inscriptos a cada disciplina
         </p>
         <ChartBar
           :labels="data3.labels"
           :data="data3.values"
-          :colors="['#232323', '#456756']"
+          :colors="['#8D72E1', '#FF0066']"
           class="w-full"
           v-if="!loading3"
         ></ChartBar>
