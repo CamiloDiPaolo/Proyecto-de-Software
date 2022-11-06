@@ -1,4 +1,4 @@
-import { UTL } from "../../config";
+import { URL } from "../../config";
 
 export default async function auth() {
   try {
