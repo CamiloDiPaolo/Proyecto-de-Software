@@ -1,4 +1,5 @@
 <script setup>
+import { UserCircleIcon } from "@heroicons/vue/20/solid/index.js";
 import { RouterLink } from "vue-router";
 import { ref } from "vue";
 
@@ -9,7 +10,7 @@ const showNavResponsive = ref(false);
 </script>
 
 <template>
-  <nav class="bg-gray-800 fixed left-0 w-screen">
+  <nav class="bg-gray-800 fixed left-0 w-screen z-50">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
       <div class="relative flex h-16 items-center justify-between">
         <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -71,11 +72,7 @@ const showNavResponsive = ref(false);
                 "
               >
                 <span class="sr-only">Open user menu</span>
-                <img
-                  class="h-8 w-8 rounded-full"
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
+                <UserCircleIcon class="h-10 text-gray-50"></UserCircleIcon>
               </button>
             </div>
             <div

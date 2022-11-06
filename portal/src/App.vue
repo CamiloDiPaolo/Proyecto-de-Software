@@ -13,6 +13,7 @@ login.value = location.href.includes("login");
     :menus="[
       { name: 'home', to: '/' },
       { name: 'about', to: '/about' },
+      { name: 'estadisticas', to: '/stats' },
     ]"
     :userOptions="[
       { name: 'Perfil', to: '/' },
@@ -23,7 +24,7 @@ login.value = location.href.includes("login");
   <main
     :class="`${
       login ? ' ' : 'pt-16'
-    } flex min-h-screen justify-center items-center`"
+    } flex min-h-screen justify-center items-center w-screen pb-12 mt-12`"
   >
     <RouterView />
   </main>
