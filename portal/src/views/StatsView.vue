@@ -3,6 +3,7 @@ import { ref } from "vue";
 import ChartPie from "../components/ChartPie.vue";
 import ChartBar from "../components/ChartBar.vue";
 import Spinner from "../components/Spinner.vue";
+import { URL } from "../config";
 
 // obtenemos los datos de las estadisticas
 const loading1 = ref(true);
@@ -16,10 +17,8 @@ const data3 = ref({});
 
 // cargamos los datos
 (async () => {
-  const url = "http://127.0.0.1:5000/api";
-
   // cargamos los usuarios activos e inactivos
-  const res = await fetch(`${url}/socios/actives`, {
+  const res = await fetch(`${URL}/socios/actives`, {
     credentials: "include",
     headers: {
       "Content-type": "application/json",
@@ -30,7 +29,7 @@ const data3 = ref({});
   loading1.value = false;
 
   // cargamos la cantidad de socios con la cuota al dia
-  const res2 = await fetch(`${url}/socios/morosos`, {
+  const res2 = await fetch(`${URL}/socios/morosos`, {
     credentials: "include",
     headers: {
       "Content-type": "application/json",
@@ -41,7 +40,7 @@ const data3 = ref({});
   loading2.value = false;
 
   // cargamos la cantidad de socios inscriptos a cada disciplina
-  const res3 = await fetch(`${url}/disciplines/cant`, {
+  const res3 = await fetch(`${URL}/disciplines/cant`, {
     credentials: "include",
     headers: {
       "Content-type": "application/json",
