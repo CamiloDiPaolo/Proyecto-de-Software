@@ -69,7 +69,7 @@ def update_user(id):
     
     
     return redirect("/admin/socios/0")
-    
+
 
 @perAsoc_blueprint.route("/delete/<int:id>", methods=["DELETE","GET"])
 def deleteSoc(id):

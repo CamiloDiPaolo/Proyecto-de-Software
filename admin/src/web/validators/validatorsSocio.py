@@ -11,6 +11,8 @@ def validate_data(data,operation ="create"):
         return "No ingreso estado"
     if not "direccion" in data and operation == "create":
         return "No ingresaste la direccion"
+    if not "pass" in data and operation == "create":
+        return "No ingreso la contraseña"
     
     if (operation != "UPDATE"):
         if ((data["tipo_documento"] != "DNI") &  (data["tipo_documento"] != "RUC") & (data["tipo_documento"] != "CARNET_EXT") & (data["tipo_documento"] != "PASAPORTE") & (data["tipo_documento"] != "P.NAC")):
@@ -28,7 +30,12 @@ def validate_data(data,operation ="create"):
             
             return "El tipo de documento no puede estar vacio"
         if not(data["nro_documento"].isnumeric()):
-            return "El numero de documento debe ser un Numero"  
+            return "El numero de documento debe ser un Numero" 
+        
+        if type(data["pass"]) != str:
+            return "La contraseña debe ser de tipo String"
+        if (data["pass"] == " "):
+            return "La contraseña ingresada esta vacia" 
     
     
     
@@ -50,6 +57,8 @@ def validate_data(data,operation ="create"):
     
     if type(data["nombre"]) != str:
         return "El nombre debe ser de tipo string"
+    
+
       
     
     if not(valid_direction(data["direccion"])):

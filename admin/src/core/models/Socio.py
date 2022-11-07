@@ -5,6 +5,7 @@ from sqlalchemy import Boolean
 from sqlalchemy import String
 from sqlalchemy import Integer
 from sqlalchemy import Date
+import hashlib
 
 class Socio(Base):
     __tablename__ = "socio"
@@ -12,6 +13,7 @@ class Socio(Base):
     email = Column(String, nullable=False) #Column(String, primary_key=True)
     nombre = Column(String,nullable=False)
     apellido = Column(String, nullable=False)
+    password = Column(String, nullable=False)
     tipo_documento = Column(String, nullable=False)
     nro_documento = Column(String, nullable=False)
     genero = Column(String, nullable=False)
@@ -34,10 +36,16 @@ class Socio(Base):
         self.estado = data["estado"]
         self.telefono = data["telefono"]
         self.fecha_alta = data["fecha_alta"]
+        
+        #Hasheo la contraseña para guardar en la BD
+        hasher = hashlib.sha256()
+        hasher.update(data["pass"].encode('utf-8'))
+        self.password = hasher.hexdigest()
+
 
 
     def __repr__(self):
-        return f"id={self.id!r}, email={self.email!r}, nombre={self.nombre!r}, apellido={self.apellido!r}, tipo_documento={self.tipo_documento!r},nro_documento={self.nro_documento!r},genero={self.genero!r},nro_socio={self.nro_socio!r},direccion={self.direccion!r},estado={self.estado!r},telefono={self.telefono!r},fecha_alta={self.fecha_alta!r},)"
+        return f"id={self.id!r}, email={self.email!r}, nombre={self.nombre!r}, apellido={self.apellido!r}, pass={self.password!r}, tipo_documento={self.tipo_documento!r},nro_documento={self.nro_documento!r},genero={self.genero!r},nro_socio={self.nro_socio!r},direccion={self.direccion!r},estado={self.estado!r},telefono={self.telefono!r},fecha_alta={self.fecha_alta!r},)"
 
     def json(self):
         return {
@@ -45,6 +53,7 @@ class Socio(Base):
             "email": self.email,
             "nombre": self.nombre,
             "apellido": self.apellido,
+            "password": self.password,
             "tipo_documento": self.tipo_documento,
             "nro_documento": self.nro_documento,
             "genero": self.genero,
@@ -70,4 +79,7 @@ class Socio(Base):
             self.direccion = data["direccion"]
         if "telefono" in data:
             self.telefono = data["telefono"]
-
+            
+    def update_pass(self, password):
+        if (password):
+            self.password=password
