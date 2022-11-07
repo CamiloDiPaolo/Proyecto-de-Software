@@ -1,1 +1,2 @@
-nro_socio,email,nombre,apellido,tipo_documento,nro_documento
+"id=82, email='facuodone1@gmail.com', nombre='Facundo Nahuel  ', apellido='Odone  ', tipo_documento='DNI',nro_documento='13311',genero='Femenino',nro_socio=390321,direccion=' ',estado=True,telefono='',fecha_alta=datetime.date(2022, 10, 26),)"
+"id=83, email='facuodone1@gmail.com', nombre='Facundo Nahuel', apellido='Odone', tipo_documento='DNI',nro_documento='131231',genero='Masculino',nro_socio=509600,direccion='462 1742',estado=True,telefono='',fecha_alta=datetime.date(2022, 11, 4),)"

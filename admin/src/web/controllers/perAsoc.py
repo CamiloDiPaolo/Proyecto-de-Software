@@ -140,27 +140,15 @@ def buscador(page,tipo,value):
 @perAsoc_blueprint.route("/descargarPDF/<tipo>/<value>", methods=["GET"])
 def descargarPDF(tipo,value):
     result=descargas(tipo, value)
-    print(result)
-
     return createPDF_perAsoc(tipo,value,result)
+
     
     
     
 @perAsoc_blueprint.route("/descargarCSV/<tipo>/<value>")
 def descargarCSV(tipo,value):
-    result=descargas(tipo, value) 
-    with open('listado.csv', 'w', newline='')as csvfile:
-        fieldnames=['nro_socio','email','nombre','apellido','tipo_documento','nro_documento']
-        thewriter = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        thewriter.writeheader()
-        
-        for socio in result:
-            thewriter.writerow({'nro_socio':socio['nro_socio'],'email':socio['email'],'nombre':socio['nombre'],'apellzido':socio['apellido'],'tipo_documento':socio['tipo_documento'],'nro_documento':socio['nro_documento']})
-            
-    response = make_response(csvfile)
-    response.headers.set("Content-Disposition","attachment",filename="listado.csv")
-    response.headers.set('Content-Type', 'application/csv')
-    return response
+    result=descargasCSV(tipo, value)
+    return createCSV(result)
 
 
     
@@ -238,3 +226,34 @@ def descargas(tipo,value):
         retorno.append(index)
     
     return retorno
+
+
+def descargasCSV(tipo,value):
+    socios_dict={"estado":tipo, "apellido":value}
+    result=[] 
+    if (socios_dict["apellido"] != 'vacio'):
+        if (socios_dict["estado"]=='nada'):
+            result = db_session.query(Socio).filter(Socio.apellido.ilike("%" + value + "%")).all()
+            
+        elif (socios_dict["estado"]=='activo'):
+            socios_dict["estado"]=True
+            result=db_session.query(Socio).filter(Socio.apellido.ilike("%" + value + "%")).filter_by(estado=True).all()
+            
+        elif (socios_dict["estado"]=='inactivo'):
+            socios_dict["estado"]=False
+            result=db_session.query(Socio).filter(Socio.apellido.ilike("%" + value + "%")).filter_by(estado=False).all()
+   
+    elif (socios_dict["estado"] != 'nada'):
+        
+        if (socios_dict["estado"]=='activo'):
+            result=db_session.query(Socio).filter_by(estado=True).all()
+            
+        elif (socios_dict["estado"]=='inactivo'):
+            result=db_session.query(Socio).filter_by(estado=False).all()
+       
+            
+    elif ((socios_dict["apellido"]=='vacio') & (socios_dict["estado"]=='nada')):
+        result=db_session.query(Socio).all()
+        
+    
+    return result

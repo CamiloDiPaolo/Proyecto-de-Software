@@ -75,29 +75,15 @@ def createPDF_perAsoc(tipo,value,result):
     pdf.cell(w=40,h=15, txt='Estado', border = 1, align='C', ln=1, fill=1)
     
     pdf.set_fill_color(r=232 , g=232 , b=232)
-    
-    result=list(result)
-    print(type(result))
-    if (type(result) == 'list'):
-        for socio in result:
-            pdf.cell(w=50,h=15, txt=str(socio.nro_socio), border = 1, align='C', fill=1)
-            pdf.cell(w=50,h=15, txt=socio.nombre, border = 1, align='C', fill=1)
-            pdf.cell(w=50,h=15, txt=socio.apellido, border = 1, align='C', fill=1)
-            if (socio.estado == True):
-                pdf.cell(w=40,h=15, txt='Activo', border = 1, align='C', ln=1, fill=1)
-            else:
-                pdf.cell(w=40,h=15, txt='Inactivo', border = 1, align='C', ln=1, fill=1)
-            
-            
-    else:
-        for socio in result:
-            pdf.cell(w=50,h=15, txt=str(socio['nro_socio']), border = 1, align='C', fill=1)
-            pdf.cell(w=50,h=15, txt=socio['nombre'], border = 1, align='C', fill=1)
-            pdf.cell(w=50,h=15, txt=socio['apellido'], border = 1, align='C', fill=1)
-            if (socio['estado'] == True):
-                pdf.cell(w=40,h=15, txt='Activo', border = 1, align='C', ln=1, fill=1)
-            else:
-                pdf.cell(w=40,h=15, txt='Inactivo', border = 1, align='C', ln=1, fill=1)
+    for socio in result:
+        pdf.cell(w=50,h=15, txt=str(socio.nro_socio), border = 1, align='C', fill=1)
+        pdf.cell(w=50,h=15, txt=socio.nombre, border = 1, align='C', fill=1)
+        pdf.cell(w=50,h=15, txt=socio.apellido, border = 1, align='C', fill=1)
+        if (socio.estado == True):
+            pdf.cell(w=40,h=15, txt='Activo', border = 1, align='C', ln=1, fill=1)
+        else:
+            pdf.cell(w=40,h=15, txt='Inactivo', border = 1, align='C', ln=1, fill=1)
+
      
     response = make_response(pdf.output(dest="S").encode('latin-1'))
     response.headers.set("Content-Disposition","attachment",filename="tabla_de_socios.pdf")
