@@ -1,25 +1,24 @@
 <script setup>
 import { ref } from "vue";
 import CardDiscipline from "../components/CardDiscipline.vue";
+import { URL } from "../config";
 
-const disciplines = ref([
-  {
-    name: "Fulvo",
-    description: "el fulvo es un deporte",
-  },
-  {
-    name: "Polo",
-    description: "en el polo hay caballos",
-  },
-  {
-    name: "Waterpolo",
-    description: "en el waterpolo no hay caballos",
-  },
-  {
-    name: "Golf",
-    description: "en el golf tampoco hay caballos",
-  },
-]);
+const disciplines = ref({});
+
+(async () => {
+  const res = await fetch(`${URL}/club/disciplines`, {
+    credentials: "include",
+    headers: {
+      "Content-type": "application/json",
+    }
+  });
+
+  const json = await res.json();
+  disciplines.value = json;
+  console.log(disciplines.value)
+})();
+
+
 </script>
 
 <template>
@@ -30,7 +29,7 @@ const disciplines = ref([
       class="absolute top-[72px] left-[100px] w-[600px]"
     />
     <div class="absolute right-[200px] top-1/3 flex flex-col items-center">
-      <h1 class="text-6xl text-white font-semibold whitespace-nowrap">
+      <h1 class="text-6xl text-white font-semibold whitespace-nowrap bordeCss">
         Club Atletico Villa Elvira
       </h1>
       <span class="text-xl text-gray-500 font-semibold w-[600px] text-center">
@@ -63,10 +62,23 @@ const disciplines = ref([
       <div class="grid grid-cols-4 gap-10 mt-10">
         <CardDiscipline
           v-for="discipline of disciplines"
-          :name="discipline.name"
-          :description="discipline.description"
+          :name="discipline.nombre"
+          :categoria="discipline.categoria.nombre"
         ></CardDiscipline>
       </div>
     </article>
   </section>
 </template>
+
+<style>
+.bordeCss{
+  color: white;
+  text-shadow:
+   3px -1px 0 #000,  
+    2px -1px 0 #000,
+    -1px 1px 0 #000,
+     4px 1px 0 #000;
+}
+
+
+</style>

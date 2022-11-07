@@ -56,10 +56,16 @@ def profile():
 
 ## Endpoints de DISCIPLINAS    
 
+@api_blueprint.route("/club/disciplines", methods=[ "OPTIONS"])
+def all_disc_2():
+    return cors(make_response())
+
 @api_blueprint.route("/club/disciplines", methods=["GET"])
 def all_disc():
     disciplines = db_session.query(Disciplina).all()
-    return jsonify(get_all_docs_json(Disciplina))
+    res = jsonify(get_all_docs_json(Disciplina))
+    return cors(res)
+
 
 @api_blueprint.route("/me/disciplines", methods=["GET"])
 def my_disciplines():    
@@ -78,14 +84,13 @@ def disciplines_cant_2():
 
 @api_blueprint.route("/disciplines/cant", methods=["GET"])
 def disciplines_cant():
-    token = request.cookies.get('jwt')
-    error = error_logged(token)
-    if(error):
-        res = jsonify({"status": 401, "message": error})
-        return cors(res)
-
-    # por ahora se hardcodea
-    res = jsonify([{"name": "fulvo", "cant": 20}, {"name": "waterpolo", "cant": 10}, {"name": "polo", "cant": 50}])
+    disciplines = db_session.query(Disciplina).all()
+    cantidades = []
+    for discipline in disciplines:
+            cantidad = db_session.query(SocioSuscriptoDisciplina).filter_by(id_disciplina = discipline.id).count()
+            count = {"name": discipline.nombre, "cant": cantidad}
+            cantidades.append(count)
+    res = jsonify(cantidades)
     return cors(res)
 
 ## Endpoints de PAGOS
@@ -143,6 +148,8 @@ def socios_activos():
     res = jsonify({"active": 10, "inactive": 20})
     return cors(res)
 
+    
+
 # Funciones Auxiliares
 
 def get_user_disciplines(id):
@@ -187,7 +194,7 @@ def error_logged(token):
 
 
 def cors(res):
-    # res.headers.add("Access-Control-Allow-Origin", "http://localhost:5173)
+    #res.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
     # res.headers.add("Access-Control-Allow-Origin", "https://grupo21.proyecto2022.linti.unlp.edu.ar")
     res.headers.add("Access-Control-Allow-Headers", "X-Requested-With,content-type")
     res.headers.add("Access-Control-Allow-Methods", "*")

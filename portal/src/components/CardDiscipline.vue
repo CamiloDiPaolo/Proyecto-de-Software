@@ -1,6 +1,6 @@
 <script setup>
 import { We } from "@heroicons/vue/20/solid/index.js";
-const props = defineProps(["name", "description"]);
+const props = defineProps(["name", "categoria"]);
 
 console.log(props);
 </script>
@@ -17,7 +17,7 @@ console.log(props);
       </h5>
     </a>
     <p class="mb-3 font-normal text-gray-500 dark:text-gray-400">
-      {{ props.description }}
+      {{ props.categoria }}
     </p>
     <a
       href="#"
