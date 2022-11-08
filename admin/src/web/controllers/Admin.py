@@ -11,7 +11,7 @@ from src.core.models.Configuracion import Configuracion
 from src.core.models.Socio import Socio
 from src.web.controllers.Auth import allowed_request
 from src.web.controllers.Usuario import get_all_user_paginated_filter_json
-from src.web.controllers.perAsoc import get_all_partners_paginated_filter_json
+from src.web.controllers.PerAsoc import get_all_partners_paginated_filter_json
 from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, update_doc_json, get_all_docs_paginated_json, exists_entity, delete_doc_json
 # TODO: pulir las response, agregar codigos HTTP descriptivos
 admin_blueprint = Blueprint("admin", __name__, url_prefix="/admin")

@@ -5,7 +5,7 @@ from src.web.controllers.Usuario import users_blueprint
 from src.web.controllers.Auth import auth_blueprint, allowed_request
 from src.web.controllers.Admin import admin_blueprint
 
-from src.web.controllers.perAsoc import perAsoc_blueprint
+from src.web.controllers.PerAsoc import perAsoc_blueprint
 from src.web.controllers.pagos_socio import pagos_socios_blueprint
 from src.web.config import config
 from src.core import db
