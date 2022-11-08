@@ -6,10 +6,6 @@ from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, cre
 
 categories_blueprint = Blueprint("categories", __name__, url_prefix="/categories")
 
-#@disciplines_blueprint.before_request
-#def protect():
-#    if(not allowed_request(request, ["admin"])):
-#        return "no tenes los permisos necesarios para acceder a este request"
 
 @categories_blueprint.route("/", methods=["GET"])
 def all_categories():
@@ -36,9 +32,6 @@ def delete_categorie(id):
     return jsonify(delete_doc_json(Categoria, id))
 
 
-#@disciplines.route("/update/Status<int:id>", methods=["PUT"])
-#def update_discipline_status(id):
-#    return jsonify(update_discipline_status(id, request.json))
 
 def create_categories_json(data):
     cat = create_doc_json(Categoria, data);

@@ -78,11 +78,9 @@ def update_user(id):
 
 @users_blueprint.route("/active/<id>", methods=["POST"])
 def active_user(id):
-    # data = request.json
 
     user = get_doc_json(Usuario, id)
     update_user_json(id, {"activo": not user["activo"]})
-    # return jsonify(update_user_json(id, data))
     return redirect("/admin/users/0")
 
 def create_user_json(data):
@@ -112,7 +110,6 @@ def update_user_json(user_id, data):
 def check_exist_user(username, email, id = False):
     result = db_session.query(Usuario).filter_by(username = username).all()
     for row in result:
-        print(id, row.json()["id"])
         if (id and str(row.json()["id"]) == id):
             break
         return "ya existe un usuario con ese username"
@@ -148,7 +145,5 @@ def get_all_user_paginated_filter_json(page, value, tipo):
     for row in result:
         json.append(row.json())
     
-    # result = db_session.query(Usuario).all();
-    # all_pages = math.ceil(len(json) / rows_per_page)
-    # print(len(json), rows_per_page, all_pages)
+
     return {"docs": json, "total_pages": all_pages}

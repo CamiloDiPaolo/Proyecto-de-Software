@@ -1,7 +1,7 @@
 from flask import Blueprint,render_template,redirect, request,jsonify, flash
 from src.core.db import db_session
 from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, create_doc_json, delete_doc_json
-from src.core.models.pago import pago
+from src.core.models.Pago import pago
 from src.core.models.Socio import Socio
 from src.core.models.Configuracion import Configuracion
 from src.core.models.Disciplina import Disciplina

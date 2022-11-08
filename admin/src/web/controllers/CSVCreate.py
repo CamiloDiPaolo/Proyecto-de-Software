@@ -1,12 +1,13 @@
-import csv
-from flask import make_response
+import pandas as pd
+import json
+from flask import make_response,jsonify, request
 
 def createCSV(result):
-    with open('socios.csv','w',newline='',encoding='utf-8') as file:
-        writer= csv.writer(file,delimiter="")
-        writer.writerows(result)
 
-        response = make_response(file.close())
-        response.headers.set("Content-Disposition","attachment",filename="socios.csv")
-        response.headers.set('Content-Type', 'text/csv')
-        return response
+
+    df= pd.DataFrame(result) #columns=('nro_socio','email','nombre','apellido','tipo_documento','nro_documento'))
+    df.to_csv('listado.csv', index=False, header=False, encoding='utf-8')
+    #response = make_response(df)
+    #response.headers.set('Content Type', 'text/csv')
+    #response.headers.set("Content-Disposition","attachment",filename="listado.csv")
+    return ('<h1> descargado </h1>')

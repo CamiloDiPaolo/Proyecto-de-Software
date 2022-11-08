@@ -75,8 +75,7 @@ def createPDF_perAsoc(tipo,value,result):
     pdf.cell(w=40,h=15, txt='Estado', border = 1, align='C', ln=1, fill=1)
     
     pdf.set_fill_color(r=232 , g=232 , b=232)
-    
-    print(type(result))
+
     for socio in result:
         pdf.cell(w=50,h=15, txt=str(socio.nro_socio), border = 1, align='C', fill=1)
         pdf.cell(w=50,h=15, txt=socio.nombre, border = 1, align='C', fill=1)
