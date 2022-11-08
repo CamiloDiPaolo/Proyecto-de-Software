@@ -37,7 +37,7 @@ class Usuario(Base):
         hasher.update(data["contraseña"].encode('utf-8'))
         self.contraseña = hasher.hexdigest()
 
-        # self.contraseña = data["contraseña"]
+
         if "activo" in data:
             self.activo = data["activo"]
         else:
@@ -48,8 +48,6 @@ class Usuario(Base):
     def __repr__(self):
         return f"Usuario(email={self.email!r}, username={self.username!r}, contraseña={self.contraseña!r}, activo={self.activo!r}, ultima_actualizacion={self.ultima_actualizacion!r}, creacion={self.creacion!r}, nombre={self.nombre!r}, apellido={self.apellido!r})"
 
-    # def __str__(self):
-    #     return f"Hola, mi nombre es ${self.username}"
 
     def json(self):
         return {

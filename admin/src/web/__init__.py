@@ -34,11 +34,6 @@ def create_app(env="development", static_folder="static"):
     def not_found(e):
         return render_template('404.html')
     
-    # @app.route("/admin", methods=["GET"])
-    # def admin():
-    #     if(not allowed_request(request, ["admin"])):
-    #         return redirect("/auth/login")
-    #     return render_template('admin_usuarios.html')
     app.register_blueprint(admin_blueprint)
     app.register_blueprint(users_blueprint)
     app.register_blueprint(auth_blueprint)

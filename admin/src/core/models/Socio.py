@@ -10,7 +10,7 @@ import hashlib
 class Socio(Base):
     __tablename__ = "socio"
     id = Column(Integer, primary_key=True)
-    email = Column(String, nullable=False) #Column(String, primary_key=True)
+    email = Column(String, nullable=False) 
     nombre = Column(String,nullable=False)
     apellido = Column(String, nullable=False)
     password = Column(String, nullable=False)
@@ -24,7 +24,6 @@ class Socio(Base):
     fecha_alta = Column(Date, nullable=False)
 
     def __init__(self,data):
-        #self.id = data["id"]
         self.email = data["email"]
         self.nombre = data["nombre"]
         self.apellido = data["apellido"]
@@ -80,6 +79,3 @@ class Socio(Base):
         if "telefono" in data:
             self.telefono = data["telefono"]
             
-    def update_pass(self, password):
-        if (password):
-            self.password=password

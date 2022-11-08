@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request, make_response, session
 from src.core.db import db_session
 from src.core.models.Usuario import Usuario
 from src.core.models.Disciplina import Disciplina
-from src.core.models.pago import pago
+from src.core.models.Pago import pago
 from src.core.models.relations.SocioSuscriptoDisciplina import SocioSuscriptoDisciplina
 from src.web.config import config
 from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, update_doc_json, get_all_docs_paginated_json
@@ -26,7 +26,6 @@ def token():
     
     user_id = db_session.query(Usuario.id).filter_by(username=request.json['username'], contraseña=request.json['password']).all()
 
-    # return jsonify({"token": sign_jwt(user_id[0][0])})
     res = make_response("logeado")
     res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/"
 

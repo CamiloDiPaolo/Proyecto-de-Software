@@ -42,7 +42,7 @@ def socioCreado():
     if result['email']== '': 'null'
     if result['telefono']=='': 'null' 
     
-    if result['estado']=='Activo': #in result.keys():
+    if result['estado']=='Activo': 
         result['estado'] = True
     else:
         result['estado'] = False
@@ -58,7 +58,7 @@ def update_user(id):
     if (error):
         return render_template('edit_perAsoc.html', error=error, user=get_doc_json(Socio, id))
     
-    if disc['estado']=='Activo': #in result.keys():
+    if disc['estado']=='Activo': 
         disc['estado'] = True
     else:
         disc['estado'] = False
@@ -100,7 +100,6 @@ def get_all_partners_paginated_filter_json(page, value, tipo):
         len_result = db_session.query(Socio).filter(Socio.nro_socio == value).all()
         all_pages = math.ceil(len(len_result) / rows_per_page)
         # TODO: Implementar el ILIKE pero con numeros
-        # result = db_session.query(Socio).filter(Socio.nro_socio.ilike("%" + value + "%")).limit(rows_per_page).offset(int(page)*rows_per_page)
     for row in result:
         json.append(row.json())
     return {"docs": json, "total_pages": all_pages}
@@ -111,7 +110,6 @@ def buscador(page,tipo,value):
     socios_dict={"estado":tipo, "apellido":value}
     result=[] 
     if (socios_dict["apellido"] != 'vacio'):
-        #if (socios_dict["estado"] == 'Activo'):
         if (socios_dict["estado"]=='nada'):
             result=get_all_partners_paginated_filter_json(page, socios_dict["apellido"], "apellido")
         

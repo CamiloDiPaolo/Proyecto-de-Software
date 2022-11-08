@@ -5,7 +5,7 @@ from src.core.models.Usuario import Usuario
 from src.core.models.Rol import Rol
 from src.core.models.Categoria import Categoria
 from src.core.models.Disciplina import Disciplina
-from src.core.models.pago import pago
+from src.core.models.Pago import pago
 from src.core.models.relations.SocioSuscriptoDisciplina import SocioSuscriptoDisciplina
 from src.core.models.Configuracion import Configuracion
 from src.core.models.Socio import Socio
@@ -13,28 +13,21 @@ from src.web.controllers.Auth import allowed_request
 from src.web.controllers.Usuario import get_all_user_paginated_filter_json
 from src.web.controllers.perAsoc import get_all_partners_paginated_filter_json
 from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, update_doc_json, get_all_docs_paginated_json, exists_entity, delete_doc_json
-
 # TODO: pulir las response, agregar codigos HTTP descriptivos
 admin_blueprint = Blueprint("admin", __name__, url_prefix="/admin")
-
 @admin_blueprint.before_request
 def protect():
     if(not allowed_request(request, ["admin","operador"])):
         return redirect("/auth/login")
-
 @admin_blueprint.route("/", methods=["GET"])
 def admin():
     return render_template('admin.html')
-
-
 @admin_blueprint.route("/me", methods=["GET"])
 def admin_me():
     user_id = session.get('user_id')
     user = db_session.query(Usuario).filter_by(id=user_id).all()
     return render_template('admin_me.html', user=user[0].json())
-
 # pestaña de usuarios
-
 @admin_blueprint.route("/users/<page>", methods=["GET"])
 def users(page):
     users = get_all_docs_paginated_json(Usuario, page);
@@ -52,10 +45,8 @@ def users_search_get(tipo, value, page):
         users = get_all_user_paginated_filter_json( page, True, "activo")
     else:
         users = get_all_user_paginated_filter_json( page, False, "activo")
-
     users["docs"].sort(key = lambda u: u["username"])
     return render_template('admin_usuarios.html', users=users["docs"], max_page = users["total_pages"], search = True, tipo = tipo, value = value)
-
 @admin_blueprint.route("/users/new", methods=["GET"])
 def new_user():
     if(not allowed_request(request, ["admin"])):
@@ -63,7 +54,6 @@ def new_user():
         flash(errorMsg)
         return redirect("/admin/")
     return render_template('admin_usuarios_new.html', roles=get_all_docs_json(Rol))
-
 @admin_blueprint.route("/users/edit/<int:id>", methods=["GET"])
 def edit_user(id):
     if(not allowed_request(request, ["admin"])):
@@ -188,7 +178,6 @@ def buscador(page,tipo,value):
     socios_dict={"estado":tipo, "apellido":value}
     result=[] 
     if (socios_dict["apellido"] != 'vacio'):
-        #if (socios_dict["estado"] == 'Activo'):
         if (socios_dict["estado"]=='nada'):
             result=get_all_partners_paginated_filter_json(page, socios_dict["apellido"], "apellido")
         
