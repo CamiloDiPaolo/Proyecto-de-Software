@@ -15,10 +15,10 @@
     <thead class="admin__table__head discipline">
       <th>Nombre</th>
       <th>Categoria</th>
-      <th>Instructores</th>
+      <th class="hidden">Instructores</th>
       <th>Horarios</th>
       <th>Costo</th>
-      <th>Habilitada</th>
+      <th class="hidden">Habilitada</th>
       <td>Acciones</td>
     </thead>
     <tbody class="admin__table__body discipline">
@@ -26,10 +26,10 @@
       <tr>
         <td>{{discipline.nombre}}</td>
         <td>{{discipline.categoria.nombre}}</td>
-        <td>{{discipline.instructores}}</td>
+        <td class="hidden">{{discipline.instructores}}</td>
         <td>{{discipline.horarios}}</td>
         <td>{{discipline.costo}}</td>
-        <td>
+        <td class="hidden">
           {% if discipline.habilitada == true%} Si {% else %} No {% endif %}
         </td>
         <td>

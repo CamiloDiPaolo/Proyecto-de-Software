@@ -47,8 +47,8 @@
     <thead class="admin__table__head">
       <th>email</th>
       <th>username</th>
-      <th>nombre</th>
-      <th>apellido</th>
+      <th class="hidden">nombre</th>
+      <th class="hidden">apellido</th>
       <th>roles</th>
       <th>Acciones</th>
     </thead>
@@ -57,8 +57,8 @@
       <tr>
         <td>{{user.email}}</td>
         <td>{{user.username}}</td>
-        <td>{{user.nombre}}</td>
-        <td>{{user.apellido}}</td>
+        <td class="hidden">{{user.nombre}}</td>
+        <td class="hidden">{{user.apellido}}</td>
         <td>{% for rol in user.roles %}{{rol.nombre}} {% endfor %}</td>
         <td>
           <div class="admin__table__actions">
