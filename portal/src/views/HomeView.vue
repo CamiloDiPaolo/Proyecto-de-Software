@@ -64,6 +64,7 @@ const disciplines = ref({});
           v-for="discipline of disciplines"
           :name="discipline.nombre"
           :categoria="discipline.categoria.nombre"
+          :id="discipline.id"
         ></CardDiscipline>
       </div>
     </article>

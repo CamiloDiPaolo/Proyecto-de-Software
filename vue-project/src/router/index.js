@@ -34,6 +34,6 @@ router.beforeEach(async (to, from, next) => {
   const res = await auth();
   if (res.status == 401) return next({ name: "login" });
   next();
-});
+}); 
 
 export default router;

@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
 import StatsView from "../views/StatsView.vue";
+import DisciplineView from "../views/DisciplineView.vue";
+
 import auth from "./middleware/auth";
 
 const router = createRouter({
@@ -29,6 +31,11 @@ const router = createRouter({
       path: "/stats",
       name: "estadisticas",
       component: StatsView,
+    },
+    {
+      path: "/discipline/:id",
+      name: "disciplina",
+      component: DisciplineView,
     },
   ],
 });

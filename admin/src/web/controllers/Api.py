@@ -66,6 +66,26 @@ def all_disc():
     res = jsonify(get_all_docs_json(Disciplina))
     return cors(res)
 
+@api_blueprint.route("club/info", methods=["GET"])
+def get_club_info():
+    res = {
+        "email": "clubdeportivovillaelisa@gmail.com",
+        "phone": "0221 487-0193"
+    }
+    res = jsonify(res)
+    return cors(res)
+
+
+@api_blueprint.route("/discipline/<id>", methods=[ "OPTIONS"])
+def  get_disc2(id):
+    return cors(make_response())
+
+@api_blueprint.route("/discipline/<id>", methods=["GET"])
+def get_disc(id):
+    res = jsonify(get_doc_json(Disciplina,id))
+    return cors(res)
+
+
 
 @api_blueprint.route("/me/disciplines", methods=["GET"])
 def my_disciplines():    
@@ -194,7 +214,7 @@ def error_logged(token):
 
 
 def cors(res):
-    #res.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
+    # res.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
     # res.headers.add("Access-Control-Allow-Origin", "https://grupo21.proyecto2022.linti.unlp.edu.ar")
     res.headers.add("Access-Control-Allow-Headers", "X-Requested-With,content-type")
     res.headers.add("Access-Control-Allow-Methods", "*")
