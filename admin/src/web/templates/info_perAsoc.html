@@ -1,0 +1,53 @@
+{% extends 'admin.html' %}
+
+{% block title %} Perfil de socio {% endblock %}
+
+{% block content %}
+
+<div class="admin__panel me">
+    <div class="admin__panel__header me">
+      <h2>Datos Del Socio</h2>
+      <div>
+        <p>Nombre: <span>{{user.nombre}}</span></p>
+        <p>Apellido: <span>{{user.apellido}}</span></p>
+        {% if user.email %}
+        <p>Email: <span> {{user.email}} </span></p>
+        {% else %}
+        <p>Email: <span> Sin Especificar </span></p>
+        {% endif %}
+        <p>Tipo de documento: <span>{{user.tipo_documento}}</span></p>
+        <p>Numero de documento: <span>{{user.nro_documento}}</span></p>
+        <p>Genero: <span>{{user.genero}}</span></p>
+        <p>Direccion: <span>{{user.direccion}}</span></p>
+        {% if user.estado == True %}
+        <p>Estado: <span>Activo</span></p>
+        {% else %} 
+        <p>Estado: <span>Inactivo</span></p>
+        {% endif %}
+        {% if user.telefono %}
+        <p>Telefono: <span> {{user.telefono}} </span></p>
+        {% else %}
+        <p>Telefono: <span> Sin Especificar </span></p>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+  <style>
+    .me {
+      display: flex;
+      flex-direction: column;
+      background-color: var(--gris-oscuro-3);
+      width: auto !important;
+      padding: 20px;
+    }
+  
+    .me div p {
+      color: var(--acento-1);
+    }
+    .me div span {
+      color: var(--acento-2-suave);
+    }
+  </style>
+
+{% endblock %}

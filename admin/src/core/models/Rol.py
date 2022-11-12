@@ -1,10 +1,6 @@
+from sqlalchemy import Boolean, Column, Date, Integer, String
 from src.core.db import Base
 
-from sqlalchemy import Column
-from sqlalchemy import Integer
-from sqlalchemy import String
-from sqlalchemy import Boolean
-from sqlalchemy import Date
 
 class Rol(Base):
     __tablename__ = "rol"

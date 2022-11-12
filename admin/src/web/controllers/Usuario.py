@@ -1,14 +1,18 @@
-from flask import Blueprint, render_template, request,jsonify, redirect, flash
-from src.core.db import db_session
-from src.core.models.Usuario import Usuario
-from src.core.models.Rol import Rol
-from src.core.models.relations.UsuarioTieneRol import UsuarioTieneRol
-from src.web.controllers.Auth import allowed_request
-from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, create_doc_json, delete_doc_json, get_all_docs_paginated_json
-from src.core.models.Configuracion import Configuracion
-from src.web.validators.ValidatorsUsuario import validate_data
-import math
 import ast
+import math
+
+from flask import Blueprint, flash, jsonify, redirect, render_template, request
+from src.core.db import db_session
+from src.core.models.Configuracion import Configuracion
+from src.core.models.relations.UsuarioTieneRol import UsuarioTieneRol
+from src.core.models.Rol import Rol
+from src.core.models.Usuario import Usuario
+from src.web.controllers.Auth import allowed_request
+from src.web.controllers.FactoryCrud import (create_doc_json, delete_doc_json,
+                                             get_all_docs_json,
+                                             get_all_docs_paginated_json,
+                                             get_doc_json)
+from src.web.validators.ValidatorsUsuario import validate_data
 
 # TODO: pulir las response, agregar codigos HTTP descriptivos
 users_blueprint = Blueprint("users", __name__, url_prefix="/users")

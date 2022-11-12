@@ -1,8 +1,10 @@
-from flask import Blueprint, jsonify, request, make_response, session
+import math
+
+from flask import Blueprint, jsonify, make_response, request, session
 from src.core.db import db_session
 from src.core.models.Configuracion import Configuracion
 from src.core.models.Rol import Rol
-import math
+
 
 def get_doc_json(Model, doc_id):
     result = db_session.query(Model).filter_by(id = doc_id).all()

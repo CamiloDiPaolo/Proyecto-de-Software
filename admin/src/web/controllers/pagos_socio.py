@@ -1,21 +1,20 @@
-from flask import Blueprint,render_template,redirect, request,jsonify, flash
-from src.core.db import db_session
-from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, create_doc_json, delete_doc_json
-from src.core.models.Pago import pago
-from src.core.models.Socio import Socio
-from src.core.models.Configuracion import Configuracion
-from src.core.models.Disciplina import Disciplina
-from src.core.models.relations.SocioSuscriptoDisciplina import SocioSuscriptoDisciplina
-from src.web.controllers.Auth import allowed_request
-
-from src.web.validators.validatorsPagos import validate_data
-
-from src.web.controllers.PDFCreate import createPDF_payment
-
-from sqlalchemy.dialects.postgresql import Any
-
 import datetime
 import math
+
+from flask import Blueprint, flash, jsonify, redirect, render_template, request
+from sqlalchemy.dialects.postgresql import Any
+from src.core.db import db_session
+from src.core.models.Configuracion import Configuracion
+from src.core.models.Disciplina import Disciplina
+from src.core.models.Pago import pago
+from src.core.models.relations.SocioSuscriptoDisciplina import \
+    SocioSuscriptoDisciplina
+from src.core.models.Socio import Socio
+from src.web.controllers.Auth import allowed_request
+from src.web.controllers.FactoryCrud import (create_doc_json, delete_doc_json,
+                                             get_all_docs_json, get_doc_json)
+from src.web.controllers.PDFCreate import createPDF_payment
+from src.web.validators.validatorsPagos import validate_data
 
 pagos_socios_blueprint = Blueprint("socios",__name__, url_prefix="/admin/pagos/socio")
 

@@ -1,12 +1,16 @@
-from flask import Blueprint, render_template, request,jsonify, redirect, flash
+from flask import Blueprint, flash, jsonify, redirect, render_template, request
 from src.core.db import db_session
-from src.core.models.Disciplina import Disciplina
 from src.core.models.Categoria import Categoria
+from src.core.models.Disciplina import Disciplina
+from src.core.models.relations.SocioSuscriptoDisciplina import \
+    SocioSuscriptoDisciplina
 from src.core.models.Socio import Socio
-from src.core.models.relations.SocioSuscriptoDisciplina import SocioSuscriptoDisciplina
-from src.web.validators.validatorsDisciplinas import validate_data
 from src.web.controllers.Auth import allowed_request
-from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, create_doc_json, delete_doc_json, exists_entity,get_all_docs_paginated_json
+from src.web.controllers.FactoryCrud import (create_doc_json, delete_doc_json,
+                                             exists_entity, get_all_docs_json,
+                                             get_all_docs_paginated_json,
+                                             get_doc_json)
+from src.web.validators.validatorsDisciplinas import validate_data
 
 disciplines_blueprint = Blueprint("disciplines", __name__, url_prefix="/disciplines")
 

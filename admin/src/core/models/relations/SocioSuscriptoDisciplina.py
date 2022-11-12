@@ -1,9 +1,5 @@
-from src.core.db import Base
+from sqlalchemy import Column, ForeignKey, Integer
 from src.core.db import Base, db_session
-
-from sqlalchemy import Integer
-from sqlalchemy import Column
-from sqlalchemy import ForeignKey
 
 
 class SocioSuscriptoDisciplina(Base):

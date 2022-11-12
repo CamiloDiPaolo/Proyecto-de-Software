@@ -1,18 +1,23 @@
-from flask import Blueprint, render_template, request,jsonify, redirect, flash, session
+from flask import (Blueprint, flash, jsonify, redirect, render_template,
+                   request, session)
 from src.core.db import db_session
-from src.web.controllers.Auth import allowed_request
-from src.core.models.Usuario import Usuario
-from src.core.models.Rol import Rol
 from src.core.models.Categoria import Categoria
+from src.core.models.Configuracion import Configuracion
 from src.core.models.Disciplina import Disciplina
 from src.core.models.Pago import pago
-from src.core.models.relations.SocioSuscriptoDisciplina import SocioSuscriptoDisciplina
-from src.core.models.Configuracion import Configuracion
+from src.core.models.relations.SocioSuscriptoDisciplina import \
+    SocioSuscriptoDisciplina
+from src.core.models.Rol import Rol
 from src.core.models.Socio import Socio
+from src.core.models.Usuario import Usuario
 from src.web.controllers.Auth import allowed_request
-from src.web.controllers.Usuario import get_all_user_paginated_filter_json
+from src.web.controllers.FactoryCrud import (delete_doc_json, exists_entity,
+                                             get_all_docs_json,
+                                             get_all_docs_paginated_json,
+                                             get_doc_json, update_doc_json)
 from src.web.controllers.PerAsoc import get_all_partners_paginated_filter_json
-from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, update_doc_json, get_all_docs_paginated_json, exists_entity, delete_doc_json
+from src.web.controllers.Usuario import get_all_user_paginated_filter_json
+
 # TODO: pulir las response, agregar codigos HTTP descriptivos
 admin_blueprint = Blueprint("admin", __name__, url_prefix="/admin")
 @admin_blueprint.before_request
@@ -155,6 +160,9 @@ def socios(page):
     socios["docs"].sort(key = lambda u: u["nro_socio"])
     return render_template("index_perAsoc.html", socio=socios["docs"], max_page = socios["total_pages"])
 
+@admin_blueprint.route("/socios/informacionSocio/<int:id>", methods=["GET"])
+def infoSocio(id):
+    return render_template("info_perAsoc.html", user=get_doc_json(Socio,id))
 
 @admin_blueprint.route("/socios/crearSocio", methods=["GET"])
 def createSoc():

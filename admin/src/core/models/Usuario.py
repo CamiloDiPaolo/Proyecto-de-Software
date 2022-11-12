@@ -1,16 +1,11 @@
+import datetime
+import hashlib
+
+from sqlalchemy import Boolean, Column, Date, Integer, String
 from src.core.db import Base, db_session
 from src.core.models.relations.UsuarioTieneRol import UsuarioTieneRol
 from src.core.models.Rol import Rol
 
-from sqlalchemy import Column
-from sqlalchemy import Integer
-from sqlalchemy import String
-from sqlalchemy import Boolean
-from sqlalchemy import Date
-
-import hashlib
-
-import datetime
 
 class Usuario(Base):
     __tablename__ = "usuario"

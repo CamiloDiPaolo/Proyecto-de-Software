@@ -1,18 +1,16 @@
-from flask import jsonify
-from src.core.db import Base, db_session
-from src.core.models.relations.SocioSuscriptoDisciplina import SocioSuscriptoDisciplina
-from src.core.models.Categoria import Categoria
-from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, update_doc_json, get_all_docs_paginated_json
-
-from sqlalchemy import ForeignKey
-from sqlalchemy import Column
-from sqlalchemy import Integer
-from sqlalchemy import String
-from sqlalchemy import Boolean
-from sqlalchemy import Date
-from sqlalchemy import Float
-
 import datetime
+
+from flask import jsonify
+from sqlalchemy import (Boolean, Column, Date, Float, ForeignKey, Integer,
+                        String)
+from src.core.db import Base, db_session
+from src.core.models.Categoria import Categoria
+from src.core.models.relations.SocioSuscriptoDisciplina import \
+    SocioSuscriptoDisciplina
+from src.web.controllers.FactoryCrud import (get_all_docs_json,
+                                             get_all_docs_paginated_json,
+                                             get_doc_json, update_doc_json)
+
 
 class Disciplina(Base):
     __tablename__ = "disciplina"

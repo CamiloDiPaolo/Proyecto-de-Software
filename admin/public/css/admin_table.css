@@ -114,6 +114,15 @@
   background-color: var(--acento-2);
 }
 
+.info__btn{
+  background-color: var(--acento-3);
+}
+
+.info__btn:hover{
+  background-color: var(--acento-3-suave);
+  cursor: pointer;
+}
+
 .patch__btn:hover {
   background-color: var(--acento-2-suave);
   cursor: pointer;
@@ -250,6 +259,7 @@
 
   .delete__btn,
   .patch__btn,
+  .info__btn,
   .action__btn {
     min-width: 20%;
     max-width: 20%;
@@ -263,6 +273,7 @@
 
   .delete__btn span,
   .patch__btn span,
+  .info__btn span,
   .action__btn span {
     font-size: 50%;
   }
@@ -415,6 +426,7 @@
 
   .delete__btn,
   .patch__btn,
+  .info__btn,
   .action__btn {
     min-width: 20%;
     max-width: 20%;

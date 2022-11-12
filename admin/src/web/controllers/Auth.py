@@ -1,7 +1,9 @@
-from flask import Blueprint, render_template, request,make_response, render_template, session, redirect
+import hashlib
+
+from flask import (Blueprint, make_response, redirect, render_template,
+                   request, session)
 from src.core.db import db_session
 from src.core.models.Usuario import Usuario
-import hashlib
 
 auth_blueprint = Blueprint("auth", __name__, url_prefix="/auth")
 

@@ -1,11 +1,8 @@
+import hashlib
+
+from sqlalchemy import Boolean, Column, Date, Integer, String
 from src.core.db import Base
 
-from sqlalchemy import Column
-from sqlalchemy import Boolean
-from sqlalchemy import String
-from sqlalchemy import Integer
-from sqlalchemy import Date
-import hashlib
 
 class Socio(Base):
     __tablename__ = "socio"

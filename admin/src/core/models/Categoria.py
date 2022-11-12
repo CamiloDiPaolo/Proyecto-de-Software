@@ -1,8 +1,6 @@
+from sqlalchemy import Column, Integer, String
 from src.core.db import Base
 
-from sqlalchemy import Column
-from sqlalchemy import Integer
-from sqlalchemy import String
 
 class Categoria(Base):
     __tablename__ = "categoria"

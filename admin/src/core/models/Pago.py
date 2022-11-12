@@ -1,9 +1,6 @@
+from sqlalchemy import Column, Date, Float, Integer
 from src.core.db import Base
 
-from sqlalchemy import Column
-from sqlalchemy import Integer
-from sqlalchemy import Date
-from sqlalchemy import Float
 
 class pago(Base):
     __tablename__ = "pago"

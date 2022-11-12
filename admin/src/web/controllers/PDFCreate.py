@@ -1,9 +1,9 @@
+import datetime
+
+from flask import make_response
 from fpdf import FPDF
-from flask import make_response 
 from src.core.models.Configuracion import Configuracion
 from src.web.controllers.FactoryCrud import get_doc_json
-
-import datetime
 
 
 def transformMonth(numMonth):

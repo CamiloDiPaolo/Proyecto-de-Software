@@ -1,19 +1,23 @@
-from flask import Blueprint,render_template,redirect,request,jsonify,flash, make_response
-import json,datetime,random,ast,math
+import ast
+import csv
+import datetime
+import json
+import math
+import random
+
+from flask import (Blueprint, flash, jsonify, make_response, redirect,
+                   render_template, request)
 from src.core.db import db_session
+from src.core.models.Configuracion import Configuracion
 from src.core.models.Socio import Socio
 from src.web.controllers.Auth import allowed_request
-
-from src.core.models.Configuracion import Configuracion
-from src.web.controllers.FactoryCrud import create_doc_json, delete_doc_json, get_all_docs_json, get_doc_json, get_all_docs_paginated_json
-
-from src.web.controllers.PDFCreate import createPDF_perAsoc
 from src.web.controllers.CSVCreate import createCSV
-
+from src.web.controllers.FactoryCrud import (create_doc_json, delete_doc_json,
+                                             get_all_docs_json,
+                                             get_all_docs_paginated_json,
+                                             get_doc_json)
+from src.web.controllers.PDFCreate import createPDF_perAsoc
 from src.web.validators.validatorsSocio import validate_data
-import csv
-
-
 
 perAsoc_blueprint = Blueprint('perAsoc_blueprint', __name__, url_prefix='/admin/socios')
 

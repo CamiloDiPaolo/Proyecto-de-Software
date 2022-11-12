@@ -1,17 +1,15 @@
-from flask import Flask, request, redirect, render_template, session
+from flask import Flask, redirect, render_template, request, session
 from flask_session import Session
-
-from src.web.controllers.Usuario import users_blueprint
-from src.web.controllers.Auth import auth_blueprint, allowed_request
-from src.web.controllers.Admin import admin_blueprint
-
-from src.web.controllers.PerAsoc import perAsoc_blueprint
-from src.web.controllers.pagos_socio import pagos_socios_blueprint
-from src.web.config import config
 from src.core import db
-from src.web.controllers.Disciplina import disciplines_blueprint
-from src.web.controllers.Categoria import categories_blueprint
+from src.web.config import config
+from src.web.controllers.Admin import admin_blueprint
 from src.web.controllers.Api import api_blueprint
+from src.web.controllers.Auth import allowed_request, auth_blueprint
+from src.web.controllers.Categoria import categories_blueprint
+from src.web.controllers.Disciplina import disciplines_blueprint
+from src.web.controllers.pagos_socio import pagos_socios_blueprint
+from src.web.controllers.PerAsoc import perAsoc_blueprint
+from src.web.controllers.Usuario import users_blueprint
 
 
 def create_app(env="development", static_folder="static"):
