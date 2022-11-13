@@ -4,7 +4,10 @@ import CardDiscipline from "../components/CardDiscipline.vue";
 import { URL } from "../config";
 
 const disciplines = ref({});
+const info = ref({});
 
+
+//Recupera todas las disciplinas
 (async () => {
   const res = await fetch(`${URL}/club/disciplines`, {
     credentials: "include",
@@ -16,6 +19,19 @@ const disciplines = ref({});
   const json = await res.json();
   disciplines.value = json;
   console.log(disciplines.value)
+})();
+
+//Recupera la información del club
+(async () => {
+  const res2 = await fetch(`${URL}/club/info`, {
+    credentials: "include",
+    headers: {
+      "Content-type": "application/json",
+    }
+  });
+
+  const json2 = await res2.json();
+  info.value = json2;
 })();
 
 
@@ -53,13 +69,18 @@ const disciplines = ref({});
         of Letraset sheets containing Lorem Ipsum passages, and more recently
         with desktop publishing software like Aldus PageMaker including versions
         of Lorem Ipsum.
+
       </p>
+      <p class="mb-3 text-xl font-semibold text-gray-500 dark:text-gray-400"><span class="text-xl text-[#8D72E1] ">Email: </span>{{info.email}}</p>
+      &nbsp;
+      <p class="mb-3 text-xl font-semibold text-gray-500 dark:text-gray-400"><span class="text-xl text-[#8D72E1] ">Teléfono: </span>{{info.phone}}</p>
+
     </article>
     <article>
       <h1 class="text-4xl text-[#8D72E1] font-semibold whitespace-nowrap">
         Nuestras disciplinas
       </h1>
-      <div class="grid grid-cols-4 gap-10 mt-10">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-10 mt-10">
         <CardDiscipline
           v-for="discipline of disciplines"
           :name="discipline.nombre"

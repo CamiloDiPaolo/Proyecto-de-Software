@@ -2,6 +2,8 @@ from flask import Blueprint, jsonify, request, make_response, session, Response
 from src.core.db import db_session
 from src.core.models.Usuario import Usuario
 from src.core.models.Disciplina import Disciplina
+from src.core.models.Socio import Socio
+
 from src.core.models.pago import pago
 from src.core.models.relations.SocioSuscriptoDisciplina import SocioSuscriptoDisciplina
 from src.web.config import config
@@ -56,7 +58,7 @@ def profile():
 
 ## Endpoints de DISCIPLINAS    
 
-@api_blueprint.route("/club/disciplines", methods=[ "OPTIONS"])
+@api_blueprint.route("/club/disciplines", methods=["OPTIONS"])
 def all_disc_2():
     return cors(make_response())
 
@@ -65,6 +67,11 @@ def all_disc():
     disciplines = db_session.query(Disciplina).all()
     res = jsonify(get_all_docs_json(Disciplina))
     return cors(res)
+
+
+@api_blueprint.route("/club/info", methods=["OPTIONS"])
+def get_club_info2():
+    return cors(make_response())
 
 @api_blueprint.route("club/info", methods=["GET"])
 def get_club_info():
@@ -163,9 +170,9 @@ def socios_activos():
     if(error):
         res = jsonify({"status": 401, "message": error})
         return cors(res)
-
-    # por ahora se hardcodea
-    res = jsonify({"active": 10, "inactive": 20})
+    cantidadActivos = db_session.query(Socio).filter_by(estado = True).count()
+    cantidadInactivos = db_session.query(Socio).filter_by(estado = False).count()
+    res = jsonify({"active": cantidadActivos, "inactive": cantidadInactivos})
     return cors(res)
 
     
