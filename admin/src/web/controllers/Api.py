@@ -5,10 +5,11 @@ from src.core.models.Disciplina import Disciplina
 from src.core.models.pago import pago
 from src.core.models.relations.SocioSuscriptoDisciplina import SocioSuscriptoDisciplina
 from src.web.config import config
-from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, update_doc_json, get_all_docs_paginated_json
+from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, update_doc_json, get_all_docs_paginated_json, create_doc_json
 import hashlib
 
 import jwt
+import datetime
 
 private_key = "mi-clave-privada-y-ultra-secreta-y-larga-para-firmar-jwts-podria-ser-mas-larga"
 
@@ -33,7 +34,8 @@ def token():
     user_id = db_session.query(Usuario.id).filter_by(username=request.json['username'], contraseña=request.json['password']).all()
 
     res = jsonify({"status": 200})
-    res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/;SameSite=None;Secure"
+    # res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/;SameSite=None;Secure"
+    res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/;"
     return cors(res)
 
 # Metemos esto pq flask nose pq toma una peticion de OPTIONS ¿¿¿¿¿¿??????
@@ -114,6 +116,10 @@ def disciplines_cant():
     return cors(res)
 
 ## Endpoints de PAGOS
+@api_blueprint.route("/me/payments", methods=[ "OPTIONS"])
+def  my_payments2():
+    return cors(make_response())
+
 @api_blueprint.route("/me/payments", methods=["GET"])
 def my_payments():
     token = request.cookies.get('jwt')
@@ -121,8 +127,16 @@ def my_payments():
     if(error):
         res = jsonify({"status": 401, "message": error})
         return cors(res)
-    
-    return jsonify(payments[0].json())
+    json = []
+    decoded = decode_jwt(token)
+    ac_year= datetime.datetime.now().date().year
+    user_payments = db_session.query(pago).filter(pago.id_socio == decoded["data"]).order_by(pago.fecha).all()
+    for payment in user_payments:
+        if(payment.fecha.year == ac_year):
+            json.append(payment.json())
+
+    res = make_response(json)
+    return cors(res)
 
 @api_blueprint.route("/me/payments", methods=["POST"])
 def my_paymentsPost():
@@ -214,7 +228,7 @@ def error_logged(token):
 
 
 def cors(res):
-    # res.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
+    res.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
     # res.headers.add("Access-Control-Allow-Origin", "https://grupo21.proyecto2022.linti.unlp.edu.ar")
     res.headers.add("Access-Control-Allow-Headers", "X-Requested-With,content-type")
     res.headers.add("Access-Control-Allow-Methods", "*")
