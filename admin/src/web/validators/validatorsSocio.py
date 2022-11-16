@@ -46,7 +46,7 @@ def validate_data(data,operation ="create"):
         return "El estado debe ser uno de los indicados"
     
     if (data["telefono"]) != '':
-        if not (type(datA["telefono"]).isnumeric):
+        if not (type(data["telefono"]).isnumeric):
             return "El telefono debe ser un numero"
     if (data["email"]) != '' :
         if type(data["email"]) != str:

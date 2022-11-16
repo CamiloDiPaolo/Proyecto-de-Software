@@ -17,116 +17,166 @@ private_key = "mi-clave-privada-y-ultra-secreta-y-larga-para-firmar-jwts-podria-
 
 api_blueprint = Blueprint("api", __name__, url_prefix="/api")
 
+# Metemos esto pq flask nose pq toma una peticion de OPTIONS ¿¿¿¿¿¿??????
+@api_blueprint.route("/auth", methods=[ "OPTIONS"])
+def token_2():
+    return cors(make_response())
+
 @api_blueprint.route("/auth", methods=["POST"])
 def token():
+    print(request.json)
     hasher = hashlib.sha256()
     hasher.update(request.json['password'].encode('utf-8'))
     request.json['password'] = hasher.hexdigest()
+    print(request.json)
     if not valid_user(request.json['username'], request.json['password']):
-        res = make_response("alguno de los datos ingresados es incorrecto")
-        res.status = 401
-        return res
+        res = jsonify({"status": 401, "message": "Los datos ingresados no son correctos"})
+        return cors(res)
     
     user_id = db_session.query(Usuario.id).filter_by(username=request.json['username'], contraseña=request.json['password']).all()
 
-    res = make_response("logeado")
-    res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/"
+    res = jsonify({"status": 200})
+    res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/;SameSite=None;Secure"
+    return cors(res)
 
-    return res
+# Metemos esto pq flask nose pq toma una peticion de OPTIONS ¿¿¿¿¿¿??????
+@api_blueprint.route("/me/profile", methods=[ "OPTIONS"])
+def profile_2():
+    return cors(make_response())
 
 @api_blueprint.route("/me/profile", methods=["GET"])
 def profile():
     token = request.cookies.get('jwt')
-
-    if (not token):
-        res = make_response("Tenes que loguearte para acceder a esta funcionalidad")
-        res.status = 401
-        return res
+    error = error_logged(token)
+    if(error):
+        res = jsonify({"status": 401, "message": error})
+        return cors(res)
 
     decoded = decode_jwt(token)
-    if(not decoded):
-        res = make_response("Tenes que loguearte para acceder a esta funcionalidad")
-        res.status = 401
-        return res
-
     user = db_session.query(Usuario).filter_by(id=decoded["data"]).all()
-    if (not user):
-        res = make_response("Los datos de la sesion almacenada pertenecen a un usuario que ya no existe")
-        res.status = 401
-        return res
-    
-    return jsonify(user[0].json())
+    res = make_response(user[0].json())
+    return cors(res)
 
 ## Endpoints de DISCIPLINAS    
+
+@api_blueprint.route("/club/disciplines", methods=["OPTIONS"])
+def all_disc_2():
+    return cors(make_response())
 
 @api_blueprint.route("/club/disciplines", methods=["GET"])
 def all_disc():
     disciplines = db_session.query(Disciplina).all()
-    return jsonify(get_all_docs_json(Disciplina))
+    res = jsonify(get_all_docs_json(Disciplina))
+    return cors(res)
+
+
+@api_blueprint.route("/club/info", methods=["OPTIONS"])
+def get_club_info2():
+    return cors(make_response())
+
+@api_blueprint.route("club/info", methods=["GET"])
+def get_club_info():
+    res = {
+        "email": "clubdeportivovillaelisa@gmail.com",
+        "phone": "0221 487-0193"
+    }
+    res = jsonify(res)
+    return cors(res)
+
+
+@api_blueprint.route("/discipline/<id>", methods=[ "OPTIONS"])
+def  get_disc2(id):
+    return cors(make_response())
+
+@api_blueprint.route("/discipline/<id>", methods=["GET"])
+def get_disc(id):
+    res = jsonify(get_doc_json(Disciplina,id))
+    return cors(res)
+
+
 
 @api_blueprint.route("/me/disciplines", methods=["GET"])
 def my_disciplines():    
     token = request.cookies.get('jwt')
-    if (not token):
-        res = make_response("Tenes que loguearte para acceder a esta funcionalidad")
-        res.status = 401
-        return res
-    decoded = decode_jwt(token)
-    if(not decoded):
-        res = make_response("Tenes que loguearte para acceder a esta funcionalidad")
-        res.status = 401
-        return res
+    error = error_logged(token)
+    if(error):
+        res = jsonify({"status": 401, "message": error})
+        return cors(res)
+
     disciplines = get_user_disciplines(decoded["data"])
     return jsonify(disciplines)
+
+@api_blueprint.route("/disciplines/cant", methods=[ "OPTIONS"])
+def disciplines_cant_2():
+    return cors(make_response())
+
+@api_blueprint.route("/disciplines/cant", methods=["GET"])
+def disciplines_cant():
+    disciplines = db_session.query(Disciplina).all()
+    cantidades = []
+    for discipline in disciplines:
+            cantidad = db_session.query(SocioSuscriptoDisciplina).filter_by(id_disciplina = discipline.id).count()
+            count = {"name": discipline.nombre, "cant": cantidad}
+            cantidades.append(count)
+    res = jsonify(cantidades)
+    return cors(res)
 
 ## Endpoints de PAGOS
 @api_blueprint.route("/me/payments", methods=["GET"])
 def my_payments():
     token = request.cookies.get('jwt')
-
-    if (not token):
-        res = make_response("Tenes que loguearte para acceder a esta funcionalidad")
-        res.status = 401
-        return res
-
-    decoded = decode_jwt(token)
-    if(not decoded):
-        res = make_response("Tenes que loguearte para acceder a esta funcionalidad")
-        res.status = 401
-        return res
-
-    payments = db_session.query(pago).filter_by(id_socio=decoded["data"]).all()
-    if (not payments):
-        res = make_response("Los datos de la sesion almacenada pertenecen a un usuario que ya no existe")
-        res.status = 401
-        return res
+    error = error_logged(token)
+    if(error):
+        res = jsonify({"status": 401, "message": error})
+        return cors(res)
     
     return jsonify(payments[0].json())
 
 @api_blueprint.route("/me/payments", methods=["POST"])
 def my_paymentsPost():
     token = request.cookies.get('jwt')
-
-    if (not token):
-        res = make_response("Tenes que loguearte para acceder a esta funcionalidad")
-        res.status = 401
-        return res
-
-    decoded = decode_jwt(token)
-    if(not decoded):
-        res = make_response("Tenes que loguearte para acceder a esta funcionalidad")
-        res.status = 401
-        return res
-
-    payments = db_session.query(pago).filter_by(id_socio=decoded["data"]).all()
-    if (not payments):
-        res = make_response("Los datos de la sesion almacenada pertenecen a un usuario que ya no existe")
-        res.status = 401
-        return res
+    error = error_logged(token)
+    if(error):
+        res = jsonify({"status": 401, "message": error})
+        return cors(res)
 
     payment_dict = request.form.to_dict()
     return jsonify(create_doc_json(pago,payment_dict))
 
+@api_blueprint.route("/socios/morosos", methods=[ "OPTIONS"])
+def socios_morosos_2():
+    return cors(make_response())
+
+@api_blueprint.route("/socios/morosos", methods=["GET"])
+def socios_morosos():
+    token = request.cookies.get('jwt')
+    error = error_logged(token)
+    if(error):
+        res = jsonify({"status": 401, "message": error})
+        return cors(res)
+
+    # por ahora se hardcodea; total => total de usuarios; morosos => usuarios morosos
+    res = jsonify({"total": 100, "morosos": 25})
+    return cors(res)
+
+## Endpoints de socios
+@api_blueprint.route("/socios/actives", methods=[ "OPTIONS"])
+def socios_activos_2():
+    return cors(make_response())
+
+@api_blueprint.route("/socios/actives", methods=["GET"])
+def socios_activos():
+    token = request.cookies.get('jwt')
+    error = error_logged(token)
+    if(error):
+        res = jsonify({"status": 401, "message": error})
+        return cors(res)
+    cantidadActivos = db_session.query(Socio).filter_by(estado = True).count()
+    cantidadInactivos = db_session.query(Socio).filter_by(estado = False).count()
+    res = jsonify({"active": cantidadActivos, "inactive": cantidadInactivos})
+    return cors(res)
+
+    
 
 # Funciones Auxiliares
 
@@ -155,3 +205,26 @@ def decode_jwt(jwt_signed):
         return decoded_jwt
     except:
         return False
+
+def error_logged(token):
+    # token = request.cookies.get('jwt')
+    if (not token): 
+        return "No estas logeado"
+
+    decoded = decode_jwt(token)
+    if(not decoded):
+        return "el token no es valido"
+
+    user = db_session.query(Usuario).filter_by(id=decoded["data"]).all()
+    if (not user):
+        return "la sesion pertenece a un usuario que no existe"
+    return False
+
+
+def cors(res):
+    res.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
+    # res.headers.add("Access-Control-Allow-Origin", "https://grupo21.proyecto2022.linti.unlp.edu.ar")
+    res.headers.add("Access-Control-Allow-Headers", "X-Requested-With,content-type")
+    res.headers.add("Access-Control-Allow-Methods", "*")
+    res.headers.add("Access-Control-Allow-Credentials", "true")
+    return res

@@ -4,6 +4,7 @@ import datetime
 import json
 import math
 import random
+import qrcode
 
 from flask import (Blueprint, flash, jsonify, make_response, redirect,
                    render_template, request)
@@ -144,6 +145,18 @@ def descargarPDF(tipo,value):
     result=descargas(tipo, value)
     return createPDF_perAsoc(tipo,value,result)
 
+
+@perAsoc_blueprint.route("/getCredential/<id>", methods=["GET"])
+def obtenerCredencial(id):
+    result = {}
+    result["Estado"] = "Todo okey"
+    #Reemplazar la URL por la de admin
+    urlQr = "http://127.0.0.1:5000/admin/socios/getCredential/" + id;
+    img = qrcode.make(urlQr)
+    # type(img)
+    # Guarda la imagen: img.save("datos.png")
+    print(result)
+    return jsonify(result)
     
     
     

@@ -24,17 +24,17 @@ def protect():
         flash(errorMsg)
         return redirect("/admin/")
 
-@users_blueprint.route("/", methods=["GET"])
-def all_users():
-    return jsonify(get_all_docs_json(Usuario))
+# @users_blueprint.route("/", methods=["GET"])
+# def all_users():
+#     return jsonify(get_all_docs_json(Usuario))
 
-@users_blueprint.route("/<int:id>", methods=["GET"])
-def get_user(id):
-    return jsonify(get_doc_json(Usuario, id))
+# @users_blueprint.route("/<int:id>", methods=["GET"])
+# def get_user(id):
+#     return jsonify(get_doc_json(Usuario, id))
     
-@users_blueprint.route("/page/<page>", methods=["GET"])
-def all_users_paginated(page):
-    return jsonify(get_all_docs_paginated_json(Usuario, page))
+# @users_blueprint.route("/page/<page>", methods=["GET"])
+# def all_users_paginated(page):
+#     return jsonify(get_all_docs_paginated_json(Usuario, page))
 
 
 @users_blueprint.route("/create", methods=["POST"])

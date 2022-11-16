@@ -56,10 +56,6 @@ def update_discipline(id):
         errorMsg = "La disciplina que queres editar no existe"
         flash(errorMsg)
         return redirect("/admin/disciplines/0")
-    error = validate_data(disc,"UPDATE")
-    if (error):
-        flash(error)
-        return render_template('admin_disciplinas_edit.html', discipline=get_doc_json(Disciplina, id), categories=get_all_docs_json(Categoria))
     if 'habilitada' in disc.keys():
         disc['habilitada'] = True
     else:
