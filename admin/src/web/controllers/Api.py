@@ -34,8 +34,9 @@ def token():
     user_id = db_session.query(Usuario.id).filter_by(username=request.json['username'], contraseña=request.json['password']).all()
 
     res = jsonify({"status": 200})
-    # res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/;SameSite=None;Secure"
-    res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/;"
+    res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/;SameSite=None;Secure"
+    # res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/;"
+    print(res.headers)
     return cors(res)
 
 # Metemos esto pq flask nose pq toma una peticion de OPTIONS ¿¿¿¿¿¿??????
@@ -140,14 +141,42 @@ def my_payments():
 
 @api_blueprint.route("/me/payments", methods=["POST"])
 def my_paymentsPost():
+    res = {}
     token = request.cookies.get('jwt')
     error = error_logged(token)
     if(error):
         res = jsonify({"status": 401, "message": error})
-        return cors(res)
 
-    payment_dict = request.form.to_dict()
-    return jsonify(create_doc_json(pago,payment_dict))
+    payment = request.json
+    print("-----------------------------")
+    print(payment)
+    print("-----------------------------")
+
+    if(not validateType(payment["certificate"])):
+        res = jsonify({
+            "status": 400, "message": "El tipo no es vlaido"
+        })
+    decoded = decode_jwt(token)
+    user_id = decoded["data"]
+    if(paymentExist(payment,user_id)):
+        res = jsonify({
+            "status": 400, "message": "El mes ingresado ya esta pago"
+        })
+
+    newPayment = {
+        "id_socio": user_id,
+        "pago": payment["pay"],
+        "fecha": payment["date"]
+    }
+    if(not res):
+        if(create_doc_json(pago,newPayment)) :
+            res = jsonify({"status": 200, "message": "El pago se subio correctamente"})
+        else: 
+            res = jsonify({"status": 400, "message": "Ocurrio un error al subir el pago"})
+
+    return cors(res)
+    
+
 
 @api_blueprint.route("/socios/morosos", methods=[ "OPTIONS"])
 def socios_morosos_2():
@@ -226,6 +255,22 @@ def error_logged(token):
         return "la sesion pertenece a un usuario que no existe"
     return False
 
+def validateType(certificate):
+    return certificate.endswith((".jpg",".png",".pdf"))
+
+def paymentExist(payment,id):
+    year = str(payment["date"]).split("-")[0]
+    month = str(payment["date"]).split("-")[1]
+    rest = False
+    result = db_session.query(pago).filter_by(id_socio = id).all()
+    for row in result:
+        rowYear = str(row.json()["fecha"]).split("-")[0]
+        rowMonth = str(row.json()["fecha"]).split("-")[1]
+
+        if(rowYear == year and rowMonth == month):
+            rest = True
+            break
+    return rest
 
 def cors(res):
     res.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
