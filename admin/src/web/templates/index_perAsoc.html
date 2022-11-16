@@ -92,8 +92,13 @@ endblock %} {% block content %}
             <a class="delete__btn action__btn" href="/admin/socios/delete/{{user.id}}">
               <span class="material-symbols-outlined"> delete </span>
             </a>
+            
             <a class="patch__btn action__btn" href="/admin/socios/editarSocio/{{user.id}}">
               <span class="material-symbols-outlined"> edit </span>
+            </a>
+
+            <a class="add__btn action__btn" href="/admin/socios/getCredential/{{user.id}}">
+              <span class="material-symbols-outlined"> badge </span>
             </a>
             {% if user.estado == false %}
             <a onclick="alert('Error: El usuario debe estar activo para inscribirse a una disciplina');" class="delete__btn action__btn" >

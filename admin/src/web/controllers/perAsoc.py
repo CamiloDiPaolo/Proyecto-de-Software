@@ -3,7 +3,7 @@ import json,datetime,random,ast,math
 from src.core.db import db_session
 from src.core.models.Socio import Socio
 from src.web.controllers.Auth import allowed_request
-
+import qrcode
 from src.core.models.Configuracion import Configuracion
 from src.web.controllers.FactoryCrud import create_doc_json, delete_doc_json, get_all_docs_json, get_doc_json, get_all_docs_paginated_json
 
@@ -143,6 +143,19 @@ def descargarPDF(tipo,value):
     print(result)
 
     return createPDF_perAsoc(tipo,value,result)
+
+
+@perAsoc_blueprint.route("/getCredential/<id>", methods=["GET"])
+def obtenerCredencial(id):
+    result = {}
+    result["Estado"] = "Todo okey"
+    #Reemplazar la URL por la de admin
+    urlQr = "http://127.0.0.1:5000/admin/socios/getCredential/" + id;
+    img = qrcode.make(urlQr)
+    # type(img)
+    # Guarda la imagen: img.save("datos.png")
+    print(result)
+    return jsonify(result)
     
     
     
