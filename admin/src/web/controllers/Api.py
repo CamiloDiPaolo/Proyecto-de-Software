@@ -2,10 +2,13 @@ from flask import Blueprint, jsonify, request, make_response, session, Response
 from src.core.db import db_session
 from src.core.models.Usuario import Usuario
 from src.core.models.Disciplina import Disciplina
+from src.core.models.Socio import Socio
 from src.core.models.pago import pago
 from src.core.models.relations.SocioSuscriptoDisciplina import SocioSuscriptoDisciplina
 from src.web.config import config
 from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, update_doc_json, get_all_docs_paginated_json, create_doc_json
+from sqlalchemy import func
+
 import hashlib
 
 import jwt
@@ -34,8 +37,8 @@ def token():
     user_id = db_session.query(Usuario.id).filter_by(username=request.json['username'], contraseña=request.json['password']).all()
 
     res = jsonify({"status": 200})
-    res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/;SameSite=None;Secure"
-    # res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/;"
+    # res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/;SameSite=None;Secure"
+    res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/;"
     print(res.headers)
     return cors(res)
 
@@ -190,8 +193,16 @@ def socios_morosos():
         res = jsonify({"status": 401, "message": error})
         return cors(res)
 
-    # por ahora se hardcodea; total => total de usuarios; morosos => usuarios morosos
-    res = jsonify({"total": 100, "morosos": 25})
+    days = { 1: 31, 2:28, 3:31, 4:30, 5:31,6:30,7:31,8:31,9:30,10:31,11:30,12:31}
+    ac_year= datetime.datetime.now().date().year
+    ac_month = datetime.datetime.now().date().month
+    firstDate = datetime.datetime(ac_year,ac_month,1)
+    lastDate = datetime.datetime(ac_year,ac_month,days[ac_month])
+
+    allUsers = db_session.query(Socio).count()
+    defaulters = db_session.query(pago).join(Socio, Socio.id == pago.id_socio).filter(pago.fecha.between(firstDate,lastDate)).count()
+
+    res = jsonify({"total": allUsers, "morosos": allUsers - defaulters})
     return cors(res)
 
 ## Endpoints de socios
