@@ -15,6 +15,7 @@ login.value = location.href.includes("login");
       { name: 'pagina principal', to: '/' },
       { name: 'contacto', to: '/about' },
       { name: 'estadisticas', to: '/stats' },
+      { name: 'Mis Pagos', to: '/payments' },
     ]"
   ></Navbar>
 
