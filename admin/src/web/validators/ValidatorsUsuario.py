@@ -48,3 +48,22 @@ def valid_email(email):
    if re.match(reg,email):
       return True
    return False
+
+
+def validate_user_json(data):
+    if not "password" in data: 
+        return "No ingresaste la contraseña"
+    if not "nro_socio" in data:
+        return "No ingresaste Numero de socio"
+    if type(data["password"]) != str:
+        return "La contraseña debe ser de tipo string"
+    if (type(data["nro_socio"]) != int):
+        return "El numero de socio No es un numero"
+    if data["password"] == "":
+        return "La contraseña no puede ser un string vacio"
+    if data["nro_socio"] =="":
+        return "El campo numero de socio no puede estar vacio"
+    
+    
+    
+    

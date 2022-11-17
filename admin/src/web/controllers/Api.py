@@ -12,6 +12,8 @@ from src.core.models.Usuario import Usuario
 from src.web.config import config
 from src.web.controllers.FactoryCrud import get_all_docs_json, get_doc_json, update_doc_json, get_all_docs_paginated_json, create_doc_json
 from sqlalchemy import func
+from src.web.validators.validatorsPagos import validate_json
+from src.web.validators.ValidatorsUsuario import validate_user_json
 
 import hashlib
 
@@ -29,21 +31,27 @@ def token_2():
 
 @api_blueprint.route("/auth", methods=["POST"])
 def token():
-    print(request.json)
+    data=request.json
+    error = validate_user_json(data)
+    if (error):
+        res = jsonify({
+            "status":400, "message": error
+        })
+        return cors(res)
+    
     hasher = hashlib.sha256()
     hasher.update(request.json['password'].encode('utf-8'))
     request.json['password'] = hasher.hexdigest()
-    print(request.json)
     if not valid_user(request.json['nro_socio'], request.json['password']):
         res = jsonify({"status": 401, "message": "Los datos ingresados no son correctos"})
         return cors(res)
+    
     
     user_id = db_session.query(Socio.id).filter_by(nro_socio=request.json['nro_socio'], password=request.json['password']).all()
 
     res = jsonify({"status": 200})
     res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/;SameSite=None;Secure" #USO REMOTO
     #res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/;" #USO LOCAL
-    print(res.headers)
     return cors(res)
 
 # Metemos esto pq flask nose pq toma una peticion de OPTIONS ¿¿¿¿¿¿??????
@@ -160,13 +168,16 @@ def my_paymentsPost():
         res = jsonify({"status": 401, "message": error})
 
     payment = request.json
-    print("-----------------------------")
-    print(payment)
-    print("-----------------------------")
-
+    error = validate_json(payment)
+    if (error):
+        res = jsonify({
+            "status":400, "message": error
+        })
+        return cors(res)
+        
     if(not validateType(payment["certificate"])):
         res = jsonify({
-            "status": 400, "message": "El tipo no es vlaido"
+            "status": 400, "message": "El tipo no es valido"
         })
     decoded = decode_jwt(token)
     user_id = decoded["data"]
@@ -232,6 +243,30 @@ def socios_activos():
     return cors(res)
 
     
+@api_blueprint.route("/socios/infoCarnet", methods=["GET"])
+def socio_infoCarnet():
+    token = request.cookies.get('jwt')
+    error = error_logged(token)
+    if(error):
+        res = jsonify({"status": 401, "message": error})
+        return cors(res)
+    
+    decoded = decode_jwt(token)
+    user_id = decoded["data"]
+    data=get_doc_json(Socio, user_id)
+    res=jsonify({
+        "Nombre":data["nombre"], 
+        "Apellido":data["apellido"],
+        "Tipo_Documento":data["tipo_documento"],
+        "Nro_documento":data["nro_documento"],
+        "Direccion":data["direccion"],
+        "Genero":data["genero"],
+        "Estado":data["estado"],
+        "Email":data["email"],
+        "Telefono":data["telefono"]
+        })
+    
+    return cors(res)
 
 # Funciones Auxiliares
 
@@ -293,7 +328,7 @@ def paymentExist(payment,id):
     return rest
 
 def cors(res):
-    res.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
+    #res.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
     # res.headers.add("Access-Control-Allow-Origin", "https://grupo21.proyecto2022.linti.unlp.edu.ar")
     res.headers.add("Access-Control-Allow-Headers", "X-Requested-With,content-type")
     res.headers.add("Access-Control-Allow-Methods", "*")

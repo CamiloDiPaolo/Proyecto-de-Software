@@ -25,3 +25,29 @@ def validate_data(data, operation = "create"):
         return "La id del Socio no puede ser un string vaion"
 
     return False
+
+def validate_json(data):
+    if not "date" in data:
+        return "No ingresaste una fecha"
+    if not "pay" in data:
+        return "No ingresaste un pago"
+    if not "certificate" in data:
+        return "No ingresaste un certificado"
+    
+    if "date" in data == '':
+        return "La fecha no debe estar vacia"
+    if "pay" in data == '':
+        return "El numero de pago no debe estar vacio"
+    if "certificate" in data =='':
+        return "El certificado no se pudo verificar correctamente"
+    
+    print(type(data["certificate"]))
+    
+    if  (type(data["date"])!= str):
+        return "La fecha debe ser un string"
+    if (type(data["certificate"])!= str):
+        return "El certificado no se cargo correctamente"
+    if (type(data["pay"]) != int):
+        return "El numero de pago No es un numero"
+    
+    
