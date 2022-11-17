@@ -294,7 +294,7 @@ def paymentExist(payment,id):
 
 def cors(res):
     #res.headers.add("Access-Control-Allow-Origin", "http://localhost:5173") #USO LOCAL
-    res.headers.add("Access-Control-Allow-Origin", "https://grupo21.proyecto2022.linti.unlp.edu.ar") #USO REMOTO
+    #res.headers.add("Access-Control-Allow-Origin", "https://grupo21.proyecto2022.linti.unlp.edu.ar") #USO REMOTO
     res.headers.add("Access-Control-Allow-Headers", "X-Requested-With,content-type")
     res.headers.add("Access-Control-Allow-Methods", "*")
     res.headers.add("Access-Control-Allow-Credentials", "true")
