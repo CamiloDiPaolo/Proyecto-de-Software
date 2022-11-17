@@ -262,7 +262,7 @@ def decode_jwt(jwt_signed):
         return False
 
 def error_logged(token):
-    # token = request.cookies.get('jwt')
+    token = request.cookies.get('jwt')
     if (not token): 
         return "No estas logeado"
 
