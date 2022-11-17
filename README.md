@@ -14,6 +14,10 @@
 # Password: admin
 
 #-----------------------------------------
+# Credenciales de socio para portal
+# nro de socio: 570551
+# contraseña: admin
+#-----------------------------------------
 # Comandos para recrear DB:
 
 ## CREATE TABLE configuracion (
