@@ -34,11 +34,11 @@ def token():
     hasher.update(request.json['password'].encode('utf-8'))
     request.json['password'] = hasher.hexdigest()
     print(request.json)
-    if not valid_user(request.json['username'], request.json['password']):
+    if not valid_user(request.json['nro_socio'], request.json['password']):
         res = jsonify({"status": 401, "message": "Los datos ingresados no son correctos"})
         return cors(res)
     
-    user_id = db_session.query(Usuario.id).filter_by(username=request.json['username'], contraseña=request.json['password']).all()
+    user_id = db_session.query(Socio.id).filter_by(nro_socio=request.json['nro_socio'], password=request.json['password']).all()
 
     res = jsonify({"status": 200})
     res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/;SameSite=None;Secure" #USO REMOTO
@@ -60,7 +60,7 @@ def profile():
         return cors(res)
 
     decoded = decode_jwt(token)
-    user = db_session.query(Usuario).filter_by(id=decoded["data"]).all()
+    user = db_session.query(Socio).filter_by(id=decoded["data"]).all()
     res = make_response(user[0].json())
     return cors(res)
 
@@ -247,8 +247,8 @@ def get_user_disciplines(id):
                 arrayDisc.append(discipline.json())
         return arrayDisc
 
-def valid_user(username, password):
-    result = db_session.query(Usuario.username).filter_by(username=username, contraseña=password).all()
+def valid_user(nro_socio, password):
+    result = db_session.query(Socio.nro_socio).filter_by(nro_socio=nro_socio, password=password).all()
     return len(result) > 0
 
 def sign_jwt(data):
@@ -270,9 +270,9 @@ def error_logged(token):
     if(not decoded):
         return "el token no es valido"
 
-    user = db_session.query(Usuario).filter_by(id=decoded["data"]).all()
+    user = db_session.query(Socio).filter_by(id=decoded["data"]).all()
     if (not user):
-        return "la sesion pertenece a un usuario que no existe"
+        return "la sesion pertenece a un socio que no existe"
     return False
 
 def validateType(certificate):
@@ -293,8 +293,8 @@ def paymentExist(payment,id):
     return rest
 
 def cors(res):
-    #res.headers.add("Access-Control-Allow-Origin", "http://localhost:5173") #USO LOCAL
-    #res.headers.add("Access-Control-Allow-Origin", "https://grupo21.proyecto2022.linti.unlp.edu.ar") #USO REMOTO
+    res.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
+    # res.headers.add("Access-Control-Allow-Origin", "https://grupo21.proyecto2022.linti.unlp.edu.ar")
     res.headers.add("Access-Control-Allow-Headers", "X-Requested-With,content-type")
     res.headers.add("Access-Control-Allow-Methods", "*")
     res.headers.add("Access-Control-Allow-Credentials", "true")

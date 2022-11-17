@@ -56,9 +56,9 @@ def update_user(id):
     if (error):
         return render_template('admin_usuarios_new.html', roles=get_all_docs_json(Rol), error=error)
 
-    error = check_exist_user(data["username"], data["email"])
-    if (error):
-        return render_template('admin_usuarios_new.html', roles=get_all_docs_json(Rol), error=error)
+    # error = check_exist_user(data["username"], data["email"])
+    # if (error):
+    #     return render_template('admin_usuarios_new.html', roles=get_all_docs_json(Rol), error=error)
 
     if(data["roles"] == "empty"):
         return render_template('admin_usuarios_new.html', roles=get_all_docs_json(Rol), error="no se selecciono ningun rol")
