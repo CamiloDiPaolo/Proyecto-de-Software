@@ -204,7 +204,6 @@ def get_all_partners_paginated_filter_json(page, value, tipo):
         all_pages = math.ceil(len(len_result) / rows_per_page)
 
         # TODO: Implementar el ILIKE pero con numeros
-        # result = db_session.query(Socio).filter(Socio.nro_socio.ilike("%" + value + "%")).limit(rows_per_page).offset(int(page)*rows_per_page)
     else:
         result = db_session.query(Socio).filter_by(estado = tipo["estado"]).filter(Socio.apellido.ilike("%" + tipo["apellido"]+ "%")).limit(rows_per_page).offset(int(page)*rows_per_page)
         len_result = db_session.query(Socio).filter_by(estado = tipo["estado"]).filter(Socio.apellido.ilike("%" + tipo["apellido"]+ "%")).all()
