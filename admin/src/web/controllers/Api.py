@@ -41,8 +41,8 @@ def token():
     user_id = db_session.query(Usuario.id).filter_by(username=request.json['username'], contraseña=request.json['password']).all()
 
     res = jsonify({"status": 200})
-    # res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/;SameSite=None;Secure"
-    res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/;"
+    res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/;SameSite=None;Secure" #USO REMOTO
+    #res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/;" #USO LOCAL
     print(res.headers)
     return cors(res)
 
