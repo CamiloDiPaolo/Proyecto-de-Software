@@ -105,6 +105,16 @@
   background-color: var(--alerta-1);
 }
 
+.qr__btn{
+  background-color: var(--acento-4);
+}
+
+.qr__btn:hover{
+  background-color: var(--acento-4-suave);
+  cursor:pointer;
+}
+
+
 .delete__btn:hover {
   background-color: var(--alerta-1-suave);
   cursor: pointer;

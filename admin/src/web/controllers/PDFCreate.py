@@ -1,5 +1,7 @@
 import datetime
+import os
 
+import qrcode
 from flask import make_response
 from fpdf import FPDF
 from src.core.models.Configuracion import Configuracion
@@ -88,4 +90,51 @@ def createPDF_perAsoc(tipo,value,result):
     response = make_response(pdf.output(dest="S").encode('latin-1'))
     response.headers.set("Content-Disposition","attachment",filename="tabla_de_socios.pdf")
     response.headers.set('Content-Type', 'application/pdf')
+    return response
+
+def createPDF_qr(id,data):
+    pdf=FPDF(orientation='P', unit='mm', format='A4')
+    pdf.add_page()
+
+    #IMAGEN QR
+    urlQr = "https://admin-grupo21.proyecto2022.linti.unlp.edu.ar/admin/socios/informacionSocio/" + id; #URL PARA USO REMOTO
+    #urlQr = "http://127.0.0.1:5000/admin/socios/informacionSocio/" + id; URL PARA USO LOCAL
+    img = qrcode.make(urlQr)
+    img.save("datos"+id+".png")
+    img.path="datos"+id+".png"
+    pdf.image(name=img.path,x=71,y=53,w=40,h=40)
+    
+    #IMAGEN CLUB
+    image_club_path = "https://cdve.files.wordpress.com/2017/06/cropped-cropped-logodepo1.png"
+    pdf.image(name=image_club_path,x=30,y=2,w=10,h=10)
+    
+    #IMAGEN SOCIO
+    image_socio_path="https://cdn-icons-png.flaticon.com/512/23/23171.png"
+    pdf.image(name=image_socio_path,x=15,y=20,w=40,h=40)
+  
+    
+    #TEXTO
+    pdf.set_font('Arial', 'B', 20)
+    pdf.text(x=65,y=10,txt=f'Club Deportivo Villa Elisa')
+    pdf.set_font('Arial', 'B', 16)
+    
+    pdf.line(0, 14, 256, 14)
+    
+    pdf.text(x=75,y=25,txt=f'Credencial de {data["nombre"]} {data["apellido"]}')
+    pdf.text(x=75,y=32,txt=f'{data["tipo_documento"]}: {data["nro_documento"]}')
+    pdf.text(x=75,y=39,txt=f'Socio: #{data["nro_socio"]}')
+    pdf.text(x=75,y=46,txt=f'Fecha de alta: {data["fecha_alta"]}')
+    if (data["moroso"]==0):
+        pdf.text(x=18,y=75,txt=f'Moroso: Si')
+    else:
+        pdf.text(x=18,y=75,txt=f'Moroso: No')
+        
+    pdf.line(0, 100, 256, 100)
+    
+    response = make_response(pdf.output(dest="S").encode('latin-1'))
+    response.headers.set("Content-Disposition","attachment",filename="credencial.pdf")
+    response.headers.set('Content-Type', 'application/pdf')
+    
+    os.remove(img.path)
+    
     return response

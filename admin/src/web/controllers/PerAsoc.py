@@ -4,12 +4,13 @@ import datetime
 import json
 import math
 import random
-import qrcode
 
+import qrcode
 from flask import (Blueprint, flash, jsonify, make_response, redirect,
                    render_template, request)
 from src.core.db import db_session
 from src.core.models.Configuracion import Configuracion
+from src.core.models.Pago import pago
 from src.core.models.Socio import Socio
 from src.web.controllers.Auth import allowed_request
 from src.web.controllers.CSVCreate import createCSV
@@ -17,7 +18,7 @@ from src.web.controllers.FactoryCrud import (create_doc_json, delete_doc_json,
                                              get_all_docs_json,
                                              get_all_docs_paginated_json,
                                              get_doc_json)
-from src.web.controllers.PDFCreate import createPDF_perAsoc
+from src.web.controllers.PDFCreate import createPDF_perAsoc, createPDF_qr
 from src.web.validators.validatorsSocio import validate_data
 
 perAsoc_blueprint = Blueprint('perAsoc_blueprint', __name__, url_prefix='/admin/socios')
@@ -148,15 +149,21 @@ def descargarPDF(tipo,value):
 
 @perAsoc_blueprint.route("/getCredential/<id>", methods=["GET"])
 def obtenerCredencial(id):
-    result = {}
-    result["Estado"] = "Todo okey"
-    #Reemplazar la URL por la de admin
-    urlQr = "http://127.0.0.1:5000/admin/socios/getCredential/" + id;
-    img = qrcode.make(urlQr)
-    # type(img)
-    # Guarda la imagen: img.save("datos.png")
-    print(result)
-    return jsonify(result)
+    data=get_doc_json(Socio, id)
+    
+    #ES MOROSO?
+    days = { 1: 31, 2:28, 3:31, 4:30, 5:31,6:30,7:31,8:31,9:30,10:31,11:30,12:31}
+    ac_year= datetime.datetime.now().date().year
+    ac_month = datetime.datetime.now().date().month
+    firstDate = datetime.datetime(ac_year,ac_month,1)
+    lastDate = datetime.datetime(ac_year,ac_month,days[ac_month])
+    
+    defaulters = db_session.query(pago).filter(pago.id_socio == id).filter(pago.fecha.between(firstDate,lastDate)).count()
+    data["moroso"]=defaulters
+    
+    return createPDF_qr(id,data)
+
+   
     
     
     
