@@ -37,6 +37,8 @@ const data3 = ref({});
   });
   const json2 = await res2.json();
   data2.value = json2;
+  console.log("------------------- MOROSOS -------------------");
+  console.log(data2.value);
   loading2.value = false;
 
   // cargamos la cantidad de socios inscriptos a cada disciplina
@@ -49,6 +51,7 @@ const data3 = ref({});
   const json3 = await res3.json();
   data3.value.labels = json3.map((discipline) => discipline.name);
   data3.value.values = json3.map((discipline) => discipline.cant);
+  console.log("------ DATA 3 ----");
   console.log(data3.value);
   loading3.value = false;
 })();

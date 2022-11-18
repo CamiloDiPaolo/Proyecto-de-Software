@@ -1,9 +1,10 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { URL } from "../config";
 import UploadPayment from "../components/UploadPayment.vue";
 
 let upload = ref(false);
+let reloadKey = ref(0);
 
 const payments = ref([]);
 const monthsNames = [
@@ -49,16 +50,16 @@ const getAllMonthsPayments = (payments) => {
   });
   if (allPayments.length != 12) allPayments[11] = null;
 
-  console.log(allPayments);
   return allPayments;
 };
 
 const closeAndReload = () => {
-  upload = false;
-  location.reload();
+  getPayments();
+  reloadKey.value += 1;
+  upload.value = false;
 };
 
-(async () => {
+const getPayments = async () => {
   const res = await fetch(`${URL}/me/payments`, {
     credentials: "include",
     headers: {
@@ -68,8 +69,12 @@ const closeAndReload = () => {
   const json = await res.json();
   //   payments.value = json;
   payments.value = getAllMonthsPayments(json);
-  console.log(payments.value);
-})();
+};
+
+onMounted(getPayments);
+
+console.log(upload.value);
+console.log(payments.value);
 </script>
 <template>
   <div class="flex flex-col gap-10">
@@ -92,6 +97,7 @@ const closeAndReload = () => {
     <div class="grid grid-cols-4 gap-10 xl:grid-cols-4">
       <div
         class="shadow-2xl flex flex-col p-10 border-2 border-gray-700 rounded-lg bg-gray-900 text-left content-start"
+        :key="reloadKey"
         v-for="(index, key, value) in payments"
       >
         <div v-if="index">

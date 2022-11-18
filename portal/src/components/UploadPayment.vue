@@ -17,16 +17,11 @@ const setFile = (e) => {
 
 const validateExtensions = (name) => {
   const extensions = [".jpg", ".png", ".pdf"];
-  console.log(name);
-  console.log(extensions.some((str) => name.toLowerCase().endsWith(str)));
   return extensions.some((str) => name.toLowerCase().endsWith(str));
 };
 
 const upload = async (e) => {
   e.preventDefault();
-  console.log(pay.value);
-  console.log(date.value);
-  console.log(file.value);
   if (!validateExtensions(file.value[0].name)) {
     error.value = true;
     messageError.value = "Solo se permiten archivos tipo .png, .pdf y .jpg";
@@ -47,19 +42,14 @@ const upload = async (e) => {
       mode: "cors",
     });
     const data = await res.json();
-    console.log(data);
-    console.log(data.status != 400);
     if (data.status != 401 && data.status != 400) {
-      console.log("Entre por aca");
       error.value = false;
       emit("close");
     } else {
-      console.log("No entre al if");
       error.value = true;
       messageError.value = data.message;
     }
   } catch (err) {
-    console.log("CAchee");
     error.value = true;
     messageError.value = err;
   }

@@ -4,6 +4,7 @@ import LoginView from "../views/LoginView.vue";
 import StatsView from "../views/StatsView.vue";
 import DisciplineView from "../views/DisciplineView.vue";
 import PaymentView from "../views/PaymentsView.vue";
+import MeView from "../views/MeView.vue";
 
 import auth from "./middleware/auth";
 
@@ -42,6 +43,11 @@ const router = createRouter({
       path: "/payments",
       name: "pagos",
       component: PaymentView,
+    },
+    {
+      path: "/me",
+      name: "miCuenta",
+      component: MeView,
     },
   ],
 });

@@ -12,10 +12,11 @@ login.value = location.href.includes("login");
   <Navbar
     v-if="!login"
     :menus="[
-      { name: 'pagina principal', to: '/' },
-      { name: 'contacto', to: '/about' },
-      { name: 'estadisticas', to: '/stats' },
+      { name: 'Inicio', to: '/' },
+      { name: 'Contacto', to: '/about' },
+      { name: 'Estadisticas', to: '/stats' },
       { name: 'Mis Pagos', to: '/payments' },
+      { name: 'Mi Cuenta', to: '/me' },
     ]"
   ></Navbar>
 

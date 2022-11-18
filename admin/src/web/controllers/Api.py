@@ -117,7 +117,7 @@ def my_disciplines():
     if(error):
         res = jsonify({"status": 401, "message": error})
         return cors(res)
-
+    decoded = decode_jwt(token)
     disciplines = get_user_disciplines(decoded["data"])
     return jsonify(disciplines)
 
@@ -242,9 +242,12 @@ def socios_activos():
     res = jsonify({"active": cantidadActivos, "inactive": cantidadInactivos})
     return cors(res)
 
+@api_blueprint.route("/socios/infoCarnet", methods=[ "OPTIONS"])
+def socio_infoCarnet():
+    return cors(make_response())
     
 @api_blueprint.route("/socios/infoCarnet", methods=["GET"])
-def socio_infoCarnet():
+def socio_infoCarnet_2():
     token = request.cookies.get('jwt')
     error = error_logged(token)
     if(error):
@@ -254,14 +257,21 @@ def socio_infoCarnet():
     decoded = decode_jwt(token)
     user_id = decoded["data"]
     data=get_doc_json(Socio, user_id)
+    days = { 1: 31, 2:28, 3:31, 4:30, 5:31,6:30,7:31,8:31,9:30,10:31,11:30,12:31}
+    ac_year= datetime.datetime.now().date().year
+    ac_month = datetime.datetime.now().date().month
+    firstDate = datetime.datetime(ac_year,ac_month,1)
+    lastDate = datetime.datetime(ac_year,ac_month,days[ac_month])
+    defaulter = db_session.query(pago).filter(pago.id_socio == user_id).filter(pago.fecha.between(firstDate,lastDate)).count()
+    
     res=jsonify({
         "Nombre":data["nombre"], 
         "Apellido":data["apellido"],
         "Tipo_Documento":data["tipo_documento"],
-        "Nro_documento":data["nro_documento"],
+        "Nro_Documento":data["nro_documento"],
         "Direccion":data["direccion"],
         "Genero":data["genero"],
-        "Estado":data["estado"],
+        "Estado": "Moroso" if defaulter else "Al Día",
         "Email":data["email"],
         "Telefono":data["telefono"]
         })
@@ -328,7 +338,7 @@ def paymentExist(payment,id):
     return rest
 
 def cors(res):
-    #res.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
+    res.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
     # res.headers.add("Access-Control-Allow-Origin", "https://grupo21.proyecto2022.linti.unlp.edu.ar")
     res.headers.add("Access-Control-Allow-Headers", "X-Requested-With,content-type")
     res.headers.add("Access-Control-Allow-Methods", "*")
