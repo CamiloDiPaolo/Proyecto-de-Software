@@ -50,8 +50,8 @@ def token():
     user_id = db_session.query(Socio.id).filter_by(nro_socio=request.json['nro_socio'], password=request.json['password']).all()
 
     res = jsonify({"status": 200})
-    res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/;SameSite=None;Secure" #USO REMOTO
-    #res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/;" #USO LOCAL
+    #res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/;SameSite=None;Secure" #USO REMOTO
+    res.headers["Set-Cookie"] = f"jwt={sign_jwt(user_id[0][0])};path=/;" #USO LOCAL
     return cors(res)
 
 # Metemos esto pq flask nose pq toma una peticion de OPTIONS ¿¿¿¿¿¿??????
@@ -338,7 +338,7 @@ def paymentExist(payment,id):
     return rest
 
 def cors(res):
-    res.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
+    #res.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
     # res.headers.add("Access-Control-Allow-Origin", "https://grupo21.proyecto2022.linti.unlp.edu.ar")
     res.headers.add("Access-Control-Allow-Headers", "X-Requested-With,content-type")
     res.headers.add("Access-Control-Allow-Methods", "*")
