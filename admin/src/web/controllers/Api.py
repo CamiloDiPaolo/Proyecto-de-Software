@@ -271,7 +271,7 @@ def socio_infoCarnet_2():
         "Nro_Documento":data["nro_documento"],
         "Direccion":data["direccion"],
         "Genero":data["genero"],
-        "Estado": "Moroso" if defaulter else "Al Día",
+        "Estado": "Al Día" if defaulter else "Moroso",
         "Email":data["email"],
         "Telefono":data["telefono"]
         })
