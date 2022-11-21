@@ -13,12 +13,7 @@ const showNavResponsive = ref(false);
     class="bg-transparent border-gray-200 px-2 sm:px-4 py-2.5 dark:bg-gray-900 shadow-xl z-50 absolute w-full"
   >
     <div class="container flex flex-wrap justify-between items-center mx-auto">
-      <a href="https://flowbite.com/" class="flex items-center">
-        <!-- <img
-          src="https://flowbite.com/docs/images/logo.svg"
-          class="mr-3 h-6 sm:h-9"
-          alt="Flowbite Logo"
-        /> -->
+      <a href="/" class="flex items-center">
         <span
           class="self-center text-xl font-semibold whitespace-nowrap text-gray-300"
           >Proyecto de Software - Aplicacion publica</span

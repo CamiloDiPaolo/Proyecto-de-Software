@@ -20,3 +20,21 @@ export default async function auth() {
     };
   }
 }
+
+export const logout = async () => {
+  try {
+    const res = await fetch(`${URL}/logout`, {
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Content-type": "application/json",
+      },
+      mode: "cors",
+    });
+  } catch (err) {
+    return {
+      status: 401,
+      err,
+    };
+  }
+};
