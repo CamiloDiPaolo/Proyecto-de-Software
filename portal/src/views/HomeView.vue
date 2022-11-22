@@ -82,7 +82,7 @@ const info = ref({});
       </h1>
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-10 mt-10">
         <CardDiscipline
-          v-for="discipline of disciplines"
+          v-for="discipline in disciplines"
           :name="discipline.nombre"
           :categoria="discipline.categoria.nombre"
           :id="discipline.id"

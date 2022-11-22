@@ -1,5 +1,7 @@
 <script setup>
 import { ref } from "vue";
+import { URL } from "../config";
+
 const username = ref("");
 const password = ref("");
 
@@ -7,7 +9,7 @@ const login = async (e) => {
   e.preventDefault();
   try {
     const url = "http://127.0.0.1:5000/api";
-    const res = await fetch(`${url}/auth`, {
+    const res = await fetch(`${URL}/auth`, {
       method: "POST",
       credentials: "include",
       headers: {

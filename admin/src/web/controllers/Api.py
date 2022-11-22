@@ -109,6 +109,9 @@ def get_disc(id):
     return cors(res)
 
 
+@api_blueprint.route("/me/disciplines", methods=[ "OPTIONS"])
+def my_disciplines_2():
+    return cors(make_response())
 
 @api_blueprint.route("/me/disciplines", methods=["GET"])
 def my_disciplines():    
@@ -119,7 +122,7 @@ def my_disciplines():
         return cors(res)
     decoded = decode_jwt(token)
     disciplines = get_user_disciplines(decoded["data"])
-    return jsonify(disciplines)
+    return cors(jsonify(disciplines))
 
 @api_blueprint.route("/disciplines/cant", methods=[ "OPTIONS"])
 def disciplines_cant_2():

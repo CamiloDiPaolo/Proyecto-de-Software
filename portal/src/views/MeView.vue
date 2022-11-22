@@ -3,17 +3,35 @@ import { ref } from "vue";
 import { URL } from "../config";
 
 let info = ref({});
+
+let disciplines = ref({});
+
 (async () => {
   const res = await fetch(`${URL}/socios/infoCarnet`, {
+    credentials: "include",
+    mode:"cors",
+    headers: {
+      "Content-type": "application/json",
+    },
+  });
+
+  const res2 = await fetch(`${URL}/me/disciplines`, {
     credentials: "include",
     headers: {
       "Content-type": "application/json",
     },
   });
+
   const json = await res.json();
+
+  const json2 = await res2.json();
+
+
   //   payments.value = json;
   info.value = json;
-  console.log(info.value);
+
+  disciplines.value = json2;
+
 })();
 </script>
 <template>
@@ -61,6 +79,11 @@ let info = ref({});
       <h1 class="text-4xl text-[#8D72E1] font-semibold whitespace-nowrap mb-8">
         Disciplinas Inscriptas
       </h1>
+      <ul>
+      <div  v-for="discipline in disciplines">
+        <li class="font-normal text-gray-300 dark:text-gray-400 mb-2"><span class="font-semibold">{{discipline.nombre}}</span>({{discipline.categoria.nombre}})</li>
+      </div>
+      </ul>
     </div>
   </div>
 </template>
