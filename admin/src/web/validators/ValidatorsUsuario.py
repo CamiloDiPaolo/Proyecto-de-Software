@@ -1,4 +1,8 @@
 import re
+import ast
+
+from src.core.db import Base, db_session
+from src.core.models.Rol import Rol
 
 def validate_data(data, operation = "create"):
     print(data)
@@ -40,7 +44,26 @@ def validate_data(data, operation = "create"):
         return "El apellido no puede ser un string vacio"
     if data["contraseña"] == "":
         return "La contraseña no puede ser un string vacio"
-
+    
+    # agregamos validaciones para los roles
+    if type(data["roles"]) != str:
+        return "El formato en el que se enviaron los roles es incorrecto"
+    if(data["roles"] == "empty"):
+        return "No se selecciono ningun rol"
+    roles = []
+    try:
+        roles = ast.literal_eval(data["roles"])
+    except:
+        return "El formato en el que se enviaron los roles es incorrecto"
+    # chequeamos que el rol exista
+    all_roles = db_session.query(Rol).all()
+    for id_rol in roles:
+        exist = False
+        for rol in all_roles:
+            if id_rol == rol.json()["id"]:
+                exist = True
+        if not exist:
+            return "Se selecciono un rol que no existe"
     return False
 
 def valid_email(email):

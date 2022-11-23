@@ -36,10 +36,7 @@ def create_user():
     if (error):
         return render_template('admin_usuarios_new.html', roles=get_all_docs_json(Rol), error=error)
 
-    if(data["roles"] == "empty"):
-        return render_template('admin_usuarios_new.html', roles=get_all_docs_json(Rol), error="no se selecciono ningun rol")
-
-    data["roles"] = ast.literal_eval(data["roles"] )
+    data["roles"] = ast.literal_eval(data["roles"])
     create_user_json(data)
     return redirect("/admin/users/0")
 
