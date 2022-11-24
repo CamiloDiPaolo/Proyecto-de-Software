@@ -23,11 +23,11 @@ const discipline = ref({});
 })();
 </script>
 <template>
-  <div class="flex flex-col gap-10">
-    <h1 class="text-4xl text-[#8D72E1] font-semibold whitespace-nowrap">
+  <div class="flex flex-col justify-center gap-10 ">
+    <h1 class="text-4xl text-[#8D72E1]  font-semibold whitespace-nowrap">
       {{ discipline.nombre }}
     </h1>
-    <div class="grid grid-cols-1 gap-10 xl:grid-cols-2">
+    <div class="grid grid-cols-1 gap-10 ">
       <div
         class="shadow-2xl flex flex-col p-10 border-2 border-gray-700 rounded-lg bg-gray-900 text-left content-start"
       >

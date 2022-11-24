@@ -12,7 +12,6 @@ login.value = location.href.includes("login");
     v-if="!login"
     :menus="[
       { name: 'home', to: '/' },
-      { name: 'about', to: '/about' },
     ]"
     :userOptions="[
       { name: 'Perfil', to: '/' },

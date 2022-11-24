@@ -46,7 +46,7 @@ const info = ref({});
     />
     <div class="absolute right-[200px] top-1/3 flex flex-col items-center">
       <h1 class="text-6xl text-white font-semibold whitespace-nowrap bordeCss">
-        Club Atletico Villa Elvira
+        Club Atletico Villa Elisa
       </h1>
       <span class="text-xl text-gray-500 font-semibold w-[600px] text-center">
         Frase corta y resumida que despierta emociones en la persona que la lea.
