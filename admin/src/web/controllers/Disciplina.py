@@ -72,6 +72,12 @@ def delete_discipline(id):
         errorMsg= "No tenes el rol necesario para realizar esta acción"
         flash(errorMsg)
         return redirect("/admin/")
+    
+    result = db_session.query(SocioSuscriptoDisciplina).filter_by(id_disciplina = id).all()
+    if(len(result) != 0):
+        errorMsg= "No se puede borrar esta disciplina porque tiene socios inscriptos"
+        flash(errorMsg)
+        return redirect("/admin/")
     #Chequeo que no hayan cambiado el id a borrar por uno invalido
     if (not exists_entity(Disciplina,id)):
         errorMsg = "Error: La disciplina a borrar no existe"
