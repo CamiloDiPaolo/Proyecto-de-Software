@@ -57,27 +57,6 @@ const info = ref({});
   <section class="mt-[500px] p-10 w-screen h-auto">
     <article>
       <h1 class="text-4xl text-[#8D72E1] font-semibold whitespace-nowrap">
-        Sobre nosotros
-      </h1>
-      <p class="mb-3 font-semibold text-gray-500 dark:text-gray-400">
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry. Lorem Ipsum has been the industry's standard dummy text ever
-        since the 1500s, when an unknown printer took a galley of type and
-        scrambled it to make a type specimen book. It has survived not only five
-        centuries, but also the leap into electronic typesetting, remaining
-        essentially unchanged. It was popularised in the 1960s with the release
-        of Letraset sheets containing Lorem Ipsum passages, and more recently
-        with desktop publishing software like Aldus PageMaker including versions
-        of Lorem Ipsum.
-
-      </p>
-      <p class="mb-3 text-xl font-semibold text-gray-500 dark:text-gray-400"><span class="text-xl text-[#8D72E1] ">Email: </span>{{info.email}}</p>
-      &nbsp;
-      <p class="mb-3 text-xl font-semibold text-gray-500 dark:text-gray-400"><span class="text-xl text-[#8D72E1] ">Teléfono: </span>{{info.phone}}</p>
-
-    </article>
-    <article>
-      <h1 class="text-4xl text-[#8D72E1] font-semibold whitespace-nowrap">
         Nuestras disciplinas
       </h1>
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-10 mt-10">
